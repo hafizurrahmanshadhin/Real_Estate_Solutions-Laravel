@@ -1,0 +1,108 @@
+{
+	"info": {
+		"_postman_id": "effc7593-8df4-431f-a7b0-adef3d28519d",
+		"name": "Jimmydela",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32086283",
+		"_collection_link": "https://www.postman.com/shadhinworkspace/workspace/jimmydela/collection/32086283-effc7593-8df4-431f-a7b0-adef3d28519d?action=share&source=collection_link&creator=32086283"
+	},
+	"item": [
+		{
+			"name": "T&C_And_Privacy_Policy",
+			"item": [
+				{
+					"name": "Index",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/contents?type=termsAndConditions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contents"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "termsAndConditions",
+									"description": "Accept only 'termsAndConditions' or 'privacyPolicy'"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8000/api",
+			"type": "string"
+		}
+	]
+}
