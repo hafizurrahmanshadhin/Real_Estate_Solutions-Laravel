@@ -8,15 +8,15 @@
             <div class="card-body">
                 <div class="text-center mt-4">
                     <div class="mb-4 pb-2">
-                        <a href="{{ route('index') }}" class="auth-logo">
-                            <img src="{{ $systemSetting->logo ? asset($systemSetting->logo) : asset('backend/images/logo-dark.png') }}"
-                                alt="logo" height="30" class="auth-logo-dark mx-auto">
-                            <img src="{{ $systemSetting->logo ? asset($systemSetting->logo) : asset('backend/images/logo-light.png') }}"
-                                alt="logo" height="30" class="auth-logo-light mx-auto">
+                        <a href="#" class="auth-logo">
+                            <img src="{{ $systemSetting->logo ? asset($systemSetting->logo) : asset('backend/images/logo.jpg') }}"
+                                alt="logo" height="100" class="auth-logo-dark mx-auto">
+                            <img src="{{ $systemSetting->logo ? asset($systemSetting->logo) : asset('backend/images/logo.jpg') }}"
+                                alt="logo" height="100" class="auth-logo-light mx-auto">
                         </a>
                     </div>
                     <h5 class="fs-3xl">Welcome Back</h5>
-                    <p class="text-muted">Sign in to continue to Dosix.</p>
+                    <p class="text-muted">Sign in to continue to admin dashboard.</p>
                 </div>
 
                 <div class="p-2 mt-4">

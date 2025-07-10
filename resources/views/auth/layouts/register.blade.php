@@ -1,4 +1,4 @@
-@extends('auth.app')
+{{-- @extends('auth.app')
 
 @section('title', 'Register')
 
@@ -8,11 +8,11 @@
             <div class="card-body">
                 <div class="text-center mt-4">
                     <div class="mb-4 pb-2">
-                        <a href="{{ route('index') }}" class="auth-logo">
-                            <img src="{{ $systemSetting->logo ? asset($systemSetting->logo) : asset('backend/images/logo-dark.png') }}"
-                                alt="logo" height="30" class="auth-logo-dark mx-auto">
-                            <img src="{{ $systemSetting->logo ? asset($systemSetting->logo) : asset('backend/images/logo-light.png') }}"
-                                alt="logo" height="30" class="auth-logo-light mx-auto">
+                        <a href="#" class="auth-logo">
+                            <img src="{{ $systemSetting->logo ? asset($systemSetting->logo) : asset('backend/images/logo.jpg') }}"
+                                alt="logo" height="100" class="auth-logo-dark mx-auto">
+                            <img src="{{ $systemSetting->logo ? asset($systemSetting->logo) : asset('backend/images/logo.jpg') }}"
+                                alt="logo" height="100" class="auth-logo-light mx-auto">
                         </a>
                     </div>
                     <h5 class="fs-3xl">Create New Account</h5>
@@ -22,7 +22,6 @@
                     <form class="needs-validation" novalidate method="POST" action="{{ route('register') }}">
                         @csrf
                         <div class="row">
-                            {{-- First Name --}}
                             <div class="col-md-6 mb-3">
                                 <label for="first_name" class="form-label">First Name <span
                                         class="text-danger">*</span></label>
@@ -36,7 +35,6 @@
                                 @enderror
                             </div>
 
-                            {{-- Last Name --}}
                             <div class="col-md-6 mb-3">
                                 <label for="last_name" class="form-label">Last Name <span
                                         class="text-danger">*</span></label>
@@ -51,7 +49,6 @@
                             </div>
                         </div>
 
-                        {{-- Email Address --}}
                         <div class="mb-3">
                             <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
                             <input type="email" class="form-control" id="email" name="email"
@@ -64,7 +61,6 @@
                             @enderror
                         </div>
 
-                        {{-- Password --}}
                         <div class="mb-3">
                             <label class="form-label" for="password-input">Password <span
                                     class="text-danger">*</span></label>
@@ -80,7 +76,6 @@
                             @enderror
                         </div>
 
-                        {{-- Confirm Password --}}
                         <div class="mb-3">
                             <label class="form-label" for="password_confirmation">Confirm Password <span
                                     class="text-danger">*</span></label>
@@ -94,7 +89,6 @@
                             @enderror
                         </div>
 
-                        {{-- Terms and Conditions --}}
                         <div class="mb-4">
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
@@ -106,12 +100,10 @@
                             </div>
                         </div>
 
-                        {{-- Sign Up Button --}}
                         <div class="mt-4">
                             <button class="btn btn-primary w-100" type="submit">Sign Up</button>
                         </div>
 
-                        {{-- Social Login --}}
                         <div class="mt-4 text-center">
                             <div class="signin-other-title position-relative">
                                 <h5 class="fs-sm mb-4 title text-muted">Create account with</h5>
@@ -137,4 +129,4 @@
             </div>
         </div>
     </div>
-@endsection
+@endsection --}}

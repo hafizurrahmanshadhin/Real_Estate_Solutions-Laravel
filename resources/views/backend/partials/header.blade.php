@@ -21,32 +21,6 @@
         <div class="layout-width">
             <div class="navbar-header">
                 <div class="d-flex">
-                    {{-- LOGO --}}
-                    <div class="navbar-brand-box horizontal-logo">
-                        <a href="{{ route('dashboard') }}" class="logo logo-dark">
-                            <span class="logo-sm">
-                                <img src="{{ asset($systemSetting->logo ?? 'backend/images/logo-sm.png') }}"
-                                    alt="Logo" height="22">
-                            </span>
-                            <span class="logo-lg">
-                                <img src="{{ asset($systemSetting->logo ?? 'backend/images/logo-sm.png') }}"
-                                    alt="Logo" height="22">
-                            </span>
-                        </a>
-
-                        <a href="{{ route('dashboard') }}" class="logo logo-light">
-                            <span class="logo-sm">
-                                <img src="{{ asset($systemSetting->logo ?? 'backend/images/logo-sm.png') }}"
-                                    alt="Logo" height="22">
-                            </span>
-                            <span class="logo-lg">
-                                <img src="{{ asset($systemSetting->logo ?? 'backend/images/logo-sm.png') }}"
-                                    alt="Logo" height="22">
-                            </span>
-                        </a>
-                    </div>
-                    {{-- LOGO --}}
-
                     <div class="header-item flex-shrink-0 me-3 vertical-btn-wrapper">
                         <button type="button"
                             class="btn btn-sm px-0 fs-xl vertical-menu-btn topnav-hamburger border hamburger-icon"
