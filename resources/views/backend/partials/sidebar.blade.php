@@ -45,6 +45,15 @@
                     </a>
                 </li>
 
+                {{-- Package --}}
+                <li class="nav-item">
+                    <a href="{{ route('package.index') }}"
+                        class="nav-link menu-link {{ request()->routeIs('package.*') ? 'active' : '' }}">
+                        <i class="ri-dashboard-line"></i>
+                        <span data-key="t-dashboard">Packages</span>
+                    </a>
+                </li>
+
                 <hr>
                 {{-- Settings --}}
                 <li class="nav-item">
