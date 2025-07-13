@@ -19,9 +19,7 @@ return new class extends Migration {
             $table->boolean('is_popular')->default(false)->nullable(false);
 
             $table->enum('status', ['active', 'inactive'])->default('active')->nullable(false);
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
-            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -32,4 +30,3 @@ return new class extends Migration {
         Schema::dropIfExists('packages');
     }
 };
-

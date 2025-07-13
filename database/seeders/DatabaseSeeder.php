@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Database\Seeders\ContentSeeder;
+use Database\Seeders\PackageSeeder;
 use Database\Seeders\SocialMediaSeeder;
 use Database\Seeders\SystemSettingSeeder;
 use Database\Seeders\UserSeeder;
@@ -15,6 +16,7 @@ class DatabaseSeeder extends Seeder {
             SystemSettingSeeder::class,
             SocialMediaSeeder::class,
             ContentSeeder::class,
+            PackageSeeder::class,
         ]);
     }
 }

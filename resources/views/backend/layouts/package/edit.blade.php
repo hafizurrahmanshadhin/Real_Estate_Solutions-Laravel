@@ -46,24 +46,6 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-12">
-                                        <div>
-                                            <label for="is_popular" class="form-label">Is Popular:</label>
-                                            <select class="form-control @error('is_popular') is-invalid @enderror"
-                                                id="is_popular" name="is_popular">
-                                                <option value="1"
-                                                    {{ old('is_popular', $packages->is_popular) == '1' ? 'selected' : '' }}>
-                                                    Yes</option>
-                                                <option value="0"
-                                                    {{ old('is_popular', $packages->is_popular) == '0' ? 'selected' : '' }}>
-                                                    No</option>
-                                            </select>
-                                            @error('is_popular')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-
                                     <div class="col-md-6">
                                         <div>
                                             <label for="description" class="form-label">Description:</label>

@@ -10,9 +10,6 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h5 class="card-title mb-0">List of Packages</h5>
-                            <a href="{{ route('package.create') }}" class="btn btn-primary btn-sm">
-                                <i class="bi bi-plus-circle"></i> Add New
-                            </a>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -26,6 +23,7 @@
                                             <th class="column-content">Name</th>
                                             <th class="column-content">Image</th>
                                             <th class="column-content">Description</th>
+                                            <th class="column-content">Popular</th>
                                             <th class="column-status">Status</th>
                                             <th class="column-action">Action</th>
                                         </tr>
@@ -117,7 +115,6 @@
                                 </div>
                             </div>`,
                     },
-                    // Turn off autoWidth so column widths are respected.
                     autoWidth: false,
                     columns: [{
                             data: 'DT_RowIndex',
@@ -125,21 +122,29 @@
                             orderable: false,
                             searchable: false,
                             className: 'text-center',
-                            width: '4%'
+                            width: '5%'
                         },
                         {
                             data: 'title',
                             name: 'title',
                             orderable: true,
                             searchable: true,
-                            width: '18%'
+                            width: '20%',
+                            render: function(data) {
+                                return '<div style="white-space:normal;word-break:break-word;">' +
+                                    data + '</div>';
+                            }
                         },
                         {
                             data: 'name',
                             name: 'name',
                             orderable: true,
                             searchable: true,
-                            width: '18%'
+                            width: '20%',
+                            render: function(data) {
+                                return '<div style="white-space:normal;word-break:break-word;">' +
+                                    data + '</div>';
+                            }
                         },
                         {
                             data: 'image',
@@ -154,11 +159,19 @@
                             name: 'description',
                             orderable: false,
                             searchable: false,
-                            width: '45%',
+                            width: '35%',
                             render: function(data) {
                                 return '<div style="white-space:normal;word-break:break-word;">' +
                                     data + '</div>';
                             }
+                        },
+                        {
+                            data: 'is_popular',
+                            name: 'is_popular',
+                            orderable: false,
+                            searchable: false,
+                            className: 'text-center',
+                            width: '5%'
                         },
                         {
                             data: 'status',
@@ -186,19 +199,51 @@
             }
         });
 
+        // Toggle Popular Status
+        function togglePopular(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will change the popular status. Only one package can be popular at a time.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, proceed!',
+                cancelButtonText: 'Cancel',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let url = '{{ route('package.togglePopular', ['id' => ':id']) }}'.replace(':id', id);
+
+                    axios.get(url)
+                        .then(function(response) {
+                            $('#datatable').DataTable().ajax.reload();
+                            if (response.data.status === true) {
+                                toastr.success(response.data.message);
+                            } else {
+                                toastr.error(response.data.message);
+                            }
+                        })
+                        .catch(function(error) {
+                            if (error.response && error.response.data && error.response.data.message) {
+                                toastr.error(error.response.data.message);
+                            } else {
+                                toastr.error('An error occurred. Please try again.');
+                            }
+                            console.error(error);
+                        });
+                }
+            });
+        }
+
         // Fetch and display package details in the modal (including image)
         async function showPackageDetails(id) {
             let url = '{{ route('package.show', ['id' => ':id']) }}';
             url = url.replace(':id', id);
 
-            // Fallback image path
             const defaultImage = "{{ asset('backend/images/users/user-dummy-img.jpg') }}";
 
             try {
                 let response = await axios.get(url);
                 if (response.data && response.data.data) {
                     let data = response.data.data;
-                    // If 'image' is null, use the default fallback
                     let imgPath = data.image ? `{{ url('/') }}/${data.image}` : defaultImage;
                     let modalBody = document.querySelector('#viewPackageModal .modal-body');
                     modalBody.innerHTML = `
@@ -207,7 +252,7 @@
                         </div>
                         <p><strong>Name:</strong> ${data.name}</p>
                         <p><strong>Title:</strong> ${data.title}</p>
-                        <p></p><strong>Is Popular:</strong> ${data.is_popular ? 'Yes' : 'No'}</p>
+                        <p><strong>Is Popular:</strong> ${data.is_popular ? 'Yes' : 'No'}</p>
                         <p><strong>Description:</strong> ${data.description}</p>
                     `;
                 } else {
@@ -215,7 +260,7 @@
                 }
             } catch (error) {
                 console.error(error);
-                toastr.error('Could not fetch testimonial details.');
+                toastr.error('Could not fetch package details.');
             }
         }
 
@@ -255,49 +300,6 @@
                 .then(function(response) {
                     $('#datatable').DataTable().ajax.reload();
 
-                    if (response.data.status === true) {
-                        toastr.success(response.data.message);
-                    } else if (response.data.errors) {
-                        toastr.error(response.data.errors[0]);
-                    } else {
-                        toastr.error(response.data.message);
-                    }
-                })
-                .catch(function(error) {
-                    toastr.error('An error occurred. Please try again.');
-                    console.error(error);
-                });
-        }
-
-        // delete Confirm
-        function showDeleteConfirm(id) {
-            event.preventDefault();
-            Swal.fire({
-                title: 'Are you sure you want to delete this record?',
-                text: 'If you delete this, it will be gone forever.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    deleteItem(id);
-                }
-            });
-        }
-
-        // Delete Button
-        function deleteItem(id) {
-            const url = '{{ route('package.destroy', ['id' => ':id']) }}'.replace(':id', id);
-
-            axios.delete(url, {
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                })
-                .then(function(response) {
-                    $('#datatable').DataTable().ajax.reload();
                     if (response.data.status === true) {
                         toastr.success(response.data.message);
                     } else if (response.data.errors) {

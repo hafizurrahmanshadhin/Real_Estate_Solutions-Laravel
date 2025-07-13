@@ -29,7 +29,7 @@ class PackageController extends Controller {
                     ->addIndexColumn()
                     ->addColumn('description', function ($data) {
                         $description      = $data->description;
-                        $shortDescription = strlen($description) > 100 ? substr($description, 0, 100) . '...' : $description;
+                        $shortDescription = strlen($description) > 200 ? substr($description, 0, 200) . '...' : $description;
                         return '<p>' . $shortDescription . '</p>';
                     })
                     ->addColumn('image', function ($data) {
@@ -41,6 +41,32 @@ class PackageController extends Controller {
                                 <img src="' . $url . '" alt="Image" width="50" height="50" style="cursor:pointer;"
                                      data-bs-toggle="modal" data-bs-target="#imagePreviewModal"
                                      onclick="showImagePreview(\'' . $url . '\');" />
+                            </div>
+                        ';
+                    })
+                    ->addColumn('is_popular', function ($data) {
+                        $buttonClass = $data->is_popular ? 'btn-success' : 'btn-outline-secondary';
+                        $buttonText  = $data->is_popular ? 'Popular' : 'Set Popular';
+                        $icon        = $data->is_popular ? 'ri-star-fill' : 'ri-star-line';
+
+                        // Disable button if package is inactive and not currently popular
+                        $isDisabled    = ($data->status === 'inactive' && !$data->is_popular);
+                        $disabledClass = $isDisabled ? ' disabled' : '';
+                        $disabledAttr  = $isDisabled ? ' disabled' : '';
+                        $titleText     = $isDisabled ? 'Package must be active to set as popular' : ($data->is_popular ? 'Remove from Popular' : 'Set as Popular');
+
+                        // If package is inactive and not popular, show different styling
+                        if ($isDisabled) {
+                            $buttonClass = 'btn-secondary';
+                            $buttonText  = 'Inactive';
+                            $icon        = 'ri-close-line';
+                        }
+
+                        return '
+                            <div class="d-flex justify-content-center">
+                                <button class="btn ' . $buttonClass . ' btn-sm' . $disabledClass . '" onclick="togglePopular(' . $data->id . ')" title="' . $titleText . '"' . $disabledAttr . '>
+                                    <i class="' . $icon . '"></i> ' . $buttonText . '
+                                </button>
                             </div>
                         ';
                     })
@@ -63,14 +89,10 @@ class PackageController extends Controller {
                                 <a href="javascript:void(0);" onclick="showPackageDetails(' . $data->id . ')" class="link-primary text-decoration-none" data-bs-toggle="modal" data-bs-target="#viewPackageModal" title="View">
                                     <i class="ri-eye-line" style="font-size: 24px;"></i>
                                 </a>
-
-                                <a href="javascript:void(0);" onclick="showDeleteConfirm(' . $data->id . ')" class="link-danger text-decoration-none" title="Delete">
-                                    <i class="ri-delete-bin-5-line" style="font-size: 24px;"></i>
-                                </a>
                             </div>
                         ';
                     })
-                    ->rawColumns(['description', 'image', 'status', 'action'])
+                    ->rawColumns(['description', 'image', 'is_popular', 'status', 'action'])
                     ->make();
             }
             return view('backend.layouts.package.index');
@@ -96,64 +118,6 @@ class PackageController extends Controller {
             return Helper::jsonResponse(false, 'An error occurred', 500, [
                 'error' => $e->getMessage(),
             ]);
-        }
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return JsonResponse|View
-     * @throws Exception
-     */
-    public function create(): JsonResponse | View {
-        try {
-            return view('backend.layouts.package.create');
-        } catch (Exception $e) {
-            return Helper::jsonResponse(false, 'An error occurred', 500, [
-                'error' => $e->getMessage(),
-            ]);
-        }
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  Request  $request
-     * @return RedirectResponse
-     * @throws Exception
-     */
-    public function store(Request $request): RedirectResponse {
-        try {
-            $validator = Validator::make($request->all(), [
-                'title'       => 'required|string',
-                'image'       => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:20480',
-                'name'        => 'required|string',
-                'description' => 'required|string',
-                'is_popular'  => 'required|boolean',
-            ]);
-
-            if ($validator->fails()) {
-                return redirect()->back()->withErrors($validator)->withInput();
-            }
-
-            $package              = new Package();
-            $package->title       = $request->title;
-            $package->name        = $request->name;
-            $package->description = $request->description;
-            $package->is_popular  = $request->is_popular ?? false;
-
-            // If an image was uploaded, store it
-            if ($request->hasFile('image')) {
-                $uploadPath = Helper::fileUpload($request->file('image'), 'packages', $request->name);
-                if ($uploadPath !== null) {
-                    $package->image = $uploadPath;
-                }
-            }
-
-            $package->save();
-            return redirect()->route('package.index')->with('t-success', 'Package Create Successfully');
-        } catch (Exception) {
-            return redirect()->back()->with('t-error', 'Failed to create')->withInput();
         }
     }
 
@@ -190,7 +154,6 @@ class PackageController extends Controller {
                 'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:20480',
                 'name'        => 'required|string',
                 'description' => 'required|string',
-                'is_popular'  => 'required|boolean',
             ]);
 
             if ($validator->fails()) {
@@ -217,7 +180,49 @@ class PackageController extends Controller {
 
             return redirect()->route('package.index')->with('t-success', 'Package updated successfully');
         } catch (Exception $e) {
-            return redirect()->back()->with('t-error', 'Failed to update testimonial')->withInput();
+            return redirect()->back()->with('t-error', 'Failed to update package')->withInput();
+        }
+    }
+
+    /**
+     * Toggle the popular status of the specified resource.
+     *
+     * @param int $id
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function togglePopular(int $id): JsonResponse {
+        try {
+            $package = Package::findOrFail($id);
+
+            // Check if package is inactive - cannot set as popular
+            if ($package->status === 'inactive' && !$package->is_popular) {
+                return Helper::jsonResponse(false, 'Cannot set inactive package as popular. Please activate the package first.', 400);
+            }
+
+            if ($package->is_popular) {
+                // If already popular, remove it
+                $package->is_popular = false;
+                $package->save();
+                return Helper::jsonResponse(true, 'Removed from popular successfully.', 200, $package);
+            } else {
+                // Only allow setting as popular if package is active
+                if ($package->status === 'active') {
+                    // Remove popular status from all other packages
+                    Package::where('is_popular', true)->update(['is_popular' => false]);
+
+                    // Set this package as popular
+                    $package->is_popular = true;
+                    $package->save();
+                    return Helper::jsonResponse(true, 'Set as popular successfully.', 200, $package);
+                } else {
+                    return Helper::jsonResponse(false, 'Cannot set inactive package as popular. Please activate the package first.', 400);
+                }
+            }
+        } catch (Exception $e) {
+            return Helper::jsonResponse(false, 'An error occurred', 500, [
+                'error' => $e->getMessage(),
+            ]);
         }
     }
 
@@ -234,6 +239,12 @@ class PackageController extends Controller {
 
             if ($package->status === 'active') {
                 $package->status = 'inactive';
+
+                // If the package is being set to inactive and it's currently popular, remove popular status
+                if ($package->is_popular) {
+                    $package->is_popular = false;
+                }
+
                 $package->save();
 
                 return Helper::jsonResponse(false, 'Unpublished Successfully.', 200, $package);
@@ -245,34 +256,6 @@ class PackageController extends Controller {
             }
         } catch (Exception $e) {
             return Helper::jsonResponse(false, 'An error occurred', 500, [
-                'error' => $e->getMessage(),
-            ]);
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return JsonResponse
-     * @throws Exception
-     */
-    public function destroy(int $id): JsonResponse {
-        try {
-            $package = Package::findOrFail($id);
-
-            // If there's an associated image, remove it from storage first
-            if ($package->image) {
-                $imagePath = public_path($package->image);
-                Helper::fileDelete($imagePath);
-            }
-
-            // Delete the record
-            $package->delete();
-
-            return Helper::jsonResponse(true, 'Deleted successfully.', 200, $package);
-        } catch (Exception $e) {
-            return Helper::jsonResponse(false, 'An error occurred while deleting.', 500, [
                 'error' => $e->getMessage(),
             ]);
         }
