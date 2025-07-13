@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 // Route for Admin Dashboard
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-// Package
+// Packages Route
 Route::controller(PackageController::class)->prefix('package')->name('package.')->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('/show/{id}', 'show')->name('show');
