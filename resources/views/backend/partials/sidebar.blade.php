@@ -63,6 +63,15 @@
                     </a>
                 </li>
 
+                {{-- Services --}}
+                <li class="nav-item">
+                    <a href="{{ route('service.index') }}"
+                        class="nav-link menu-link {{ request()->routeIs('service.*') ? 'active' : '' }}">
+                        <i class="ri-gallery-line"></i>
+                        <span data-key="t-package">Services</span>
+                    </a>
+                </li>
+
                 <hr>
                 {{-- Settings --}}
                 <li class="nav-item">

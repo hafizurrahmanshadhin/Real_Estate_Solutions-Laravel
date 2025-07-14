@@ -3,10 +3,13 @@
 namespace Database\Seeders;
 
 use Database\Seeders\ContentSeeder;
+use Database\Seeders\FootageSizeSeeder;
 use Database\Seeders\PackageSeeder;
+use Database\Seeders\ServiceItemSeeder;
 use Database\Seeders\SocialMediaSeeder;
 use Database\Seeders\SystemSettingSeeder;
 use Database\Seeders\UserSeeder;
+use Database\Seeders\ZipCodeSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder {
@@ -16,7 +19,10 @@ class DatabaseSeeder extends Seeder {
             SystemSettingSeeder::class,
             SocialMediaSeeder::class,
             ContentSeeder::class,
+            ZipCodeSeeder::class,
             PackageSeeder::class,
+            FootageSizeSeeder::class,
+            ServiceItemSeeder::class,
         ]);
     }
 }
