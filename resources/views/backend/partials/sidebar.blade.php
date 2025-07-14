@@ -45,12 +45,21 @@
                     </a>
                 </li>
 
+                {{-- Services Area --}}
+                <li class="nav-item">
+                    <a href="{{ route('service-area.index') }}"
+                        class="nav-link menu-link {{ request()->routeIs('service-area.*') ? 'active' : '' }}">
+                        <i class="ri-map-pin-line"></i>
+                        <span data-key="t-service-area">Services Area</span>
+                    </a>
+                </li>
+
                 {{-- Package --}}
                 <li class="nav-item">
                     <a href="{{ route('package.index') }}"
                         class="nav-link menu-link {{ request()->routeIs('package.*') ? 'active' : '' }}">
-                        <i class="ri-dashboard-line"></i>
-                        <span data-key="t-dashboard">Packages</span>
+                        <i class="ri-stack-line"></i>
+                        <span data-key="t-package">Packages</span>
                     </a>
                 </li>
 
