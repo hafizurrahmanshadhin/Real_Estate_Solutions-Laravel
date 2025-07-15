@@ -31,6 +31,13 @@ Route::controller(PackageController::class)->prefix('package')->name('package.')
 // Route for Services
 Route::controller(ServiceController::class)->prefix('service')->name('service.')->group(function () {
     Route::get('/', 'index')->name('index');
+    Route::get('/form-data', 'getFormData')->name('form-data');
+    Route::post('/store', 'store')->name('store');
+    Route::put('/update/{id}', 'update')->name('update');
+    Route::get('/status/{id}', 'status')->name('status');
+    Route::delete('/destroy/{id}', 'destroy')->name('destroy');
+
+    Route::get('/footage-sizes', 'indexFootageSize')->name('footage-sizes.index');
     Route::post('/footage-sizes/store', 'storeSquareFootageSize')->name('footage-sizes.store');
     Route::put('/footage-sizes/update/{id}', 'updateSquareFootageSize')->name('footage-sizes.update');
     Route::get('/footage-sizes/status/{id}', 'statusSquareFootageSize')->name('footage-sizes.status');

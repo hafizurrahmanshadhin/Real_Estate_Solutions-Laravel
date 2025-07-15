@@ -22,6 +22,11 @@ return new class extends Migration {
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
+            $table->unsignedBigInteger('service_item_id')->nullable(false);
+            $table->foreign('service_item_id')->references('id')->on('service_items')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
             $table->integer('quantity')->nullable();
             $table->decimal('price', 10, 2)->nullable(false);
             $table->enum('status', ['active', 'inactive'])->default('active');

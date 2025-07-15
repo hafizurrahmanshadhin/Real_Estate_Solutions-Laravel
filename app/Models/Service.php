@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\FootageSize;
 use App\Models\Package;
+use App\Models\ServiceItem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,6 +19,7 @@ class Service extends Model {
         'id',
         'package_id',
         'footage_size_id',
+        'service_item_id',
         'quantity',
         'price',
         'status',
@@ -30,6 +32,7 @@ class Service extends Model {
         'id'              => 'integer',
         'package_id'      => 'integer',
         'footage_size_id' => 'integer',
+        'service_item_id' => 'integer',
         'quantity'        => 'integer',
         'price'           => 'decimal:2',
         'status'          => 'string',
@@ -44,5 +47,9 @@ class Service extends Model {
 
     public function footageSize(): BelongsTo {
         return $this->belongsTo(FootageSize::class, 'footage_size_id', 'id');
+    }
+
+    public function serviceItem(): BelongsTo {
+        return $this->belongsTo(ServiceItem::class, 'service_item_id', 'id');
     }
 }
