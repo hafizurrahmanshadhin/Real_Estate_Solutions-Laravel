@@ -18,11 +18,11 @@
         </div>
     </div>
 
-    {{-- Modal For Square Footage Range --}}
-    @include('backend.layouts.services.footage-size.modal')
-
     {{-- Modal For Service Item --}}
     @include('backend.layouts.services.service-items.modal')
+
+    {{-- Modal For Square Footage Range --}}
+    @include('backend.layouts.services.footage-size.modal')
 
     {{-- Modal For Service --}}
     @include('backend.layouts.services.services-list.modal')

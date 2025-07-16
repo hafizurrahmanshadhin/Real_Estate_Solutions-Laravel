@@ -2,54 +2,45 @@
 
 namespace App\Models;
 
-use App\Models\FootageSize;
-use App\Models\Package;
-use App\Models\ServiceItem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Service extends Model {
     use HasFactory, SoftDeletes;
 
-    protected $table = "services";
-
     protected $fillable = [
-        'id',
         'package_id',
         'footage_size_id',
-        'service_item_id',
-        'quantity',
         'price',
         'status',
-        'created_at',
-        'updated_at',
-        'deleted_at',
     ];
 
     protected $casts = [
-        'id'              => 'integer',
-        'package_id'      => 'integer',
-        'footage_size_id' => 'integer',
-        'service_item_id' => 'integer',
-        'quantity'        => 'integer',
-        'price'           => 'decimal:2',
-        'status'          => 'string',
-        'created_at'      => 'datetime',
-        'updated_at'      => 'datetime',
-        'deleted_at'      => 'datetime',
+        'price' => 'decimal:2',
     ];
 
-    public function package(): BelongsTo {
+    // Relationships
+    public function package() {
         return $this->belongsTo(Package::class);
     }
 
-    public function footageSize(): BelongsTo {
-        return $this->belongsTo(FootageSize::class, 'footage_size_id', 'id');
+    public function footageSize() {
+        return $this->belongsTo(FootageSize::class);
     }
 
-    public function serviceItem(): BelongsTo {
-        return $this->belongsTo(ServiceItem::class, 'service_item_id', 'id');
+    public function serviceItems() {
+        return $this->belongsToMany(ServiceItem::class, 'service_items_pivot')
+            ->withPivot('quantity')
+            ->withTimestamps();
+    }
+
+    // Scopes
+    public function scopeActive($query) {
+        return $query->where('status', 'active');
+    }
+
+    public function scopeInactive($query) {
+        return $query->where('status', 'inactive');
     }
 }

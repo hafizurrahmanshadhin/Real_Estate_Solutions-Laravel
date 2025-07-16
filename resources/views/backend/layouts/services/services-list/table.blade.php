@@ -11,11 +11,11 @@
                     <thead>
                         <tr>
                             <th class="column-id">#</th>
-                            <th class="column-content">Package</th>
-                            <th class="column-content">Footage Size</th>
-                            <th class="column-content">Service Item</th>
-                            <th class="column-content">Quantity</th>
-                            <th class="column-content">Price</th>
+                            <th class="column-content">Package & Footage Range</th>
+                            <th class="column-content">Service Items</th>
+                            <th class="column-content">Items Count</th>
+                            <th class="column-content">Total Quantity</th>
+                            <th class="column-content">Total Price</th>
                             <th class="column-status">Status</th>
                             <th class="column-action">Action</th>
                         </tr>

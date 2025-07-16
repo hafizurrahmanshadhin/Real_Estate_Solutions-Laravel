@@ -36,6 +36,7 @@ Route::prefix('service')->name('service.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/form-data', 'getFormData')->name('form-data');
         Route::post('/store', 'store')->name('store');
+        Route::get('/show/{id}', 'show')->name('show');
         Route::put('/update/{id}', 'update')->name('update');
         Route::get('/status/{id}', 'status')->name('status');
         Route::delete('/destroy/{id}', 'destroy')->name('destroy');
