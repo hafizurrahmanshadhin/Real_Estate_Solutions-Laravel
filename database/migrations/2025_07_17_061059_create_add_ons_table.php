@@ -1,0 +1,39 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    /**
+     * Run the migrations.
+     */
+    public function up(): void {
+        Schema::create('add_ons', function (Blueprint $table) {
+            $table->id();
+
+            $table->unsignedBigInteger('footage_size_id')->nullable();
+            $table->foreign('footage_size_id')->references('id')->on('footage_sizes')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
+            $table->unsignedBigInteger('service_item_id')->nullable(false);
+            $table->foreign('service_item_id')->references('id')->on('service_items')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
+            $table->integer('quantity')->nullable();
+            $table->decimal('price', 10, 2)->nullable(false);
+            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void {
+        Schema::dropIfExists('add_ons');
+    }
+};

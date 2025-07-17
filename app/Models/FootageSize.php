@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\AddOn;
 use App\Models\Service;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -33,5 +34,9 @@ class FootageSize extends Model {
 
     public function services(): HasMany {
         return $this->hasMany(Service::class);
+    }
+
+    public function addOns(): HasMany {
+        return $this->hasMany(AddOn::class);
     }
 }

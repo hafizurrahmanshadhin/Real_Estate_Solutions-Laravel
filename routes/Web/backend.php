@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\Backend\AddOnController;
 use App\Http\Controllers\Web\Backend\DashboardController;
 use App\Http\Controllers\Web\Backend\FootageSizeController;
 use App\Http\Controllers\Web\Backend\PackageController;
@@ -53,6 +54,16 @@ Route::prefix('service')->name('service.')->group(function () {
     Route::controller(ServiceItemController::class)->prefix('item')->name('item.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('/store', 'store')->name('store');
+        Route::put('/update/{id}', 'update')->name('update');
+        Route::get('/status/{id}', 'status')->name('status');
+        Route::delete('/destroy/{id}', 'destroy')->name('destroy');
+    });
+
+    Route::controller(AddOnController::class)->prefix('add-on')->name('add-on.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/form-data', 'getFormData')->name('form-data');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/show/{id}', 'show')->name('show');
         Route::put('/update/{id}', 'update')->name('update');
         Route::get('/status/{id}', 'status')->name('status');
         Route::delete('/destroy/{id}', 'destroy')->name('destroy');

@@ -6,6 +6,8 @@ use Database\Seeders\ContentSeeder;
 use Database\Seeders\FootageSizeSeeder;
 use Database\Seeders\PackageSeeder;
 use Database\Seeders\ServiceItemSeeder;
+use Database\Seeders\ServiceItemsPivotSeeder;
+use Database\Seeders\ServiceSeeder;
 use Database\Seeders\SocialMediaSeeder;
 use Database\Seeders\SystemSettingSeeder;
 use Database\Seeders\UserSeeder;
@@ -23,6 +25,8 @@ class DatabaseSeeder extends Seeder {
             PackageSeeder::class,
             FootageSizeSeeder::class,
             ServiceItemSeeder::class,
+            ServiceSeeder::class,
+            ServiceItemsPivotSeeder::class,
         ]);
     }
 }
