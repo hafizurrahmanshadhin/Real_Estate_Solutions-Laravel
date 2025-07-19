@@ -11,7 +11,7 @@
             order: [],
             lengthMenu: [
                 [10, 25, 50, 100, -1],
-                [10, 25, 50, 100, "All"],
+                [10, 25, 50, 100, "All"]
             ],
             processing: true,
             serverSide: true,
@@ -31,12 +31,7 @@
                 search: "_INPUT_",
                 searchPlaceholder: "Search add-ons...",
                 lengthMenu: "Show _MENU_ entries",
-                processing: `
-                        <div class="text-center">
-                            <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                        </div>`,
+                processing: `<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>`,
             },
             autoWidth: false,
             columns: [{
@@ -52,30 +47,30 @@
                     name: 'footage_size',
                     orderable: true,
                     searchable: true,
-                    width: '25%',
+                    width: '20%'
                 },
                 {
                     data: 'service_item_name',
                     name: 'service_item_name',
                     orderable: true,
                     searchable: true,
-                    width: '30%',
+                    width: '30%'
                 },
                 {
-                    data: 'quantity',
-                    name: 'quantity',
+                    data: 'quantity_display',
+                    name: 'quantity_display',
                     orderable: true,
                     searchable: false,
                     className: 'text-center',
-                    width: '10%',
+                    width: '25%'
                 },
                 {
                     data: 'formatted_price',
                     name: 'formatted_price',
                     orderable: true,
-                    searchable: false,
+                    searchable: true,
                     className: 'text-center',
-                    width: '10%',
+                    width: '10%'
                 },
                 {
                     data: 'status',
@@ -83,7 +78,7 @@
                     orderable: false,
                     searchable: false,
                     className: 'text-center',
-                    width: '10%'
+                    width: '5%'
                 },
                 {
                     data: 'action',
@@ -91,60 +86,117 @@
                     orderable: false,
                     searchable: false,
                     className: 'text-center',
-                    width: '10%'
+                    width: '5%'
                 },
             ],
         });
 
-        // Show Create Modal and Load Form Data
+        // Show Create Modal
         $('#addNewAddOn').click(function() {
             $('#createAddOnModal').modal('show');
             $('#createAddOnForm')[0].reset();
             $('.error-text').text('');
+            $('.form-control, .form-select').removeClass('is-invalid');
+
+            // Hide Community Images fields initially
+            $('#locations_field, #community_pricing_guide').hide();
+
             loadFormData();
+        });
+
+        // Handle Service Item Change for Create Modal
+        $(document).on('change', '#service_item_id', function() {
+            const selectedText = $(this).find('option:selected').text().toLowerCase();
+            const isCommunityImages = selectedText === 'community image';
+
+            console.log('Service changed to:', selectedText, 'Is Community Images:', isCommunityImages);
+
+            if (isCommunityImages) {
+                $('#locations_field, #community_pricing_guide').show();
+                $('#locations').prop('required', true);
+            } else {
+                $('#locations_field, #community_pricing_guide').hide();
+                $('#locations').prop('required', false).val('');
+            }
+        });
+
+        // Handle Service Item Change for Edit Modal
+        $(document).on('change', '#edit_service_item_id', function() {
+            const selectedText = $(this).find('option:selected').text().toLowerCase();
+            const isCommunityImages = selectedText === 'community image';
+
+            console.log('Edit service changed to:', selectedText, 'Is Community Images:',
+                isCommunityImages);
+
+            if (isCommunityImages) {
+                $('#edit_locations_field, #edit_community_pricing_guide').show();
+                $('#edit_locations').prop('required', true);
+            } else {
+                $('#edit_locations_field, #edit_community_pricing_guide').hide();
+                $('#edit_locations').prop('required', false).val('');
+            }
         });
 
         // Load Form Data for Dropdowns
         function loadFormData() {
             axios.get("{{ route('service.add-on.form-data') }}")
                 .then(function(response) {
+                    console.log('Form data response:', response.data);
+
                     if (response.data.success) {
                         const data = response.data.data;
 
                         // Populate Footage Size Dropdown
                         let footageOptions = '<option value="">Choose a footage size...</option>';
-                        data.footage_sizes.forEach(function(footage) {
-
-                            footageOptions +=
-                                `<option value="${footage.id}">${footage.size}</option>`;
-                        });
+                        if (data.footage_sizes && data.footage_sizes.length > 0) {
+                            data.footage_sizes.forEach(function(footage) {
+                                footageOptions +=
+                                    `<option value="${footage.id}">${footage.size}</option>`;
+                            });
+                        }
                         $('#footage_size_id_for_add_ons').html(footageOptions);
 
                         // Populate Service Item Dropdown
                         let serviceItemOptions = '<option value="">Choose a service item...</option>';
-                        data.service_items.forEach(function(item) {
-                            serviceItemOptions +=
-                                `<option value="${item.id}">${item.service_name}</option>`;
-                        });
+                        if (data.service_items && data.service_items.length > 0) {
+                            data.service_items.forEach(function(item) {
+                                serviceItemOptions +=
+                                    `<option value="${item.id}">${item.service_name}</option>`;
+                            });
+                        }
                         $('#service_item_id').html(serviceItemOptions);
+
+                        console.log('Form data loaded successfully');
                     } else {
                         toastr.error('Failed to load form data');
                     }
                 })
                 .catch(function(error) {
+                    console.error('Form data error:', error);
                     toastr.error('An error occurred while loading form data');
-                    console.error(error);
                 });
         }
 
-        // Handle Create Form Submission
+        // Create Form Submission
         $('#createAddOnForm').submit(function(e) {
             e.preventDefault();
+            console.log('Creating add-on...');
+
             $('.error-text').text('');
+            $('.form-control, .form-select').removeClass('is-invalid');
+
             let formData = $(this).serialize();
+            console.log('Create form data:', formData);
+
+            let submitBtn = $(this).find('button[type="submit"]');
+            let originalText = submitBtn.html();
+            submitBtn.prop('disabled', true).html(
+                '<i class="fas fa-spinner fa-spin me-1"></i>Creating...');
 
             axios.post("{{ route('service.add-on.store') }}", formData)
                 .then(function(response) {
+                    console.log('Create response:', response.data);
+
                     if (response.data.success) {
                         $('#createAddOnModal').modal('hide');
                         $('#createAddOnForm')[0].reset();
@@ -152,9 +204,7 @@
                         toastr.success(response.data.message);
                     } else {
                         if (response.data.errors) {
-                            $.each(response.data.errors, function(key, value) {
-                                $('.create_' + key + '_error').text(value[0]);
-                            });
+                            handleValidationErrors(response.data.errors, 'create');
                             toastr.error('Please fix the errors.');
                         } else {
                             toastr.error(response.data.message);
@@ -162,69 +212,155 @@
                     }
                 })
                 .catch(function(error) {
-                    toastr.error('An error occurred while creating add-on.');
-                    console.error(error);
+                    console.error('Create error:', error);
+                    if (error.response && error.response.data && error.response.data.errors) {
+                        handleValidationErrors(error.response.data.errors, 'create');
+                        toastr.error('Please fix the validation errors.');
+                    } else {
+                        toastr.error('An error occurred while creating add-on.');
+                    }
+                })
+                .finally(function() {
+                    submitBtn.prop('disabled', false).html(originalText);
                 });
         });
 
         // Show Edit Modal
         $(document).on('click', '.edit-add-on', function() {
+            console.log('Edit button clicked');
+
             let tr = $(this).closest('tr');
             let rowData = addOnsTable.row(tr).data();
+            console.log('Row data:', rowData);
+
+            $('.error-text').text('');
+            $('.form-control, .form-select').removeClass('is-invalid');
+
             $('#edit_service_id').val(rowData.id);
-            loadEditFormData(rowData);
+
+            // Hide Community Images fields initially
+            $('#edit_locations_field, #edit_community_pricing_guide').hide();
+
+            loadEditFormData(rowData.id);
             $('#editAddOnModal').modal('show');
         });
 
-        // Load Form Data for Edit Modal
-        function loadEditFormData(currentData) {
-            axios.get("{{ route('service.add-on.form-data') }}")
-                .then(function(response) {
-                    if (response.data.success) {
-                        const data = response.data.data;
+        // Load Edit Form Data
+        function loadEditFormData(addOnId) {
+            console.log('Loading edit form data for ID:', addOnId);
+
+            // Show loading state
+            $('#edit_footage_size_id_for_add_ons, #edit_service_item_id').html(
+                '<option value="">Loading...</option>').prop('disabled', true);
+            $('#edit_quantity, #edit_price_for_add_ons, #edit_locations').val('').prop('disabled', true);
+
+            Promise.all([
+                    axios.get("{{ route('service.add-on.form-data') }}"),
+                    axios.get("{{ route('service.add-on.show', 0) }}".replace('/0', '/' + addOnId))
+                ])
+                .then(function(responses) {
+                    const formDataResponse = responses[0];
+                    const addOnResponse = responses[1];
+
+                    console.log('Edit form data response:', formDataResponse.data);
+                    console.log('Edit add-on response:', addOnResponse.data);
+
+                    if (formDataResponse.data.success && addOnResponse.data.success) {
+                        const formData = formDataResponse.data.data;
+                        const addOnData = addOnResponse.data.data;
+
+                        console.log('Processing edit data:', {
+                            formData,
+                            addOnData
+                        });
 
                         // Populate Footage Size Dropdown
                         let footageOptions = '<option value="">Choose a footage size...</option>';
-                        data.footage_sizes.forEach(function(footage) {
-                            const selected = footage.id == currentData.footage_size_id ?
-                                'selected' : '';
-                            footageOptions +=
-                                `<option value="${footage.id}" ${selected}>${footage.size}</option>`;
-                        });
-                        $('#edit_footage_size_id_for_add_ons').html(footageOptions);
+                        if (formData.footage_sizes && formData.footage_sizes.length > 0) {
+                            formData.footage_sizes.forEach(function(footage) {
+                                const selected = footage.id == addOnData.footage_size_id ?
+                                    'selected' : '';
+                                footageOptions +=
+                                    `<option value="${footage.id}" ${selected}>${footage.size}</option>`;
+                            });
+                        }
+                        $('#edit_footage_size_id_for_add_ons').html(footageOptions).prop('disabled', false);
 
                         // Populate Service Item Dropdown
                         let serviceItemOptions = '<option value="">Choose a service item...</option>';
-                        data.service_items.forEach(function(item) {
-                            const selected = item.id == currentData.service_item_id ? 'selected' :
-                                '';
-                            serviceItemOptions +=
-                                `<option value="${item.id}" ${selected}>${item.service_name}</option>`;
-                        });
-                        $('#edit_service_item_id').html(serviceItemOptions);
+                        if (formData.service_items && formData.service_items.length > 0) {
+                            formData.service_items.forEach(function(item) {
+                                const selected = item.id == addOnData.service_item_id ? 'selected' :
+                                    '';
+                                serviceItemOptions +=
+                                    `<option value="${item.id}" ${selected}>${item.service_name}</option>`;
+                            });
+                        }
+                        $('#edit_service_item_id').html(serviceItemOptions).prop('disabled', false);
 
                         // Set quantity and price
-                        $('#edit_quantity').val(currentData.quantity);
-                        $('#edit_price_for_add_ons').val(currentData.price);
+                        $('#edit_quantity').val(addOnData.quantity || '').prop('disabled', false);
+                        $('#edit_price_for_add_ons').val(addOnData.price || '').prop('disabled', false);
+
+                        // Handle Community Images fields
+                        if (addOnData.is_community_images) {
+                            console.log('Showing Community Images fields, locations:', addOnData.locations);
+                            $('#edit_locations_field, #edit_community_pricing_guide').show();
+                            $('#edit_locations').val(addOnData.locations || '').prop('required', true);
+                        } else {
+                            console.log('Hiding Community Images fields');
+                            $('#edit_locations_field, #edit_community_pricing_guide').hide();
+                            $('#edit_locations').prop('required', false).val('');
+                        }
+
+                        console.log('Edit form data loaded successfully');
+                        toastr.success('Edit form loaded successfully!');
+
                     } else {
-                        toastr.error('Failed to load form data');
+                        console.error('API responses failed');
+                        toastr.error('Failed to load add-on data for editing');
+                        $('#edit_footage_size_id_for_add_ons, #edit_service_item_id').prop('disabled',
+                            false);
+                        $('#edit_quantity, #edit_price_for_add_ons, #edit_locations').prop('disabled',
+                            false);
                     }
                 })
                 .catch(function(error) {
-                    toastr.error('An error occurred while loading form data');
-                    console.error(error);
+                    console.error('Edit form data error:', error);
+                    toastr.error('An error occurred while loading add-on data');
+                    $('#edit_footage_size_id_for_add_ons, #edit_service_item_id').prop('disabled', false);
+                    $('#edit_quantity, #edit_price_for_add_ons, #edit_locations').prop('disabled', false);
                 });
         }
 
-        // Handle Edit Form Submission
+        // Edit Form Submission
         $('#editAddOnForm').submit(function(e) {
             e.preventDefault();
+            console.log('Updating add-on...');
+
             $('.error-text').text('');
+            $('.form-control, .form-select').removeClass('is-invalid');
+
             let formData = $(this).serialize();
             let addOnId = $('#edit_service_id').val();
 
+            console.log('Update form data:', formData);
+            console.log('Update add-on ID:', addOnId);
+
+            if (!addOnId) {
+                toastr.error('Add-on ID is missing. Please try again.');
+                return;
+            }
+
+            let submitBtn = $(this).find('button[type="submit"]');
+            let originalText = submitBtn.html();
+            submitBtn.prop('disabled', true).html(
+                '<i class="fas fa-spinner fa-spin me-1"></i>Updating...');
+
             axios.put("{{ route('service.add-on.update', 0) }}".replace('/0', '/' + addOnId), formData)
                 .then(function(response) {
+                    console.log('Update response:', response.data);
+
                     if (response.data.success) {
                         $('#editAddOnModal').modal('hide');
                         $('#editAddOnForm')[0].reset();
@@ -232,9 +368,7 @@
                         toastr.success(response.data.message);
                     } else {
                         if (response.data.errors) {
-                            $.each(response.data.errors, function(key, value) {
-                                $('.edit_' + key + '_error').text(value[0]);
-                            });
+                            handleValidationErrors(response.data.errors, 'edit');
                             toastr.error('Please fix the errors.');
                         } else {
                             toastr.error(response.data.message);
@@ -242,22 +376,59 @@
                     }
                 })
                 .catch(function(error) {
-                    if (error.response && error.response.data && error.response.data.message) {
-                        toastr.error(error.response.data.message);
+                    console.error('Update error:', error);
+                    if (error.response && error.response.data) {
+                        if (error.response.data.errors) {
+                            handleValidationErrors(error.response.data.errors, 'edit');
+                            toastr.error('Please fix the validation errors.');
+                        } else {
+                            toastr.error(error.response.data.message ||
+                                'An error occurred while updating.');
+                        }
                     } else {
                         toastr.error('An error occurred while updating.');
                     }
-                    console.error(error);
+                })
+                .finally(function() {
+                    submitBtn.prop('disabled', false).html(originalText);
                 });
+        });
+
+        // Validation Error Handler
+        function handleValidationErrors(errors, prefix) {
+            console.log('Handling validation errors:', errors, 'Prefix:', prefix);
+
+            $.each(errors, function(key, value) {
+                let errorMessage = Array.isArray(value) ? value[0] : value;
+                let errorElement = $(`.${prefix}_${key}_error`);
+                let inputElement = $(`[name="${key}"]`);
+
+                if (prefix === 'edit') {
+                    inputElement = $(`#editAddOnForm [name="${key}"]`);
+                }
+
+                console.log(`Setting error for ${key}:`, errorMessage);
+                errorElement.text(errorMessage);
+                inputElement.addClass('is-invalid');
+            });
+        }
+
+        // Clear modal states
+        $('#createAddOnModal').on('hidden.bs.modal', function() {
+            $(this).find('.error-text').text('');
+            $(this).find('.form-control, .form-select').removeClass('is-invalid');
+            $('#locations_field, #community_pricing_guide').hide();
+        });
+
+        $('#editAddOnModal').on('hidden.bs.modal', function() {
+            $(this).find('.error-text').text('');
+            $(this).find('.form-control, .form-select').removeClass('is-invalid');
+            $('#edit_locations_field, #edit_community_pricing_guide').hide();
         });
     });
 
-    // Status Change Confirm Alert
     function showAddOnStatusChangeAlert(id) {
-        if (event) {
-            event.preventDefault();
-        }
-
+        if (event) event.preventDefault();
         Swal.fire({
             title: 'Update Status',
             text: 'Are you sure you want to change the status of this add-on?',
@@ -278,7 +449,6 @@
         });
     }
 
-    // Status Change
     function addOnStatusChange(id) {
         let url = '{{ route('service.add-on.status', 0) }}'.replace('/0', '/' + id);
         let checkbox = $('#SwitchCheck' + id);
@@ -308,12 +478,8 @@
         });
     }
 
-    // Delete Confirm
     function showAddOnDeleteConfirm(id) {
-        if (event) {
-            event.preventDefault();
-        }
-
+        if (event) event.preventDefault();
         Swal.fire({
             title: 'Delete Add-on',
             text: 'Are you sure you want to delete this add-on? This action cannot be undone.',
@@ -331,7 +497,6 @@
         });
     }
 
-    // Delete Add-on
     function deleteAddOn(id) {
         let url = '{{ route('service.add-on.destroy', 0) }}'.replace('/0', '/' + id);
         let csrfToken = '{{ csrf_token() }}';
@@ -342,9 +507,7 @@
             allowOutsideClick: false,
             allowEscapeKey: false,
             showConfirmButton: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
+            didOpen: () => Swal.showLoading()
         });
 
         $.ajax({

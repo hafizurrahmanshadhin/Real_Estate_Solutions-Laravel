@@ -14,7 +14,7 @@
                             <th class="column-id">#</th>
                             <th class="column-content">Footage Size</th>
                             <th class="column-content">Service Item</th>
-                            <th class="column-content">Quantity</th>
+                            <th class="column-content">Quantity/Locations</th>
                             <th class="column-content">Price</th>
                             <th class="column-status">Status</th>
                             <th class="column-action">Action</th>

@@ -4,14 +4,15 @@
 
 <div class="app-menu navbar-menu">
     {{-- Logo & Toggle Button --}}
-    <div class="navbar-brand-box" style="display: flex;">
-        <a href="{{ route('dashboard') }}" class="logo logo-light" style="margin: 0px auto;">
+    <div class="navbar-brand-box">
+        <a href="{{ route('dashboard') }}" class="logo logo-light">
             <span class="logo-sm">
-                <img src="{{ asset($systemSetting->logo ?? 'backend/images/logo.jpg') }}" alt="Logo" height="22">
+                <img src="{{ asset($systemSetting->logo ?? 'backend/images/PNG FILE-01-02.png') }}" alt="Logo"
+                    height="30">
             </span>
             <span class="logo-lg">
-                <img src="{{ asset($systemSetting->logo ?? 'backend/images/logo.jpg') }}" alt="Logo"
-                    style="max-width: 100px; height: 90px;">
+                <img src="{{ asset($systemSetting->logo ?? 'backend/images/PNG FILE-01-02.png') }}" alt="Logo"
+                    height="125" style="margin-left: -50px;">
             </span>
         </a>
 

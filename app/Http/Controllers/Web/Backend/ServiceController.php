@@ -8,13 +8,23 @@ use App\Models\Package;
 use App\Models\Service;
 use App\Models\ServiceItem;
 use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
 
 class ServiceController extends Controller {
-    public function index(Request $request) {
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  Request  $request
+     * @return JsonResponse|RedirectResponse|View
+     * @throws Exception
+     */
+    public function index(Request $request): JsonResponse | RedirectResponse | View {
         try {
             if ($request->ajax()) {
                 $services = Service::with(['package', 'footageSize', 'serviceItems'])->select('services.*')->latest()->get();
@@ -89,7 +99,13 @@ class ServiceController extends Controller {
         }
     }
 
-    public function getFormData() {
+    /**
+     * Get form data for creating or editing a service.
+     *
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function getFormData(): JsonResponse {
         try {
             $packages     = Package::where('status', 'active')->select('id', 'name', 'title')->get();
             $footageSizes = FootageSize::where('status', 'active')->select('id', 'size')->get();
@@ -111,7 +127,14 @@ class ServiceController extends Controller {
         }
     }
 
-    public function store(Request $request) {
+    /**
+     * Store a newly created service in storage.
+     *
+     * @param  Request  $request
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function store(Request $request): JsonResponse {
         $serviceItems   = $request->input('service_items', []);
         $serviceItemIds = array_column($serviceItems, 'service_item_id');
 
@@ -192,7 +215,14 @@ class ServiceController extends Controller {
         }
     }
 
-    public function show(int $id) {
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function show(int $id): JsonResponse {
         try {
             $service = Service::with(['package', 'footageSize', 'serviceItems'])->findOrFail($id);
 
@@ -225,7 +255,15 @@ class ServiceController extends Controller {
         }
     }
 
-    public function update(Request $request, int $id) {
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  Request  $request
+     * @param  int  $id
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function update(Request $request, int $id): JsonResponse {
         $serviceItems   = $request->input('service_items', []);
         $serviceItemIds = array_column($serviceItems, 'service_item_id');
 
@@ -291,7 +329,14 @@ class ServiceController extends Controller {
         }
     }
 
-    public function status(int $id) {
+    /**
+     * Toggle the status of the specified service.
+     *
+     * @param  int  $id
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function status(int $id): JsonResponse {
         try {
             $service = Service::findOrFail($id);
 
@@ -310,7 +355,14 @@ class ServiceController extends Controller {
         }
     }
 
-    public function destroy(int $id) {
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function destroy(int $id): JsonResponse {
         try {
             $service = Service::findOrFail($id);
 

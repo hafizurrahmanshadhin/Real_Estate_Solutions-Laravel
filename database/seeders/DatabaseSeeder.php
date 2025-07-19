@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\AddOnSeeder;
 use Database\Seeders\ContentSeeder;
 use Database\Seeders\FootageSizeSeeder;
 use Database\Seeders\PackageSeeder;
@@ -27,6 +28,7 @@ class DatabaseSeeder extends Seeder {
             ServiceItemSeeder::class,
             ServiceSeeder::class,
             ServiceItemsPivotSeeder::class,
+            AddOnSeeder::class,
         ]);
     }
 }

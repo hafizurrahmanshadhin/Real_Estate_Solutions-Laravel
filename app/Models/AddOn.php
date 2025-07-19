@@ -18,6 +18,7 @@ class AddOn extends Model {
         'id',
         'footage_size_id',
         'service_item_id',
+        'locations',
         'quantity',
         'price',
         'status',
@@ -30,6 +31,7 @@ class AddOn extends Model {
         'id'              => 'integer',
         'footage_size_id' => 'integer',
         'service_item_id' => 'integer',
+        'locations'       => 'integer',
         'quantity'        => 'integer',
         'price'           => 'decimal:2',
         'status'          => 'string',
@@ -44,5 +46,18 @@ class AddOn extends Model {
 
     public function serviceItem(): BelongsTo {
         return $this->belongsTo(ServiceItem::class, 'service_item_id');
+    }
+
+    // Helper method to check if service is Community Images
+    public function isCommunityImages(): bool {
+        return $this->serviceItem && strtolower($this->serviceItem->service_name) === 'community image';
+    }
+
+    // Helper method to get display text
+    public function getDisplayText(): string {
+        if ($this->isCommunityImages()) {
+            return "{$this->quantity} Community Images - {$this->locations} location(s)";
+        }
+        return "Quantity: {$this->quantity}";
     }
 }

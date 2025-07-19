@@ -15,7 +15,6 @@
                                     class="text-danger">*</span></label>
                             <select class="form-select" id="footage_size_id_for_add_ons" name="footage_size_id">
                                 <option value="">Choose a footage size...</option>
-                                {{-- Options will be populated via JavaScript --}}
                             </select>
                             <span class="text-danger error-text create_footage_size_id_error"></span>
                         </div>
@@ -25,7 +24,6 @@
                                     class="text-danger">*</span></label>
                             <select class="form-select" id="service_item_id" name="service_item_id">
                                 <option value="">Choose a service item...</option>
-                                {{-- Options will be populated via JavaScript --}}
                             </select>
                             <span class="text-danger error-text create_service_item_id_error"></span>
                         </div>
@@ -37,12 +35,38 @@
                             <span class="text-danger error-text create_quantity_error"></span>
                         </div>
 
+                        {{-- Locations field for Community Images --}}
+                        <div class="col-md-6 mb-3" id="locations_field" style="display: none;">
+                            <label for="locations" class="form-label">Number of Locations <span
+                                    class="text-danger">*</span></label>
+                            <select class="form-select" id="locations" name="locations">
+                                <option value="">Choose number of locations...</option>
+                                <option value="1">1 Location</option>
+                                <option value="2">2 Locations</option>
+                                <option value="3">3 Locations</option>
+                                <option value="4">4 Locations</option>
+                                <option value="5">5 Locations</option>
+                            </select>
+                            <span class="text-danger error-text create_locations_error"></span>
+                        </div>
+
                         <div class="col-md-6 mb-3">
                             <label for="price" class="form-label">Price ($) <span
                                     class="text-danger">*</span></label>
                             <input type="number" class="form-control" id="price" name="price"
                                 placeholder="Enter price" min="0" step="0.01">
                             <span class="text-danger error-text create_price_error"></span>
+                        </div>
+
+                        {{-- Community Images Pricing Guide --}}
+                        <div class="col-12" id="community_pricing_guide" style="display: none;">
+                            <div class="alert alert-info">
+                                <h6><i class="fas fa-info-circle"></i> Community Images Pricing Guide:</h6>
+                                <ul class="mb-0">
+                                    <li><strong>2 Community Images - 1 location:</strong> $19.00</li>
+                                    <li><strong>5 Community Images - 2 locations:</strong> $49.00</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -76,7 +100,6 @@
                                     class="text-danger">*</span></label>
                             <select class="form-select" id="edit_footage_size_id_for_add_ons" name="footage_size_id">
                                 <option value="">Choose a footage size...</option>
-                                {{-- Options will be populated via JavaScript --}}
                             </select>
                             <span class="text-danger error-text edit_footage_size_id_error"></span>
                         </div>
@@ -86,7 +109,6 @@
                                     class="text-danger">*</span></label>
                             <select class="form-select" id="edit_service_item_id" name="service_item_id">
                                 <option value="">Choose a service item...</option>
-                                {{-- Options will be populated via JavaScript --}}
                             </select>
                             <span class="text-danger error-text edit_service_item_id_error"></span>
                         </div>
@@ -98,12 +120,38 @@
                             <span class="text-danger error-text edit_quantity_error"></span>
                         </div>
 
+                        {{-- Edit Locations field --}}
+                        <div class="col-md-6 mb-3" id="edit_locations_field" style="display: none;">
+                            <label for="edit_locations" class="form-label">Number of Locations <span
+                                    class="text-danger">*</span></label>
+                            <select class="form-select" id="edit_locations" name="locations">
+                                <option value="">Choose number of locations...</option>
+                                <option value="1">1 Location</option>
+                                <option value="2">2 Locations</option>
+                                <option value="3">3 Locations</option>
+                                <option value="4">4 Locations</option>
+                                <option value="5">5 Locations</option>
+                            </select>
+                            <span class="text-danger error-text edit_locations_error"></span>
+                        </div>
+
                         <div class="col-md-6 mb-3">
                             <label for="edit_price_for_add_ons" class="form-label">Price ($) <span
                                     class="text-danger">*</span></label>
                             <input type="number" class="form-control" id="edit_price_for_add_ons" name="price"
                                 placeholder="Enter price" min="0" step="0.01">
                             <span class="text-danger error-text edit_price_error"></span>
+                        </div>
+
+                        {{-- Edit Community Images Pricing Guide --}}
+                        <div class="col-12" id="edit_community_pricing_guide" style="display: none;">
+                            <div class="alert alert-info">
+                                <h6><i class="fas fa-info-circle"></i> Community Images Pricing Guide:</h6>
+                                <ul class="mb-0">
+                                    <li><strong>2 Community Images - 1 location:</strong> $19.00</li>
+                                    <li><strong>5 Community Images - 2 locations:</strong> $49.00</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
