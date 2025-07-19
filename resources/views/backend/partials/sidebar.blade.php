@@ -73,6 +73,15 @@
                     </a>
                 </li>
 
+                {{-- Other Services --}}
+                <li class="nav-item">
+                    <a href="{{ route('other-service.index') }}"
+                        class="nav-link menu-link {{ request()->routeIs('other-service.*') ? 'active' : '' }}">
+                        <i class="ri-stack-line"></i>
+                        <span data-key="t-package">Other Services</span>
+                    </a>
+                </li>
+
                 <hr>
                 {{-- Settings --}}
                 <li class="nav-item">

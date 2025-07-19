@@ -3,6 +3,7 @@
 use App\Http\Controllers\Web\Backend\AddOnController;
 use App\Http\Controllers\Web\Backend\DashboardController;
 use App\Http\Controllers\Web\Backend\FootageSizeController;
+use App\Http\Controllers\Web\Backend\OtherServiceController;
 use App\Http\Controllers\Web\Backend\PackageController;
 use App\Http\Controllers\Web\Backend\ServiceController;
 use App\Http\Controllers\Web\Backend\ServiceItemController;
@@ -68,4 +69,13 @@ Route::prefix('service')->name('service.')->group(function () {
         Route::get('/status/{id}', 'status')->name('status');
         Route::delete('/destroy/{id}', 'destroy')->name('destroy');
     });
+});
+
+// Route for Other Services
+Route::controller(OtherServiceController::class)->prefix('other-service')->name('other-service.')->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::post('/store', 'store')->name('store');
+    Route::put('/update/{id}', 'update')->name('update');
+    Route::get('/status/{id}', 'status')->name('status');
+    Route::delete('/destroy/{id}', 'destroy')->name('destroy');
 });
