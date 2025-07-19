@@ -20,7 +20,7 @@
                             <span class="text-danger error-text create_footage_size_id_error"></span>
                         </div>
 
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-6 mb-3">
                             <label for="service_item_id" class="form-label">Select Service Item <span
                                     class="text-danger">*</span></label>
                             <select class="form-select" id="service_item_id" name="service_item_id">
@@ -31,9 +31,9 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="quantity" class="form-label">Quantity <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control" id="quantity" name="quantity"
-                                placeholder="Enter quantity" min="1">
+                            <label for="quantity" class="form-label">Quantity</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" value="1"
+                                placeholder="Enter quantity">
                             <span class="text-danger error-text create_quantity_error"></span>
                         </div>
 
@@ -72,16 +72,16 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="edit_footage_size_id" class="form-label">Select Footage Size <span
+                            <label for="edit_footage_size_id_for_add_ons" class="form-label">Select Footage Size <span
                                     class="text-danger">*</span></label>
-                            <select class="form-select" id="edit_footage_size_id" name="footage_size_id">
+                            <select class="form-select" id="edit_footage_size_id_for_add_ons" name="footage_size_id">
                                 <option value="">Choose a footage size...</option>
                                 {{-- Options will be populated via JavaScript --}}
                             </select>
                             <span class="text-danger error-text edit_footage_size_id_error"></span>
                         </div>
 
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-6 mb-3">
                             <label for="edit_service_item_id" class="form-label">Select Service Item <span
                                     class="text-danger">*</span></label>
                             <select class="form-select" id="edit_service_item_id" name="service_item_id">
@@ -92,17 +92,16 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="edit_quantity" class="form-label">Quantity <span
-                                    class="text-danger">*</span></label>
+                            <label for="edit_quantity" class="form-label">Quantity</label>
                             <input type="number" class="form-control" id="edit_quantity" name="quantity"
-                                placeholder="Enter quantity" min="1">
+                                placeholder="Enter quantity">
                             <span class="text-danger error-text edit_quantity_error"></span>
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="edit_price" class="form-label">Price ($) <span
+                            <label for="edit_price_for_add_ons" class="form-label">Price ($) <span
                                     class="text-danger">*</span></label>
-                            <input type="number" class="form-control" id="edit_price" name="price"
+                            <input type="number" class="form-control" id="edit_price_for_add_ons" name="price"
                                 placeholder="Enter price" min="0" step="0.01">
                             <span class="text-danger error-text edit_price_error"></span>
                         </div>

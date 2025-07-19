@@ -191,7 +191,7 @@
                             footageOptions +=
                                 `<option value="${footage.id}" ${selected}>${footage.size}</option>`;
                         });
-                        $('#edit_footage_size_id').html(footageOptions);
+                        $('#edit_footage_size_id_for_add_ons').html(footageOptions);
 
                         // Populate Service Item Dropdown
                         let serviceItemOptions = '<option value="">Choose a service item...</option>';
@@ -205,7 +205,7 @@
 
                         // Set quantity and price
                         $('#edit_quantity').val(currentData.quantity);
-                        $('#edit_price').val(currentData.price);
+                        $('#edit_price_for_add_ons').val(currentData.price);
                     } else {
                         toastr.error('Failed to load form data');
                     }

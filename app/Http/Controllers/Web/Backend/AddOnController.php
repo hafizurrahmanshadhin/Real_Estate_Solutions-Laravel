@@ -80,7 +80,7 @@ class AddOnController extends Controller {
         $validator = Validator::make($request->all(), [
             'footage_size_id' => 'required|integer|exists:footage_sizes,id',
             'service_item_id' => 'required|integer|exists:service_items,id',
-            'quantity'        => 'required|integer|min:1',
+            'quantity'        => 'nullable|integer|min:1',
             'price'           => 'required|numeric|min:0',
         ]);
 
@@ -120,7 +120,7 @@ class AddOnController extends Controller {
         $validator = Validator::make($request->all(), [
             'footage_size_id' => 'required|integer|exists:footage_sizes,id',
             'service_item_id' => 'required|integer|exists:service_items,id',
-            'quantity'        => 'required|integer|min:1',
+            'quantity'        => 'nullable|integer|min:1',
             'price'           => 'required|numeric|min:0',
         ]);
 
