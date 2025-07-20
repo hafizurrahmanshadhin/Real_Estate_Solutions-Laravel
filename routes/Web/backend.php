@@ -74,6 +74,8 @@ Route::prefix('service')->name('service.')->group(function () {
 // Route for Other Services
 Route::controller(OtherServiceController::class)->prefix('other-service')->name('other-service.')->group(function () {
     Route::get('/', 'index')->name('index');
+    Route::patch('/', 'updateOtherService')->name('header.update');
+    Route::get('/show/{id}', 'show')->name('show');
     Route::post('/store', 'store')->name('store');
     Route::put('/update/{id}', 'update')->name('update');
     Route::get('/status/{id}', 'status')->name('status');
