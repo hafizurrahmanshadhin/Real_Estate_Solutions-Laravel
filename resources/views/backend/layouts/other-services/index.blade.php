@@ -5,58 +5,49 @@
 @section('content')
     <div class="page-content">
         <div class="container-fluid">
-            {{-- <div class="row">
+            {{-- ✅ Service Description Update Section (Single Entity) --}}
+            <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Service Description Settings</h5>
+                        </div>
                         <div class="card-body">
-                            <form method="POST" action="{{ route('other-service.header.update') }}"
-                                enctype="multipart/form-data">
+                            <form method="POST" action="{{ route('other-service.header.update') }}">
                                 @csrf
                                 @method('PATCH')
                                 <div class="row gy-4">
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div>
-                                            <label for="title" class="form-label">Title:</label>
-                                            <input type="text" class="form-control @error('title') is-invalid @enderror"
-                                                name="title" id="title" placeholder="Please Enter Title"
-                                                value="{{ old('title', $AIPrompt->title ?? '') }}" style="height: 100px;">
-                                            @error('title')
+                                            <label for="service_description" class="form-label">Service Description:</label>
+                                            <textarea class="form-control @error('service_description') is-invalid @enderror" name="service_description"
+                                                id="service_description" placeholder="Please Enter Service Description" rows="4">{{ old('service_description', $otherService->service_description ?? '') }}</textarea>
+                                            @error('service_description')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
                                     </div>
-
-                                    <div class="col-md-6">
-                                        <div>
-                                            <label for="image" class="form-label">Image:</label>
-                                            <input type="hidden" name="remove_image" value="0">
-                                            <input class="form-control dropify @error('image') is-invalid @enderror"
-                                                type="file" name="image" id="image"
-                                                data-default-file="@isset($AIPrompt){{ asset($AIPrompt->image) }}@endisset">
-                                            @error('image')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save me-1"></i>Update Service Description
+                                        </button>
                                     </div>
-
-                                    <button type="submit" class="btn btn-primary w-50"
-                                        style="margin-top: -38px; margin-right: 80%;">
-                                        Submit
-                                    </button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-            </div> --}}
+            </div>
 
-            {{-- Other Services List --}}
+            {{-- ✅ Other Services CRUD Section --}}
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="card-title mb-0">All Other Services List</h5>
-                            <button type="button" class="btn btn-primary btn-sm" id="addNewOtherService">Add New</button>
+                            <h5 class="card-title mb-0">Other Services Management</h5>
+                            <button type="button" class="btn btn-primary btn-sm" id="addNewOtherService">
+                                <i class="fas fa-plus me-1"></i>Add New Service
+                            </button>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -85,98 +76,112 @@
         </div>
     </div>
 
-    {{-- Create Modal Start --}}
+    {{-- ✅ Create Modal with CKEditor + Dropify --}}
     <div class="modal fade" id="createOtherServiceModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
-            <form id="createOtherServiceForm" class="modal-content" enctype="multipart/form-data">
-                @csrf
+            <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Create New Other Service</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
+                <form id="createOtherServiceForm" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="modal_create_title" class="form-label">Title <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" name="title" id="modal_create_title" class="form-control">
+                            <span class="text-danger error-text create_title_error"></span>
+                        </div>
 
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="title" class="form-label">Title</label>
-                        <input type="text" name="title" id="create_title" class="form-control">
-                        <span class="text-danger error-text create_title_error"></span>
+                        <div class="mb-3">
+                            <label for="modal_create_description" class="form-label">Description <span
+                                    class="text-danger">*</span></label>
+                            <textarea name="description" id="modal_create_description" class="form-control" rows="4"></textarea>
+                            <span class="text-danger error-text create_description_error"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="modal_create_image" class="form-label">Image <span
+                                    class="text-danger">*</span></label>
+                            <input type="file" name="image" id="modal_create_image" class="form-control dropify"
+                                accept="image/*">
+                            <span class="text-danger error-text create_image_error"></span>
+                            <small class="text-muted">Accepted formats: JPG, PNG, GIF (Max: 20MB)</small>
+                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="create_description" class="form-label">Description</label>
-                        <textarea name="description" id="create_description" class="form-control" rows="4"></textarea>
-                        <span class="text-danger error-text create_description_error"></span>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i>Create Service
+                        </button>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="create_image" class="form-label">Image</label>
-                        <input type="file" name="image" id="create_image" class="form-control dropify">
-                        <span class="text-danger error-text create_image_error"></span>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button class="btn btn-primary">Create</button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-    {{-- Create Modal End --}}
 
-    {{-- Edit Modal Start --}}
-    {{-- <div class="modal fade" id="editFeatureModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <form id="editFeatureForm" class="modal-content" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-                <input type="hidden" id="edit_feature_id" name="id">
-
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Feature</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Title</label>
-                        <input type="text" id="edit_title" name="title" class="form-control">
-                        <span class="text-danger error-text edit_title_error"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="edit_description" class="form-label">Description</label>
-                        <textarea id="edit_description" name="description" class="form-control" rows="4"></textarea>
-                        <span class="text-danger error-text edit_description_error"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="edit_image" class="form-label">Image</label>
-                        <input type="file" id="edit_image" name="image" class="form-control dropify"
-                            data-default-file="">
-                        <span class="text-danger error-text edit_image_error"></span>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button class="btn btn-primary">Update</button>
-                </div>
-            </form>
-        </div>
-    </div> --}}
-    {{-- Edit Modal End --}}
-
-    {{-- Modal for viewing feature details start --}}
-    <div class="modal fade" id="viewFeatureModal" tabindex="-1" aria-labelledby="FeatureModalLabel" aria-hidden="true">
+    {{-- ✅ Edit Modal with CKEditor + Dropify --}}
+    <div class="modal fade" id="editOtherServiceModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 id="FeatureModalLabel" class="modal-title">Feature Details</h5>
+                    <h5 class="modal-title">Edit Other Service</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="editOtherServiceForm" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" id="edit_other_service_id" name="id">
+
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="modal_edit_title" class="form-label">Title <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" id="modal_edit_title" name="title" class="form-control">
+                            <span class="text-danger error-text edit_title_error"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="modal_edit_description" class="form-label">Description <span
+                                    class="text-danger">*</span></label>
+                            <textarea id="modal_edit_description" name="description" class="form-control" rows="4"></textarea>
+                            <span class="text-danger error-text edit_description_error"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="modal_edit_image" class="form-label">Image</label>
+                            <input type="file" id="modal_edit_image" name="image" class="form-control dropify"
+                                accept="image/*">
+                            <span class="text-danger error-text edit_image_error"></span>
+                            <small class="text-muted">Leave empty to keep current image. Accepted formats: JPG, PNG, GIF
+                                (Max: 20MB)</small>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i>Update Service
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- View Modal --}}
+    <div class="modal fade" id="viewOtherServiceModal" tabindex="-1" aria-labelledby="OtherServiceModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="OtherServiceModalLabel" class="modal-title">Other Service Details</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    {{-- Dynamic data filled by JS --}}
+                    {{-- Dynamic content --}}
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -184,9 +189,8 @@
             </div>
         </div>
     </div>
-    {{-- Modal for viewing feature details end --}}
 
-    {{-- Modal for image preview start --}}
+    {{-- Image Preview Modal --}}
     <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imagePreviewModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -196,300 +200,314 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    {{-- Filled by showImagePreview() --}}
+                    {{-- Dynamic content --}}
                 </div>
             </div>
         </div>
     </div>
-    {{-- Modal for image preview end --}}
 @endsection
+
 
 @push('scripts')
     <script>
-        // ---------------------------------
-        // 1. Keep references to CKEditor
-        // ---------------------------------
-        let createEditor, editEditor;
-
-        ClassicEditor
-            .create(document.querySelector('#create_description')) // for create modal
-            .then(editor => {
-                createEditor = editor;
-            })
-            .catch(error => {
-                console.error(error);
-            });
-
-        ClassicEditor
-            .create(document.querySelector('#edit_description')) // for edit modal
-            .then(editor => {
-                editEditor = editor;
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        let createEditor, editEditor, serviceDescriptionEditor;
 
         $(document).ready(function() {
-            // Initialize top-level dropify (already used in the main form)
+            // ✅ Initialize Dropify
             $('.dropify').dropify();
 
-            // For the hidden remove_image input
-            $('#image').on('dropify.afterClear', function() {
-                $('input[name="remove_image"]').val('1');
-            });
+            // ✅ Get CSRF Token
+            let csrfToken = $('meta[name="csrf-token"]').attr('content');
 
+            // ✅ AJAX Setup with CSRF Token
             $.ajaxSetup({
                 headers: {
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-                },
+                    'X-CSRF-TOKEN': csrfToken
+                }
             });
 
-            // Add a hidden "image_url" column in your controller if you want direct file links
-            // so you can set .dropify({ defaultFile: row.image_url })
+            // ✅ Initialize CKEditor for Service Description (Main Form)
+            ClassicEditor.create(document.querySelector('#service_description'))
+                .then(editor => {
+                    serviceDescriptionEditor = editor;
+                    console.log('Service Description editor initialized');
+                })
+                .catch(error => {
+                    console.error('Service Description editor error:', error);
+                });
 
-            if (!$.fn.DataTable.isDataTable('#datatable')) {
-                let table = $('#datatable').DataTable({
-                    responsive: true,
-                    order: [],
-                    lengthMenu: [
-                        [10, 25, 50, 100, -1],
-                        [10, 25, 50, 100, "All"],
-                    ],
-                    processing: true,
-                    serverSide: true,
-                    pagingType: "full_numbers",
-                    ajax: {
-                        url: "{{ route('other-service.index') }}",
-                        type: "GET",
+            // ✅ Initialize DataTable
+            let table = $('#datatable').DataTable({
+                responsive: true,
+                order: [],
+                lengthMenu: [
+                    [10, 25, 50, 100, -1],
+                    [10, 25, 50, 100, "All"]
+                ],
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ route('other-service.index') }}",
+                    type: "GET",
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                },
+                dom: "<'row table-topbar'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>><'row'<'col-12'tr>><'row table-bottom'<'col-md-5 dataTables_left'i><'col-md-7'p>>",
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "Search records...",
+                    lengthMenu: "Show _MENU_ entries",
+                    processing: '<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>'
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false,
+                        className: 'text-center',
+                        width: '5%'
                     },
-                    dom: "<'row table-topbar'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>>" +
-                        "<'row'<'col-12'tr>>" +
-                        "<'row table-bottom'<'col-md-5 dataTables_left'i><'col-md-7'p>>",
-                    language: {
-                        search: "_INPUT_",
-                        searchPlaceholder: "Search records...",
-                        lengthMenu: "Show _MENU_ entries",
-                        processing: `
-                    <div class="text-center">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    </div>`,
+                    {
+                        data: 'title',
+                        orderable: true,
+                        searchable: true,
+                        width: '20%'
                     },
-                    autoWidth: false,
-                    columns: [{
-                            data: 'DT_RowIndex',
-                            name: 'DT_RowIndex',
-                            orderable: false,
-                            searchable: false,
-                            className: 'text-center',
-                            width: '5%'
-                        },
-                        {
-                            data: 'title',
-                            name: 'title',
-                            orderable: true,
-                            searchable: true,
-                            width: '20%',
-                            render: function(data) {
-                                return '<div style="white-space:normal;word-break:break-word;">' +
-                                    data + '</div>';
-                            }
-                        },
-                        {
-                            data: 'image',
-                            name: 'image',
-                            orderable: false,
-                            searchable: false,
-                            className: 'text-center',
-                            width: '5%'
-                        },
-                        {
-                            data: 'description',
-                            name: 'description',
-                            orderable: false,
-                            searchable: false,
-                            width: '60%',
-                            render: function(data) {
-                                return '<div style="white-space:normal;word-break:break-word;">' +
-                                    data + '</div>';
-                            }
-                        },
-                        {
-                            data: 'status',
-                            name: 'status',
-                            orderable: false,
-                            searchable: false,
-                            className: 'text-center',
-                            width: '5%'
-                        },
-                        {
-                            data: 'action',
-                            name: 'action',
-                            orderable: false,
-                            searchable: false,
-                            className: 'text-center',
-                            width: '5%'
-                        },
-                    ],
-                });
-
-                // ---------------------------------
-                // 2. "Add New OtherService" button
-                // ---------------------------------
-                $('#addNewOtherService').on('click', () => {
-                    // Clear the form
-                    $('#createOtherServiceForm')[0].reset();
-
-                    // Clear CKEditor data
-                    if (createEditor) {
-                        createEditor.setData(''); // Reset
+                    {
+                        data: 'image',
+                        orderable: false,
+                        searchable: false,
+                        className: 'text-center',
+                        width: '10%'
+                    },
+                    {
+                        data: 'description',
+                        orderable: false,
+                        searchable: false,
+                        width: '50%'
+                    },
+                    {
+                        data: 'status',
+                        orderable: false,
+                        searchable: false,
+                        className: 'text-center',
+                        width: '10%'
+                    },
+                    {
+                        data: 'action',
+                        orderable: false,
+                        searchable: false,
+                        className: 'text-center',
+                        width: '15%'
                     }
+                ]
+            });
 
-                    // Re-init Dropify in the Create form
-                    $('#create_image').val('');
-                    let dropifyCreate = $('#create_image').dropify();
-                    dropifyCreate = dropifyCreate.data('dropify');
-                    if (dropifyCreate) {
-                        dropifyCreate.resetPreview();
-                        dropifyCreate.clearElement();
-                    }
+            // ✅ Add New Button
+            $('#addNewOtherService').click(function() {
+                console.log('Add New button clicked');
 
-                    $('.error-text').text('');
-                    $('#createOtherServiceModal').modal('show');
-                });
+                // Reset form
+                $('#createOtherServiceForm')[0].reset();
+                $('.error-text').text('');
 
-                // ---------------------------------
-                // 3. Submit "Create OtherService" form
-                // ---------------------------------
-                $('#createOtherServiceForm').submit(e => {
-                    e.preventDefault();
-                    $('.error-text').text('');
+                // Clear CKEditor
+                if (createEditor) {
+                    createEditor.setData('');
+                }
 
-                    axios.post("{{ route('other-service.store') }}", new FormData(e.target))
-                        .then(({
-                            data
-                        }) => {
-                            if (data.status) {
-                                $('#createOtherServiceModal').modal('hide');
-                                table.ajax.reload();
-                                toastr.success(data.message);
-                            } else {
-                                for (let [k, v] of Object.entries(data.errors || {})) {
-                                    $(`.create_${k}_error`).text(v[0]);
-                                }
-                                toastr.error(data.message);
-                            }
+                // Reset Dropify
+                $('#modal_create_image').dropify('destroy').dropify();
+
+                // Show modal
+                $('#createOtherServiceModal').modal('show');
+            });
+
+            // ✅ Initialize CKEditor when Create Modal is shown
+            $('#createOtherServiceModal').on('shown.bs.modal', function() {
+                if (!createEditor && document.querySelector('#modal_create_description')) {
+                    ClassicEditor.create(document.querySelector('#modal_create_description'))
+                        .then(editor => {
+                            createEditor = editor;
+                            console.log('Create editor initialized');
                         })
-                        .catch(() => toastr.error('Something went wrong.'));
-                });
+                        .catch(error => {
+                            console.error('Create editor error:', error);
+                        });
+                }
+            });
 
-                // ---------------------------------
-                // 4. Show "Edit Feature" modal
-                // ---------------------------------
-                $(document).on('click', '.edit-feature', function() {
-                    let row = table.row($(this).closest('tr')).data();
-
-                    // Basic fields
-                    $('#edit_feature_id').val(row.id);
-                    $('#edit_title').val(row.title);
-
-                    // Set CKEditor content
-                    if (editEditor) {
-                        editEditor.setData(row.description || '');
-                    } else {
-                        // fallback if needed
-                        $('#edit_description').val(row.description || '');
-                    }
-
-                    // Re-init Dropify for existing image
-                    $('#edit_image').val('');
-                    let dropifyEdit = $('#edit_image').dropify({
-                        defaultFile: row
-                            .image_url // Make sure you have a hidden "image_url" column in the JSON
-                    });
-                    dropifyEdit = dropifyEdit.data('dropify');
-                    dropifyEdit.resetPreview();
-                    dropifyEdit.clearElement();
-                    dropifyEdit.settings.defaultFile = row.image_url || '';
-                    dropifyEdit.destroy();
-                    dropifyEdit.init();
-
-                    $('.error-text').text('');
-                    $('#editFeatureModal').modal('show');
-                });
-
-                // ---------------------------------
-                // 5. Submit "Edit Feature" form
-                // ---------------------------------
-                const updateFeatureUrlTemplate = "{{ route('other-service.update', ['id' => ':id']) }}";
-
-                $('#editFeatureForm').submit(e => {
-                    e.preventDefault();
-                    $('.error-text').text('');
-
-                    const id = $('#edit_feature_id').val();
-                    const url = updateFeatureUrlTemplate.replace(':id', id);
-                    const formData = new FormData(e.target);
-
-                    axios.post(url, formData)
-                        .then(({
-                            data
-                        }) => {
-                            if (data.status) {
-                                $('#editFeatureModal').modal('hide');
-                                table.ajax.reload();
-                                toastr.success(data.message);
-                            } else {
-                                for (let [field, msgs] of Object.entries(data.errors || {})) {
-                                    $(`.edit_${field}_error`).text(msgs[0]);
-                                }
-                                toastr.error(data.message);
-                            }
+            // ✅ Initialize CKEditor when Edit Modal is shown
+            $('#editOtherServiceModal').on('shown.bs.modal', function() {
+                if (!editEditor && document.querySelector('#modal_edit_description')) {
+                    ClassicEditor.create(document.querySelector('#modal_edit_description'))
+                        .then(editor => {
+                            editEditor = editor;
+                            console.log('Edit editor initialized');
                         })
-                        .catch(() => toastr.error('Something went wrong.'));
+                        .catch(error => {
+                            console.error('Edit editor error:', error);
+                        });
+                }
+            });
+
+            // ✅ Create Form Submit with Proper CSRF
+            $('#createOtherServiceForm').submit(function(e) {
+                e.preventDefault();
+                console.log('Create form submitted');
+
+                // Clear previous errors
+                $('.error-text').text('');
+
+                // Get form data
+                let formData = new FormData();
+
+                let title = $('#modal_create_title').val().trim();
+                let description = createEditor ? createEditor.getData().trim() : $(
+                    '#modal_create_description').val().trim();
+                let image = $('#modal_create_image')[0].files[0];
+
+                // Validation
+                if (!title || !description || !image) {
+                    toastr.error('Please fill all required fields.');
+                    return;
+                }
+
+                // Build FormData with CSRF token
+                formData.append('_token', csrfToken);
+                formData.append('title', title);
+                formData.append('description', description);
+                formData.append('image', image);
+
+                // Submit form
+                $.ajax({
+                    url: "{{ route('other-service.store') }}",
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    success: function(response) {
+                        console.log('Success:', response);
+                        if (response.status) {
+                            $('#createOtherServiceModal').modal('hide');
+                            table.ajax.reload();
+                            toastr.success(response.message);
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        console.log('Error:', xhr);
+
+                        if (xhr.responseJSON && xhr.responseJSON.errors) {
+                            let errors = xhr.responseJSON.errors;
+                            Object.keys(errors).forEach(function(key) {
+                                $(`.create_${key}_error`).text(errors[key][0]);
+                            });
+                        }
+
+                        toastr.error(xhr.responseJSON?.message || 'Something went wrong.');
+                    }
                 });
-            }
+            });
+
+            // ✅ Edit Button Click
+            $(document).on('click', '.edit-other-service', function() {
+                let row = table.row($(this).closest('tr')).data();
+
+                $('#edit_other_service_id').val(row.id);
+                $('#modal_edit_title').val(row.title);
+
+                // Set CKEditor content
+                if (editEditor) {
+                    editEditor.setData(row.description || '');
+                } else {
+                    $('#modal_edit_description').val(row.description || '');
+                }
+
+                // Reset Dropify with existing image
+                $('#modal_edit_image').dropify('destroy').dropify({
+                    defaultFile: row.image_url || ''
+                });
+
+                $('.error-text').text('');
+                $('#editOtherServiceModal').modal('show');
+            });
+
+            // ✅ Edit Form Submit with Proper CSRF
+            $('#editOtherServiceForm').submit(function(e) {
+                e.preventDefault();
+
+                $('.error-text').text('');
+
+                let formData = new FormData();
+                let id = $('#edit_other_service_id').val();
+
+                let title = $('#modal_edit_title').val().trim();
+                let description = editEditor ? editEditor.getData().trim() : $('#modal_edit_description')
+                    .val().trim();
+                let image = $('#modal_edit_image')[0].files[0];
+
+                // Validation
+                if (!title || !description) {
+                    toastr.error('Please fill all required fields.');
+                    return;
+                }
+
+                // Build FormData with CSRF token
+                formData.append('_token', csrfToken);
+                formData.append('_method', 'PUT');
+                formData.append('title', title);
+                formData.append('description', description);
+
+                if (image) {
+                    formData.append('image', image);
+                }
+
+                $.ajax({
+                    url: "{{ route('other-service.update', ':id') }}".replace(':id', id),
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    success: function(response) {
+                        if (response.status) {
+                            $('#editOtherServiceModal').modal('hide');
+                            table.ajax.reload();
+                            toastr.success(response.message);
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.responseJSON && xhr.responseJSON.errors) {
+                            let errors = xhr.responseJSON.errors;
+                            Object.keys(errors).forEach(function(key) {
+                                $(`.edit_${key}_error`).text(errors[key][0]);
+                            });
+                        }
+                        toastr.error(xhr.responseJSON?.message || 'Something went wrong.');
+                    }
+                });
+            });
+
+            // ✅ Handle Service Description Form Submit
+            $('form[action="{{ route('other-service.header.update') }}"]').submit(function(e) {
+                if (serviceDescriptionEditor) {
+                    // Update the hidden textarea with CKEditor content
+                    let content = serviceDescriptionEditor.getData();
+                    $('#service_description').val(content);
+                }
+            });
         });
 
-        // ---------------------------------
-        // 6. Utility functions
-        // ---------------------------------
-        async function showFeatureDetails(id) {
-            let url = '{{ route('other-service.show', ['id' => ':id']) }}'.replace(':id', id);
-            const defaultImage = "{{ asset('backend/images/users/user-dummy-img.jpg') }}";
-
-            try {
-                let response = await axios.get(url);
-                if (response.data && response.data.data) {
-                    let data = response.data.data;
-                    let imgPath = data.image ? `{{ url('/') }}/${data.image}` : defaultImage;
-                    let modalBody = document.querySelector('#viewFeatureModal .modal-body');
-                    modalBody.innerHTML = `
-                        <div class="text-center mb-3">
-                            <img src="${imgPath}" alt="Image" width="200" height="200" class="rounded">
-                        </div>
-                        <p><strong>Title:</strong> ${data.title}</p>
-                        <p><strong>Description:</strong> ${data.description}</p>
-                    `;
-                } else {
-                    toastr.error('No data returned from the server.');
-                }
-            } catch (error) {
-                console.error(error);
-                toastr.error('Could not fetch feature details.');
-            }
-        }
-
-        function showImagePreview(imageUrl) {
-            let modalBody = document.querySelector('#imagePreviewModal .modal-body');
-            modalBody.innerHTML = `
-                <div class="text-center">
-                    <img src="${imageUrl}" alt="Preview" class="img-fluid" />
-                </div>
-            `;
-        }
-
+        // ✅ Status Functions with CSRF
         function showStatusChangeAlert(id) {
             event.preventDefault();
             Swal.fire({
@@ -498,73 +516,113 @@
                 icon: 'info',
                 showCancelButton: true,
                 confirmButtonText: 'Yes',
-                cancelButtonText: 'No',
+                cancelButtonText: 'No'
             }).then((result) => {
-                if (result.isConfirmed) {
-                    statusChange(id);
-                }
+                if (result.isConfirmed) statusChange(id);
             });
         }
 
         function statusChange(id) {
-            let url = '{{ route('other-service.status', ['id' => ':id']) }}'.replace(':id', id);
+            let csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-            axios.get(url)
-                .then(function(response) {
+            $.ajax({
+                url: "{{ route('other-service.status', ':id') }}".replace(':id', id),
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function(response) {
                     $('#datatable').DataTable().ajax.reload();
-                    if (response.data.status === true) {
-                        toastr.success(response.data.message);
-                    } else if (response.data.errors) {
-                        toastr.error(response.data.errors[0]);
+                    if (response.status === true) {
+                        toastr.success(response.message);
                     } else {
-                        toastr.error(response.data.message);
+                        toastr.error(response.message);
                     }
-                })
-                .catch(function(error) {
+                },
+                error: function() {
                     toastr.error('An error occurred. Please try again.');
-                    console.error(error);
-                });
-        }
-
-        function showDeleteConfirm(id) {
-            event.preventDefault();
-            Swal.fire({
-                title: 'Are you sure you want to delete this record?',
-                text: 'If you delete this, it will be gone forever.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    deleteItem(id);
                 }
             });
         }
 
-        function deleteItem(id) {
-            const url = '{{ route('other-service.destroy', ['id' => ':id']) }}'.replace(':id', id);
+        // ✅ Delete Functions with CSRF
+        function showDeleteConfirm(id) {
+            event.preventDefault();
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This action cannot be undone!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) deleteItem(id);
+            });
+        }
 
-            axios.delete(url, {
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                })
-                .then(function(response) {
+        function deleteItem(id) {
+            let csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+            $.ajax({
+                url: "{{ route('other-service.destroy', ':id') }}".replace(':id', id),
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function(response) {
                     $('#datatable').DataTable().ajax.reload();
-                    if (response.data.status === true) {
-                        toastr.success(response.data.message);
-                    } else if (response.data.errors) {
-                        toastr.error(response.data.errors[0]);
+                    if (response.status === true) {
+                        toastr.success(response.message);
                     } else {
-                        toastr.error(response.data.message);
+                        toastr.error(response.message);
                     }
-                })
-                .catch(function(error) {
+                },
+                error: function() {
                     toastr.error('An error occurred. Please try again.');
-                    console.error(error);
-                });
+                }
+            });
+        }
+
+        // ✅ View Details with CSRF
+        function showOtherServiceDetails(id) {
+            let csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+            $.ajax({
+                url: "{{ route('other-service.show', ':id') }}".replace(':id', id),
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function(response) {
+                    if (response.data) {
+                        let data = response.data;
+                        let imgPath = data.image ? `{{ url('/') }}/${data.image}` :
+                            "{{ asset('backend/images/users/user-dummy-img.jpg') }}";
+
+                        $('#viewOtherServiceModal .modal-body').html(`
+                            <div class="text-center mb-3">
+                                <img src="${imgPath}" alt="Image" width="200" height="200" class="rounded">
+                            </div>
+                            <p><strong>Title:</strong> ${data.title}</p>
+                            <p><strong>Description:</strong> ${data.description}</p>
+                            <p><strong>Status:</strong> <span class="badge ${data.status === 'active' ? 'bg-success' : 'bg-danger'}">${data.status}</span></p>
+                        `);
+                    }
+                },
+                error: function() {
+                    toastr.error('Could not fetch details.');
+                }
+            });
+        }
+
+        // ✅ Image Preview
+        function showImagePreview(imageUrl) {
+            $('#imagePreviewModal .modal-body').html(`
+                <div class="text-center">
+                    <img src="${imageUrl}" alt="Preview" class="img-fluid" />
+                </div>
+            `);
         }
     </script>
 @endpush
