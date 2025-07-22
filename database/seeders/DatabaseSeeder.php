@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Database\Seeders\AddOnSeeder;
 use Database\Seeders\ContentSeeder;
 use Database\Seeders\FootageSizeSeeder;
+use Database\Seeders\OtherServiceSeeder;
 use Database\Seeders\PackageSeeder;
 use Database\Seeders\ServiceItemSeeder;
 use Database\Seeders\ServiceItemsPivotSeeder;
@@ -29,6 +30,7 @@ class DatabaseSeeder extends Seeder {
             ServiceSeeder::class,
             ServiceItemsPivotSeeder::class,
             AddOnSeeder::class,
+            OtherServiceSeeder::class,
         ]);
     }
 }

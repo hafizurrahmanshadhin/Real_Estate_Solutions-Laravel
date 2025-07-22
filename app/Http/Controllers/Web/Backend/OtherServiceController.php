@@ -7,15 +7,24 @@ use App\Http\Controllers\Controller;
 use App\Models\OtherService;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
 use Yajra\DataTables\DataTables;
 
 class OtherServiceController extends Controller {
-    public function index(Request $request) {
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return JsonResponse|View
+     * @throws Exception
+     */
+    public function index(Request $request): JsonResponse | View {
         try {
             if ($request->ajax()) {
-                $data = OtherService::latest()->get();
+                $data = OtherService::where('id', '>', 1)->latest()->get();
                 return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('image', function ($data) {
@@ -32,7 +41,10 @@ class OtherServiceController extends Controller {
                     })
                     ->addColumn('image_url', function ($data) {
                         $defaultImage = asset('backend/images/users/user-dummy-img.jpg');
-                        return $data->image ? asset($data->image) : $defaultImage;
+                        if ($data->image) {
+                            return asset($data->image);
+                        }
+                        return $defaultImage;
                     })
                     ->addColumn('description', function ($data) {
                         $description      = $data->description;
@@ -69,14 +81,13 @@ class OtherServiceController extends Controller {
                     ->make();
             }
 
-            // ✅ Get or create the service_description record (single entity)
+            // Get or create the service_description record (single entity)
             $otherService = OtherService::whereNull('title')
                 ->whereNull('description')
                 ->whereNull('image')
                 ->first();
 
             if (!$otherService) {
-                // Create the single service_description record
                 $otherService                      = new OtherService();
                 $otherService->service_description = null;
                 $otherService->title               = null;
@@ -93,7 +104,14 @@ class OtherServiceController extends Controller {
         }
     }
 
-    public function updateOtherService(Request $request) {
+    /**
+     * Update the service description.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws Exception
+     */
+    public function updateOtherService(Request $request): RedirectResponse {
         try {
             $rules = [
                 'service_description' => 'nullable|string|max:1000',
@@ -104,7 +122,7 @@ class OtherServiceController extends Controller {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
-            // ✅ Get the single service_description record
+            // Get the single service_description record
             $otherService = OtherService::whereNull('title')
                 ->whereNull('description')
                 ->whereNull('image')
@@ -118,7 +136,7 @@ class OtherServiceController extends Controller {
                 $otherService->image       = null;
             }
 
-            // ✅ Update ONLY service_description
+            // Update ONLY service_description
             $otherService->service_description = $request->input('service_description');
             $otherService->save();
 
@@ -128,7 +146,14 @@ class OtherServiceController extends Controller {
         }
     }
 
-    public function show(int $id) {
+    /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function show(int $id): JsonResponse {
         try {
             $data = OtherService::findOrFail($id);
             return Helper::jsonResponse(true, 'Data fetched successfully', 200, $data);
@@ -139,7 +164,14 @@ class OtherServiceController extends Controller {
         }
     }
 
-    public function store(Request $request) {
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function store(Request $request): JsonResponse {
         try {
             $validator = Validator::make($request->all(), [
                 'title'       => 'required|string',
@@ -173,7 +205,15 @@ class OtherServiceController extends Controller {
         }
     }
 
-    public function update(Request $request, int $id) {
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function update(Request $request, int $id): JsonResponse {
         try {
             $validator = Validator::make($request->all(), [
                 'title'       => 'required|string',
@@ -209,7 +249,14 @@ class OtherServiceController extends Controller {
         }
     }
 
-    public function status(int $id) {
+    /**
+     * Toggle the status of the service.
+     *
+     * @param int $id
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function status(int $id): JsonResponse {
         try {
             $otherService = OtherService::findOrFail($id);
 
@@ -231,7 +278,14 @@ class OtherServiceController extends Controller {
         }
     }
 
-    public function destroy(int $id) {
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param int $id
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function destroy(int $id): JsonResponse {
         try {
             $otherService = OtherService::findOrFail($id);
 

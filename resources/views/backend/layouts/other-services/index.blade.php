@@ -5,7 +5,7 @@
 @section('content')
     <div class="page-content">
         <div class="container-fluid">
-            {{-- ✅ Service Description Update Section (Single Entity) --}}
+            {{-- Service Description Update Section (Single Entity) --}}
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
@@ -39,7 +39,7 @@
                 </div>
             </div>
 
-            {{-- ✅ Other Services CRUD Section --}}
+            {{-- Other Services CRUD Section --}}
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
@@ -76,7 +76,7 @@
         </div>
     </div>
 
-    {{-- ✅ Create Modal with CKEditor + Dropify --}}
+    {{-- Create Modal with CKEditor + Dropify --}}
     <div class="modal fade" id="createOtherServiceModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -122,7 +122,7 @@
         </div>
     </div>
 
-    {{-- ✅ Edit Modal with CKEditor + Dropify --}}
+    {{-- Edit Modal with CKEditor + Dropify --}}
     <div class="modal fade" id="editOtherServiceModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -210,23 +210,24 @@
 
 @push('scripts')
     <script>
+        // Complete updated JavaScript code for your blade file
         let createEditor, editEditor, serviceDescriptionEditor;
 
         $(document).ready(function() {
-            // ✅ Initialize Dropify
+            // Initialize Dropify
             $('.dropify').dropify();
 
-            // ✅ Get CSRF Token
+            // Get CSRF Token
             let csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-            // ✅ AJAX Setup with CSRF Token
+            // AJAX Setup with CSRF Token
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': csrfToken
                 }
             });
 
-            // ✅ Initialize CKEditor for Service Description (Main Form)
+            // Initialize CKEditor for Service Description (Main Form)
             ClassicEditor.create(document.querySelector('#service_description'))
                 .then(editor => {
                     serviceDescriptionEditor = editor;
@@ -236,7 +237,7 @@
                     console.error('Service Description editor error:', error);
                 });
 
-            // ✅ Initialize DataTable
+            // Initialize DataTable
             let table = $('#datatable').DataTable({
                 responsive: true,
                 order: [],
@@ -260,6 +261,7 @@
                     lengthMenu: "Show _MENU_ entries",
                     processing: '<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>'
                 },
+                autoWidth: false,
                 columns: [{
                         data: 'DT_RowIndex',
                         orderable: false,
@@ -271,39 +273,47 @@
                         data: 'title',
                         orderable: true,
                         searchable: true,
-                        width: '20%'
+                        width: '25%',
+                        render: function(data) {
+                            return '<div style="white-space:normal;word-break:break-word;">' +
+                                data + '</div>';
+                        }
                     },
                     {
                         data: 'image',
                         orderable: false,
                         searchable: false,
                         className: 'text-center',
-                        width: '10%'
+                        width: '5%'
                     },
                     {
                         data: 'description',
                         orderable: false,
                         searchable: false,
-                        width: '50%'
+                        width: '55%',
+                        render: function(data) {
+                            return '<div style="white-space:normal;word-break:break-word;">' +
+                                data + '</div>';
+                        }
                     },
                     {
                         data: 'status',
                         orderable: false,
                         searchable: false,
                         className: 'text-center',
-                        width: '10%'
+                        width: '5%'
                     },
                     {
                         data: 'action',
                         orderable: false,
                         searchable: false,
                         className: 'text-center',
-                        width: '15%'
+                        width: '5%'
                     }
                 ]
             });
 
-            // ✅ Add New Button
+            // Add New Button
             $('#addNewOtherService').click(function() {
                 console.log('Add New button clicked');
 
@@ -316,14 +326,81 @@
                     createEditor.setData('');
                 }
 
-                // Reset Dropify
-                $('#modal_create_image').dropify('destroy').dropify();
+                // Properly reset Dropify for create modal
+                let $createImageInput = $('#modal_create_image');
+
+                // Remove existing dropify wrapper completely
+                if ($createImageInput.closest('.dropify-wrapper').length) {
+                    // Store the original attributes
+                    let originalClass = $createImageInput.attr('class');
+                    let originalAccept = $createImageInput.attr('accept');
+                    let originalName = $createImageInput.attr('name');
+                    let originalId = $createImageInput.attr('id');
+
+                    // Create a fresh input element
+                    let newInput = $('<input>')
+                        .attr('type', 'file')
+                        .attr('name', originalName)
+                        .attr('id', originalId)
+                        .attr('accept', originalAccept)
+                        .addClass(originalClass);
+
+                    // Replace the existing input
+                    $createImageInput.closest('.dropify-wrapper').replaceWith(newInput);
+                    $createImageInput = newInput;
+                }
+
+                // Initialize fresh Dropify without any default file
+                $createImageInput.dropify({
+                    messages: {
+                        'default': 'Drag and drop a file here or click',
+                        'replace': 'Drag and drop or click to replace',
+                        'remove': 'Remove',
+                        'error': 'Ooops, something wrong happened.'
+                    }
+                });
 
                 // Show modal
                 $('#createOtherServiceModal').modal('show');
             });
 
-            // ✅ Initialize CKEditor when Create Modal is shown
+            // Also add this helper function to completely reset dropify
+            function resetDropify(selector) {
+                let $input = $(selector);
+
+                if ($input.closest('.dropify-wrapper').length) {
+                    // Store original attributes
+                    let originalAttributes = {
+                        class: $input.attr('class'),
+                        accept: $input.attr('accept'),
+                        name: $input.attr('name'),
+                        id: $input.attr('id')
+                    };
+
+                    // Create fresh input
+                    let newInput = $('<input type="file">')
+                        .attr(originalAttributes);
+
+                    // Replace completely
+                    $input.closest('.dropify-wrapper').replaceWith(newInput);
+
+                    // Initialize fresh Dropify
+                    newInput.dropify({
+                        messages: {
+                            'default': 'Drag and drop a file here or click',
+                            'replace': 'Drag and drop or click to replace',
+                            'remove': 'Remove',
+                            'error': 'Ooops, something wrong happened.'
+                        }
+                    });
+
+                    return newInput;
+                }
+
+                return $input;
+            }
+
+            // Initialize CKEditor when Create Modal is shown
             $('#createOtherServiceModal').on('shown.bs.modal', function() {
                 if (!createEditor && document.querySelector('#modal_create_description')) {
                     ClassicEditor.create(document.querySelector('#modal_create_description'))
@@ -337,7 +414,7 @@
                 }
             });
 
-            // ✅ Initialize CKEditor when Edit Modal is shown
+            // Initialize CKEditor when Edit Modal is shown
             $('#editOtherServiceModal').on('shown.bs.modal', function() {
                 if (!editEditor && document.querySelector('#modal_edit_description')) {
                     ClassicEditor.create(document.querySelector('#modal_edit_description'))
@@ -351,7 +428,7 @@
                 }
             });
 
-            // ✅ Create Form Submit with Proper CSRF
+            // Create Form Submit with Proper CSRF
             $('#createOtherServiceForm').submit(function(e) {
                 e.preventDefault();
                 console.log('Create form submitted');
@@ -414,30 +491,97 @@
                 });
             });
 
-            // ✅ Edit Button Click
+            // Alternative Edit Button Click - Using setTimeout for better Dropify handling
             $(document).on('click', '.edit-other-service', function() {
                 let row = table.row($(this).closest('tr')).data();
+                let id = row.id;
 
-                $('#edit_other_service_id').val(row.id);
-                $('#modal_edit_title').val(row.title);
+                // Fetch the data via AJAX to get accurate image path
+                $.ajax({
+                    url: "{{ route('other-service.show', ':id') }}".replace(':id', id),
+                    type: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    success: function(response) {
+                        if (response.status && response.data) {
+                            let data = response.data;
 
-                // Set CKEditor content
-                if (editEditor) {
-                    editEditor.setData(row.description || '');
-                } else {
-                    $('#modal_edit_description').val(row.description || '');
-                }
+                            // Set form values
+                            $('#edit_other_service_id').val(data.id);
+                            $('#modal_edit_title').val(data.title);
 
-                // Reset Dropify with existing image
-                $('#modal_edit_image').dropify('destroy').dropify({
-                    defaultFile: row.image_url || ''
+                            // Set CKEditor content
+                            if (editEditor) {
+                                editEditor.setData(data.description || '');
+                            } else {
+                                $('#modal_edit_description').val(data.description || '');
+                            }
+
+                            // Clear errors
+                            $('.error-text').text('');
+
+                            // Show modal first
+                            $('#editOtherServiceModal').modal('show');
+
+                            // Handle Dropify after modal is shown (use setTimeout to ensure DOM is ready)
+                            setTimeout(function() {
+                                let $imageInput = $('#modal_edit_image');
+
+                                // Remove existing dropify
+                                if ($imageInput.closest('.dropify-wrapper').length) {
+                                    let originalInput = $imageInput.clone();
+                                    $imageInput.closest('.dropify-wrapper').replaceWith(
+                                        originalInput);
+                                    $imageInput = originalInput;
+                                }
+
+                                // Initialize dropify with existing image
+                                if (data.image) {
+                                    let imageUrl = data.image_full_url || (
+                                        "{{ url('/') }}/" + data.image);
+                                    console.log('Image URL:', imageUrl);
+
+                                    // Create a temporary image to check if URL is valid
+                                    let tempImg = new Image();
+                                    tempImg.onload = function() {
+                                        console.log('Image loaded successfully');
+                                        $imageInput.attr('data-default-file',
+                                            imageUrl);
+                                        $imageInput.dropify({
+                                            messages: {
+                                                'default': 'Drag and drop a file here or click',
+                                                'replace': 'Drag and drop or click to replace',
+                                                'remove': 'Remove',
+                                                'error': 'Ooops, something wrong happened.'
+                                            }
+                                        });
+                                    };
+                                    tempImg.onerror = function() {
+                                        console.log(
+                                            'Image failed to load, initializing without default'
+                                        );
+                                        $imageInput.dropify();
+                                    };
+                                    tempImg.src = imageUrl;
+                                } else {
+                                    console.log('No image, initializing empty dropify');
+                                    $imageInput.dropify();
+                                }
+                            }, 300); // Small delay to ensure modal is fully rendered
+
+                        } else {
+                            toastr.error('Could not fetch record details');
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('Error fetching data:', xhr);
+                        toastr.error('Error fetching record details');
+                    }
                 });
-
-                $('.error-text').text('');
-                $('#editOtherServiceModal').modal('show');
             });
 
-            // ✅ Edit Form Submit with Proper CSRF
+            // Edit Form Submit with Proper CSRF
             $('#editOtherServiceForm').submit(function(e) {
                 e.preventDefault();
 
@@ -497,7 +641,7 @@
                 });
             });
 
-            // ✅ Handle Service Description Form Submit
+            // Handle Service Description Form Submit
             $('form[action="{{ route('other-service.header.update') }}"]').submit(function(e) {
                 if (serviceDescriptionEditor) {
                     // Update the hidden textarea with CKEditor content
@@ -507,7 +651,7 @@
             });
         });
 
-        // ✅ Status Functions with CSRF
+        // Status Functions with CSRF
         function showStatusChangeAlert(id) {
             event.preventDefault();
             Swal.fire({
@@ -545,7 +689,7 @@
             });
         }
 
-        // ✅ Delete Functions with CSRF
+        // Delete Functions with CSRF
         function showDeleteConfirm(id) {
             event.preventDefault();
             Swal.fire({
@@ -584,7 +728,7 @@
             });
         }
 
-        // ✅ View Details with CSRF
+        // View Details with CSRF
         function showOtherServiceDetails(id) {
             let csrfToken = $('meta[name="csrf-token"]').attr('content');
 
@@ -601,13 +745,13 @@
                             "{{ asset('backend/images/users/user-dummy-img.jpg') }}";
 
                         $('#viewOtherServiceModal .modal-body').html(`
-                            <div class="text-center mb-3">
-                                <img src="${imgPath}" alt="Image" width="200" height="200" class="rounded">
-                            </div>
-                            <p><strong>Title:</strong> ${data.title}</p>
-                            <p><strong>Description:</strong> ${data.description}</p>
-                            <p><strong>Status:</strong> <span class="badge ${data.status === 'active' ? 'bg-success' : 'bg-danger'}">${data.status}</span></p>
-                        `);
+                    <div class="text-center mb-3">
+                        <img src="${imgPath}" alt="Image" width="200" height="200" class="rounded">
+                    </div>
+                    <p><strong>Title:</strong> ${data.title}</p>
+                    <p><strong>Description:</strong> ${data.description}</p>
+                    <p><strong>Status:</strong> <span class="badge ${data.status === 'active' ? 'bg-success' : 'bg-danger'}">${data.status}</span></p>
+                `);
                     }
                 },
                 error: function() {
@@ -616,13 +760,13 @@
             });
         }
 
-        // ✅ Image Preview
+        // Image Preview
         function showImagePreview(imageUrl) {
             $('#imagePreviewModal .modal-body').html(`
-                <div class="text-center">
-                    <img src="${imageUrl}" alt="Preview" class="img-fluid" />
-                </div>
-            `);
+        <div class="text-center">
+            <img src="${imageUrl}" alt="Preview" class="img-fluid" />
+        </div>
+    `);
         }
     </script>
 @endpush
