@@ -6,12 +6,21 @@ use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\FootageSize;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
 use Yajra\DataTables\DataTables;
 
 class FootageSizeController extends Controller {
-    public function index(Request $request) {
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return JsonResponse|View
+     * @throws Exception
+     */
+    public function index(Request $request): JsonResponse | View {
         try {
             if ($request->ajax()) {
                 $data = FootageSize::get();
@@ -49,7 +58,14 @@ class FootageSizeController extends Controller {
         }
     }
 
-    public function store(Request $request) {
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function store(Request $request): JsonResponse {
         $validator = Validator::make($request->all(), [
             'size' => [
                 'required',
@@ -86,7 +102,15 @@ class FootageSizeController extends Controller {
         }
     }
 
-    public function update(Request $request, int $id) {
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function update(Request $request, int $id): JsonResponse {
         $validator = Validator::make($request->all(), [
             'size' => [
                 'required',
@@ -192,7 +216,14 @@ class FootageSizeController extends Controller {
         return $normalized;
     }
 
-    public function status(int $id) {
+    /**
+     * Toggle the status of the footage size.
+     *
+     * @param int $id
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function status(int $id): JsonResponse {
         try {
             $data = FootageSize::findOrFail($id);
 
@@ -221,7 +252,14 @@ class FootageSizeController extends Controller {
         }
     }
 
-    public function destroy(int $id) {
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param int $id
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function destroy(int $id): JsonResponse {
         try {
             $data = FootageSize::findOrFail($id);
 

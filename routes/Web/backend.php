@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Web\Backend\AddOnController;
+use App\Http\Controllers\Web\Backend\CMS\ContactPageHeroSectionController;
+use App\Http\Controllers\Web\Backend\CMS\HomePageHeroSectionController;
+use App\Http\Controllers\Web\Backend\CMS\OtherPageHeroSectionController;
 use App\Http\Controllers\Web\Backend\DashboardController;
 use App\Http\Controllers\Web\Backend\FootageSizeController;
 use App\Http\Controllers\Web\Backend\OtherServiceController;
@@ -80,4 +83,28 @@ Route::controller(OtherServiceController::class)->prefix('other-service')->name(
     Route::put('/update/{id}', 'update')->name('update');
     Route::get('/status/{id}', 'status')->name('status');
     Route::delete('/destroy/{id}', 'destroy')->name('destroy');
+});
+
+// CMS
+Route::prefix('cms')->group(function () {
+    Route::prefix('home-page')->name('home-page.')->group(function () {
+        Route::controller(HomePageHeroSectionController::class)->prefix('hero-section')->name('hero-section.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::patch('/', 'update')->name('update');
+        });
+    });
+
+    Route::prefix('contact-page')->name('contact-page.')->group(function () {
+        Route::controller(ContactPageHeroSectionController::class)->prefix('hero-section')->name('hero-section.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::patch('/', 'update')->name('update');
+        });
+    });
+
+    Route::prefix('other-page')->name('other-page.')->group(function () {
+        Route::controller(OtherPageHeroSectionController::class)->prefix('hero-section')->name('hero-section.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::patch('/', 'update')->name('update');
+        });
+    });
 });

@@ -15,7 +15,6 @@ class FootageSizeSeeder extends Seeder {
                 'status'     => 'active',
                 'created_at' => Carbon::parse('2025-07-16 02:57:39'),
                 'updated_at' => Carbon::parse('2025-07-16 02:57:39'),
-                'deleted_at' => null,
             ],
             [
                 'id'         => 2,
@@ -23,7 +22,6 @@ class FootageSizeSeeder extends Seeder {
                 'status'     => 'active',
                 'created_at' => Carbon::parse('2025-07-16 02:58:00'),
                 'updated_at' => Carbon::parse('2025-07-16 02:58:00'),
-                'deleted_at' => null,
             ],
             [
                 'id'         => 3,
@@ -31,7 +29,6 @@ class FootageSizeSeeder extends Seeder {
                 'status'     => 'active',
                 'created_at' => Carbon::parse('2025-07-16 02:58:12'),
                 'updated_at' => Carbon::parse('2025-07-16 02:58:12'),
-                'deleted_at' => null,
             ],
             [
                 'id'         => 4,
@@ -39,7 +36,6 @@ class FootageSizeSeeder extends Seeder {
                 'status'     => 'active',
                 'created_at' => Carbon::parse('2025-07-16 02:59:29'),
                 'updated_at' => Carbon::parse('2025-07-16 02:59:29'),
-                'deleted_at' => null,
             ],
         ]);
     }

@@ -6,11 +6,11 @@ use App\Models\AddOn;
 use App\Models\Service;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ServiceItem extends Model {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $table = 'service_items';
 
@@ -20,7 +20,6 @@ class ServiceItem extends Model {
         'status',
         'created_at',
         'updated_at',
-        'deleted_at',
     ];
 
     protected $casts = [
@@ -29,11 +28,13 @@ class ServiceItem extends Model {
         'status'       => 'string',
         'created_at'   => 'datetime',
         'updated_at'   => 'datetime',
-        'deleted_at'   => 'datetime',
     ];
 
-    public function services(): HasMany {
-        return $this->hasMany(Service::class, 'service_item_id', 'id');
+    // Many-to-many relationship with Service through pivot table
+    public function services(): BelongsToMany {
+        return $this->belongsToMany(Service::class, 'service_items_pivot', 'service_item_id', 'service_id')
+            ->withPivot('quantity')
+            ->withTimestamps();
     }
 
     public function addOns(): HasMany {

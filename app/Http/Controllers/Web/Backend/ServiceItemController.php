@@ -6,12 +6,24 @@ use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\ServiceItem;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
 use Yajra\DataTables\DataTables;
 
 class ServiceItemController extends Controller {
-    public function index(Request $request) {
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return JsonResponse|View
+     * @throws Exception
+     */
+    public function index(Request $request): JsonResponse | View {
         try {
             if ($request->ajax()) {
                 $data = ServiceItem::get();
@@ -48,7 +60,14 @@ class ServiceItemController extends Controller {
         }
     }
 
-    public function store(Request $request) {
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function store(Request $request): JsonResponse {
         $validator = Validator::make($request->all(), [
             'service_name' => [
                 'required',
@@ -88,7 +107,15 @@ class ServiceItemController extends Controller {
         }
     }
 
-    public function update(Request $request, int $id) {
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param int $id
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function update(Request $request, int $id): JsonResponse {
         $validator = Validator::make($request->all(), [
             'service_name' => [
                 'required',
@@ -177,7 +204,14 @@ class ServiceItemController extends Controller {
         return $cleaned;
     }
 
-    public function status(int $id) {
+    /**
+     * Change the status of the service item.
+     *
+     * @param int $id
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function status(int $id): JsonResponse {
         try {
             $data = ServiceItem::findOrFail($id);
 
@@ -206,28 +240,81 @@ class ServiceItemController extends Controller {
         }
     }
 
-    public function destroy(int $id) {
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param int $id
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function destroy(int $id): JsonResponse {
         try {
             $data = ServiceItem::findOrFail($id);
 
-            // Check if this service item is being used by any services
-            if ($data->services()->count() > 0) {
+            // Debug logging
+            Log::info('Attempting to delete ServiceItem ID: ' . $id);
+
+            // Check many-to-many relationship with services through pivot table
+            $servicesCount = $data->services()->count();
+            Log::info('Services count (via service_items_pivot): ' . $servicesCount);
+
+            // Check one-to-many relationship with add-ons
+            $addOnsCount = $data->addOns()->count();
+            Log::info('Add-ons count: ' . $addOnsCount);
+
+            // If you want to see which specific services are using this item:
+            if ($servicesCount > 0) {
+                $serviceIds = $data->services()->pluck('services.id')->toArray();
+                Log::info('Service IDs using this item: ' . implode(', ', $serviceIds));
+            }
+
+            // Check if this service item is being used
+            if ($servicesCount > 0 || $addOnsCount > 0) {
+                Log::info('Cannot delete - item is in use');
+
+                $usageDetails = [];
+                if ($servicesCount > 0) {
+                    $usageDetails[] = "$servicesCount service(s)";
+                }
+                if ($addOnsCount > 0) {
+                    $usageDetails[] = "$addOnsCount add-on(s)";
+                }
+
                 return response()->json([
                     't-success' => false,
-                    'message'   => 'Cannot delete this service item because it is being used by one or more services.',
+                    'message'   => 'Cannot delete this service item because it is being used by ' . implode(' and ', $usageDetails) . '.',
                 ]);
             }
 
+            // Delete the service item
             $data->delete();
+            Log::info('ServiceItem deleted successfully');
 
             return response()->json([
                 't-success' => true,
                 'message'   => 'Service item deleted successfully.',
             ]);
+
+        } catch (ModelNotFoundException $e) {
+            Log::error('ServiceItem not found: ' . $e->getMessage());
+            return response()->json([
+                't-success' => false,
+                'message'   => 'Service item not found.',
+            ], 404);
+
+        } catch (QueryException $e) {
+            Log::error('Database error while deleting ServiceItem: ' . $e->getMessage());
+            return response()->json([
+                't-success' => false,
+                'message'   => 'Database error occurred while deleting.',
+            ], 500);
+
         } catch (Exception $e) {
-            return Helper::jsonResponse(false, 'An error occurred', 500, [
-                'error' => $e->getMessage(),
-            ]);
+            Log::error('Delete ServiceItem Error: ' . $e->getMessage());
+            return response()->json([
+                't-success' => false,
+                'message'   => 'An unexpected error occurred: ' . $e->getMessage(),
+            ], 500);
         }
     }
 }

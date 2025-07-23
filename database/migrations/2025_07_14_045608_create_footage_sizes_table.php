@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->string('size', 50)->unique()->nullable(false);
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

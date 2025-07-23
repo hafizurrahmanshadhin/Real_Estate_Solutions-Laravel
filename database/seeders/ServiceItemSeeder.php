@@ -15,7 +15,6 @@ class ServiceItemSeeder extends Seeder {
                 'status'       => 'active',
                 'created_at'   => Carbon::parse('2025-07-14 02:37:21'),
                 'updated_at'   => Carbon::parse('2025-07-14 02:55:14'),
-                'deleted_at'   => null,
             ],
             [
                 'id'           => 2,
@@ -23,7 +22,6 @@ class ServiceItemSeeder extends Seeder {
                 'status'       => 'active',
                 'created_at'   => Carbon::parse('2025-07-14 02:37:28'),
                 'updated_at'   => Carbon::parse('2025-07-14 02:55:04'),
-                'deleted_at'   => null,
             ],
             [
                 'id'           => 3,
@@ -31,7 +29,6 @@ class ServiceItemSeeder extends Seeder {
                 'status'       => 'active',
                 'created_at'   => Carbon::parse('2025-07-14 02:55:23'),
                 'updated_at'   => Carbon::parse('2025-07-14 02:55:23'),
-                'deleted_at'   => null,
             ],
             [
                 'id'           => 4,
@@ -39,7 +36,6 @@ class ServiceItemSeeder extends Seeder {
                 'status'       => 'active',
                 'created_at'   => Carbon::parse('2025-07-14 02:55:23'),
                 'updated_at'   => Carbon::parse('2025-07-14 02:55:23'),
-                'deleted_at'   => null,
             ],
             [
                 'id'           => 5,
@@ -47,7 +43,6 @@ class ServiceItemSeeder extends Seeder {
                 'status'       => 'active',
                 'created_at'   => Carbon::parse('2025-07-14 02:55:23'),
                 'updated_at'   => Carbon::parse('2025-07-14 02:55:23'),
-                'deleted_at'   => null,
             ],
             [
                 'id'           => 6,
@@ -55,7 +50,6 @@ class ServiceItemSeeder extends Seeder {
                 'status'       => 'active',
                 'created_at'   => Carbon::parse('2025-07-14 02:55:23'),
                 'updated_at'   => Carbon::parse('2025-07-14 02:55:23'),
-                'deleted_at'   => null,
             ],
             [
                 'id'           => 7,
@@ -63,7 +57,6 @@ class ServiceItemSeeder extends Seeder {
                 'status'       => 'active',
                 'created_at'   => Carbon::parse('2025-07-14 02:55:23'),
                 'updated_at'   => Carbon::parse('2025-07-14 02:55:23'),
-                'deleted_at'   => null,
             ],
         ]);
     }

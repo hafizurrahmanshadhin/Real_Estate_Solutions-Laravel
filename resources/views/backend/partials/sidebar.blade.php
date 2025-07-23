@@ -2,6 +2,12 @@
     $systemSetting = App\Models\SystemSetting::first();
 @endphp
 
+<style>
+    .navbar-menu .navbar-nav .nav-sm .nav-link:before {
+        display: none;
+    }
+</style>
+
 <div class="app-menu navbar-menu">
     {{-- Logo & Toggle Button --}}
     <div class="navbar-brand-box">
@@ -80,6 +86,56 @@
                         <i class="ri-stack-line"></i>
                         <span data-key="t-package">Other Services</span>
                     </a>
+                </li>
+
+                <hr>
+                {{-- CMS --}}
+                <li class="nav-item">
+                    <a class="nav-link menu-link {{ request()->is('admin/cms/*') ? 'active' : '' }}" href="#sidebarCms"
+                        data-bs-toggle="collapse" role="button"
+                        aria-expanded="{{ request()->is('admin/cms/*') ? 'true' : 'false' }}"
+                        aria-controls="sidebarCms">
+                        <i class="ri-file-list-line"></i>
+                        <span data-key="t-cms">CMS</span>
+                    </a>
+
+                    <div class="collapse menu-dropdown {{ request()->is('admin/cms/*') ? 'show' : '' }}"
+                        id="sidebarCms">
+                        <ul class="nav nav-sm flex-column">
+                            {{-- Home Page --}}
+                            <li class="nav-item">
+                                <a href="{{ route('home-page.hero-section.index') }}"
+                                    class="nav-link {{ request()->routeIs('home-page.hero-section.*') ? 'active' : '' }}"
+                                    data-key="t-testimonials" style="white-space: nowrap">
+                                    <i class="ri-checkbox-blank-circle-fill"
+                                        style="font-size:0.6rem; margin-right:-1rem;"></i>
+                                    Home Page
+                                </a>
+                            </li>
+
+                            {{-- Contact Page --}}
+                            <li class="nav-item">
+                                <a href="{{ route('contact-page.hero-section.index') }}"
+                                    class="nav-link {{ request()->routeIs('contact-page.hero-section.*') ? 'active' : '' }}"
+                                    data-key="t-testimonials" style="white-space: nowrap">
+                                    <i class="ri-checkbox-blank-circle-fill"
+                                        style="font-size:0.6rem; margin-right:-1rem;"></i>
+                                    Contact Page
+                                </a>
+                            </li>
+
+                            {{-- Other Page --}}
+                            <li class="nav-item">
+                                <a href="{{ route('other-page.hero-section.index') }}"
+                                    class="nav-link {{ request()->routeIs('other-page.hero-section.*') ? 'active' : '' }}"
+                                    data-key="t-testimonials" style="white-space: nowrap">
+                                    <i class="ri-checkbox-blank-circle-fill"
+                                        style="font-size:0.6rem; margin-right:-1rem;"></i>
+                                    Other Page
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
 
                 <hr>

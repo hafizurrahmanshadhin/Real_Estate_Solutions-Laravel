@@ -1,0 +1,103 @@
+<?php
+
+namespace App\Services\Web\Backend\CMS;
+
+use App\Helpers\Helper;
+use App\Models\CMS;
+use Exception;
+use Illuminate\Http\UploadedFile;
+use Laravel\Reverb\Loggers\Log;
+
+class OtherPageHeroSectionService {
+    /**
+     * Get or create hero section
+     *
+     * @return CMS
+     */
+    public function getOrCreateHeroSection(): CMS {
+        return CMS::firstOrNew(['section' => 'others_page']);
+    }
+
+    /**
+     * Update hero section with image handling
+     *
+     * @param array $data
+     * @return void
+     */
+    public function updateHeroSection(array $data): void {
+        $heroSection = $this->getOrCreateHeroSection();
+
+        // Update basic fields
+        $heroSection->title   = $data['title'];
+        $heroSection->content = $data['content'];
+
+        // Handle image operations
+        $this->handleImageUpload($heroSection, $data);
+
+        $heroSection->save();
+    }
+
+    /**
+     * Handle image upload, update, or removal
+     *
+     * @param CMS $heroSection
+     * @param array $data
+     * @return void
+     */
+    private function handleImageUpload(CMS $heroSection, array $data): void {
+        // Check if image should be removed
+        if (isset($data['remove_image']) && $data['remove_image']) {
+            $this->removeExistingImage($heroSection);
+            $heroSection->image = null;
+            return;
+        }
+
+        // Check if new image is uploaded
+        if (isset($data['image']) && $data['image'] instanceof UploadedFile) {
+            // Remove existing image if it exists
+            $this->removeExistingImage($heroSection);
+
+            // Upload new image
+            $uploadPath = $this->uploadImage($data['image']);
+            if ($uploadPath) {
+                $heroSection->image = $uploadPath;
+            }
+        }
+    }
+
+    /**
+     * Remove existing image file
+     *
+     * @param CMS $heroSection
+     * @return void
+     */
+    private function removeExistingImage(CMS $heroSection): void {
+        if ($heroSection->image) {
+            // Use the new method to get raw image path
+            $imagePath = $heroSection->getRawImagePath();
+            if ($imagePath) {
+                Helper::fileDelete(public_path($imagePath));
+            }
+        }
+    }
+
+    /**
+     * Upload image file
+     *
+     * @param UploadedFile $image
+     * @return string|null
+     */
+    private function uploadImage(UploadedFile $image): ?string {
+        try {
+            // Generate a unique filename
+            $filename = 'other-section-' . time() . '-' . uniqid();
+
+            // Upload the image using Helper
+            return Helper::fileUpload($image, 'cms/other-section', $filename);
+        } catch (Exception $e) {
+            // Log the error or handle it as needed
+            Log::error('Other Section Image Upload Error: ' . $e->getMessage());
+            return null;
+        }
+    }
+}
