@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ContactUsController;
 use App\Http\Controllers\Api\ContentController;
 use App\Http\Controllers\Api\HeaderAndFooterController;
+use App\Http\Controllers\Api\HomeController;
 use Illuminate\Support\Facades\Route;
 
 // This route is for getting header and footer content.
@@ -14,5 +15,9 @@ Route::get('contents', [ContentController::class, 'index']);
 Route::controller(ContactUsController::class)->group(function () {
     // This route is for getting the contact page content.
     Route::get('contact-page', 'index');
+    // This route is for submitting the contact form.
     Route::post('contact-us', 'store')->middleware(['throttle:5,1']);
 });
+
+// This route is for getting the home page content.
+Route::get('/home', [HomeController::class, 'index']);
