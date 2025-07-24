@@ -74,6 +74,269 @@
 					}
 				}
 			]
+		},
+		{
+			"name": "Header_&_Footer",
+			"item": [
+				{
+					"name": "fetch_header_&_footer",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/header-footer",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"header-footer"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Contact_Us",
+			"item": [
+				{
+					"name": "fetch_contact_us_page_content",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/contact-page",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contact-page"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "submit_contact_request",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Enhanced version with more realistic business scenarios\r",
+									"const businessFirstNames = [\r",
+									"    \"Alexander\", \"Victoria\", \"Christopher\", \"Elizabeth\", \"Nicholas\", \"Catherine\",\r",
+									"    \"Jonathan\", \"Margaret\", \"Benjamin\", \"Rebecca\", \"William\", \"Patricia\",\r",
+									"    \"Anthony\", \"Barbara\", \"Charles\", \"Susan\", \"Richard\", \"Dorothy\"\r",
+									"];\r",
+									"\r",
+									"const businessLastNames = [\r",
+									"    \"Thompson\", \"Richardson\", \"Patterson\", \"Henderson\", \"Morrison\", \"Cooper\",\r",
+									"    \"Stewart\", \"Turner\", \"Parker\", \"Campbell\", \"Mitchell\", \"Roberts\",\r",
+									"    \"Carter\", \"Phillips\", \"Evans\", \"Collins\", \"Edwards\", \"Morris\"\r",
+									"];\r",
+									"\r",
+									"// Generate professional names\r",
+									"const firstName = businessFirstNames[Math.floor(Math.random() * businessFirstNames.length)];\r",
+									"const lastName = businessLastNames[Math.floor(Math.random() * businessLastNames.length)];\r",
+									"\r",
+									"// Professional email domains\r",
+									"const professionalDomains = [\r",
+									"    \"gmail.com\", \"outlook.com\", \"yahoo.com\", \"company.com\", \"business.com\",\r",
+									"    \"realty.com\", \"properties.com\", \"realtor.com\", \"homes.com\", \"estate.com\"\r",
+									"];\r",
+									"\r",
+									"const randomNumber = Math.floor(Math.random() * 999) + 1;\r",
+									"const randomDomain = professionalDomains[Math.floor(Math.random() * professionalDomains.length)];\r",
+									"const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${randomNumber}@${randomDomain}`;\r",
+									"\r",
+									"// US phone number format (avoiding issues with international validation)\r",
+									"const areaCode = Math.floor(200 + Math.random() * 799); // Valid US area codes (200-999)\r",
+									"const exchange = Math.floor(200 + Math.random() * 799); // Valid exchange codes\r",
+									"const number = Math.floor(1000 + Math.random() * 8999); // Last 4 digits\r",
+									"const phone_number = `+1${areaCode}${exchange}${number}`;\r",
+									"\r",
+									"// Professional real estate related messages\r",
+									"const professionalMessages = [\r",
+									"    \"Hello! I'm a real estate professional seeking your photography and staging services for high-end property listings. Please contact me to discuss your premium packages and availability.\",\r",
+									"    \"Good morning! I represent multiple property owners who need comprehensive listing preparation services. Your drone footage and professional photography services would be perfect for our upcoming listings.\",\r",
+									"    \"Hi there! I'm looking for a reliable partner for ongoing real estate marketing services. Your combination of photography, staging, and property preparation aligns perfectly with our needs.\",\r",
+									"    \"Hello! I've seen your excellent work in real estate photography and would like to establish a business relationship for regular property shoots. Please reach out to discuss terms and pricing.\",\r",
+									"    \"Good day! I need immediate assistance with property staging and professional photography for a luxury home listing. Time is of the essence, so please contact me as soon as possible.\",\r",
+									"    \"Hi! I'm expanding my real estate services and looking for a trusted vendor for property photography, drone services, and staging consultation. Your company comes highly recommended.\",\r",
+									"    \"Hello! I have several properties that need your complete makeover services - from cleaning and landscaping to professional photography. Let's discuss how we can work together.\",\r",
+									"    \"Good afternoon! I'm interested in your real estate photography packages, particularly for high-value properties. Please provide information about your services and current availability.\"\r",
+									"];\r",
+									"\r",
+									"const message = professionalMessages[Math.floor(Math.random() * professionalMessages.length)];\r",
+									"const is_agree = true;\r",
+									"\r",
+									"// Set variables\r",
+									"pm.globals.set(\"first_name\", firstName);\r",
+									"pm.globals.set(\"last_name\", lastName);\r",
+									"pm.globals.set(\"email\", email);\r",
+									"pm.globals.set(\"phone_number\", phone_number);\r",
+									"pm.globals.set(\"message\", message);\r",
+									"pm.globals.set(\"is_agree\", is_agree);\r",
+									"\r",
+									"// Console output for verification\r",
+									"console.log(\"=== Generated Professional Contact Data ===\");\r",
+									"console.log(`Name: ${firstName} ${lastName}`);\r",
+									"console.log(`Email: ${email}`);\r",
+									"console.log(`Phone: ${phone_number}`);\r",
+									"console.log(`Message Preview: ${message.substring(0, 50)}...`);\r",
+									"console.log(`Agreement: ${is_agree}`);\r",
+									"console.log(\"===========================================\");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "first_name",
+									"value": "{{first_name}}",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "{{last_name}}",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "{{email}}",
+									"type": "text"
+								},
+								{
+									"key": "phone_number",
+									"value": "{{phone_number}}",
+									"type": "text"
+								},
+								{
+									"key": "message",
+									"value": "{{message}}",
+									"type": "text"
+								},
+								{
+									"key": "is_agree",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/contact-us",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contact-us"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
 		}
 	],
 	"event": [
@@ -103,6 +366,12 @@
 			"key": "base_url",
 			"value": "http://127.0.0.1:8000/api",
 			"type": "string"
+		},
+		{
+			"key": "base_url",
+			"value": "https://jimmydela.softvencefsd.xyz/api",
+			"type": "string",
+			"disabled": true
 		}
 	]
 }
