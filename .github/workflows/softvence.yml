@@ -14,6 +14,6 @@ jobs:
       - name: FTP-Deploy-Action
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
-          server: ${{ secrets.SERVER }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          server: ftp.softvencefsd.xyz
+          username: jimmydela@jimmydela.softvencefsd.xyz
+          password: "softvencefsd_jimmydela"
