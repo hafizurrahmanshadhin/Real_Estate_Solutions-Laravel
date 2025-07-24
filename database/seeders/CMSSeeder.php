@@ -43,7 +43,7 @@ class CMSSeeder extends Seeder {
             'title'      => 'Contact Us',
             'content'    => '<p>Building strong, lasting partnerships to achieve shared goals and success.</p>',
             'image'      => 'backend/images/seeder/cms/contact-page-body-section.png',
-            'banner'     => 'backend/images/seeder/cms/contact-page-hero-section.jpg',
+            'banner'     => 'backend/images/seeder/cms/contactUs.jpg',
             'status'     => 'active',
             'created_at' => Carbon::parse('2025-07-23 04:26:58'),
             'updated_at' => Carbon::parse('2025-07-23 04:26:58'),

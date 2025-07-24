@@ -27,10 +27,6 @@ return Application::configure(basePath: dirname(__DIR__))
             Route::middleware(['web', 'auth', 'admin'])
                 ->prefix('admin/settings')
                 ->group(base_path('routes/Web/settings.php'));
-
-            Route::middleware(['api'])
-                ->prefix('api')
-                ->group(base_path('routes/Api/auth.php'));
         },
     )
     ->withBroadcasting(

@@ -26,18 +26,10 @@ class SocialMediaSeeder extends Seeder {
             ],
             [
                 'id'           => 3,
-                'social_media' => 'twitter',
-                'profile_link' => 'https://x.com/',
+                'social_media' => 'youtube',
+                'profile_link' => 'https://www.youtube.com/',
                 'created_at'   => '2025-06-19 00:03:21',
                 'updated_at'   => '2025-07-19 00:03:21',
-                'deleted_at'   => null,
-            ],
-            [
-                'id'           => 4,
-                'social_media' => 'linkedin',
-                'profile_link' => 'https://www.linkedin.com/',
-                'created_at'   => '2025-08-19 00:03:21',
-                'updated_at'   => '2025-09-19 00:03:21',
                 'deleted_at'   => null,
             ],
         ]);

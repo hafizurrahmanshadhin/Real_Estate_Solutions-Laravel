@@ -6,6 +6,7 @@ use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ContentRequest;
 use App\Http\Resources\Api\ContentResource;
+use App\Models\CMS;
 use App\Models\Content;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -21,13 +22,23 @@ class ContentController extends Controller {
         try {
             $validated = $request->validated();
 
-            $content = Content::where('type', $validated['type'])->where('status', 'active')->first();
+            $content = Content::where('type', $validated['type'])
+                ->where('status', 'active')
+                ->first();
 
             if (!$content) {
                 return Helper::jsonResponse(false, "No active content found for type: {$validated['type']}", 404);
             }
 
-            return Helper::jsonResponse(true, 'Content retrieved successfully.', 200, new ContentResource($content));
+            // Get the image from CMS table (others_page section)
+            $cmsData = CMS::where('section', 'others_page')
+                ->where('status', 'active')
+                ->first();
+
+            return Helper::jsonResponse(true, 'Content retrieved successfully.', 200,
+                new ContentResource($content, $cmsData)
+            );
+
         } catch (Exception $e) {
             return Helper::jsonResponse(false, 'An error occurred', 500, ['error' => $e->getMessage()]);
         }

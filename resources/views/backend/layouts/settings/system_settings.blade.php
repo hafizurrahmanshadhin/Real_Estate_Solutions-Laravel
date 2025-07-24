@@ -13,7 +13,7 @@
                                 @csrf
                                 @method('PATCH')
                                 <div class="row gy-4">
-                                    <div class="col-md-6">
+                                    {{-- <div class="col-md-6">
                                         <div>
                                             <label for="title" class="form-label">Title:</label>
                                             <input type="text" class="form-control @error('title') is-invalid @enderror"
@@ -75,7 +75,7 @@
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="col-12">
                                         <div>
