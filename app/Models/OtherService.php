@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\OtherServiceOrder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OtherService extends Model {
@@ -34,4 +36,8 @@ class OtherService extends Model {
         'updated_at'          => 'datetime',
         'deleted_at'          => 'datetime',
     ];
+
+    public function otherServiceOrders(): HasMany {
+        return $this->hasMany(OtherServiceOrder::class, 'other_services_id');
+    }
 }

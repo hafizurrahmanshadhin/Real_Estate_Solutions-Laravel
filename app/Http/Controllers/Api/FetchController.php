@@ -8,6 +8,7 @@ use App\Http\Resources\Api\Pricing\AddOnResource;
 use App\Http\Resources\Api\Pricing\FetchPackageResource;
 use App\Models\AddOn;
 use App\Models\FootageSize;
+use App\Models\OtherService;
 use App\Models\Package;
 use App\Models\ZipCode;
 use Exception;
@@ -88,6 +89,30 @@ class FetchController extends Controller {
             return Helper::jsonResponse(false, 'An error occurred', 500,
                 ['error' => $e->getMessage()]
             );
+        }
+    }
+
+    /**
+     * Fetch other services that are active and have at least one of title, image, or description set.
+     *
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function FetchOtherServices(): JsonResponse {
+        try {
+            $data = OtherService::where('status', 'active')
+                ->where(function ($q) {
+                    $q->whereNotNull('title')
+                        ->orWhereNotNull('image')
+                        ->orWhereNotNull('description');
+                })
+                ->get(['id', 'title']);
+
+            return Helper::jsonResponse(true, 'Other services fetched successfully', 200, $data);
+        } catch (Exception $e) {
+            return Helper::jsonResponse(false, 'An error occurred', 500, [
+                'error' => $e->getMessage(),
+            ]);
         }
     }
 }
