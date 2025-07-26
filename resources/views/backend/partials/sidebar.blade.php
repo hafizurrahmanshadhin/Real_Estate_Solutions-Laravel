@@ -65,7 +65,7 @@
                 <li class="nav-item">
                     <a href="{{ route('package.index') }}"
                         class="nav-link menu-link {{ request()->routeIs('package.*') ? 'active' : '' }}">
-                        <i class="ri-stack-line"></i>
+                        <i class="ri-archive-line"></i>
                         <span data-key="t-package">Packages</span>
                     </a>
                 </li>
@@ -75,7 +75,7 @@
                     <a href="{{ route('service.index') }}"
                         class="nav-link menu-link {{ request()->routeIs('service.*') ? 'active' : '' }}">
                         <i class="ri-gallery-line"></i>
-                        <span data-key="t-package">Services</span>
+                        <span data-key="t-service">Services</span>
                     </a>
                 </li>
 
@@ -84,7 +84,16 @@
                     <a href="{{ route('other-service.index') }}"
                         class="nav-link menu-link {{ request()->routeIs('other-service.*') ? 'active' : '' }}">
                         <i class="ri-stack-line"></i>
-                        <span data-key="t-package">Other Services</span>
+                        <span data-key="t-other-service">Other Services</span>
+                    </a>
+                </li>
+
+                {{-- Contact Message --}}
+                <li class="nav-item">
+                    <a href="{{ route('contact-message.index') }}"
+                        class="nav-link menu-link {{ request()->routeIs('contact-message.*') ? 'active' : '' }}">
+                        <i class="ri-mail-line"></i>
+                        <span data-key="t-contact-message">Contact Message</span>
                     </a>
                 </li>
 
@@ -106,7 +115,7 @@
                             <li class="nav-item">
                                 <a href="{{ route('home-page.hero-section.index') }}"
                                     class="nav-link {{ request()->routeIs('home-page.hero-section.*') ? 'active' : '' }}"
-                                    data-key="t-testimonials" style="white-space: nowrap">
+                                    data-key="t-home-page.hero-section" style="white-space: nowrap">
                                     <i class="ri-checkbox-blank-circle-fill"
                                         style="font-size:0.6rem; margin-right:-1rem;"></i>
                                     Home Page
@@ -117,7 +126,7 @@
                             <li class="nav-item">
                                 <a href="{{ route('contact-page.hero-section.index') }}"
                                     class="nav-link {{ request()->routeIs('contact-page.hero-section.*') ? 'active' : '' }}"
-                                    data-key="t-testimonials" style="white-space: nowrap">
+                                    data-key="t-contact-page.hero-section" style="white-space: nowrap">
                                     <i class="ri-checkbox-blank-circle-fill"
                                         style="font-size:0.6rem; margin-right:-1rem;"></i>
                                     Contact Page
@@ -128,7 +137,7 @@
                             <li class="nav-item">
                                 <a href="{{ route('other-page.hero-section.index') }}"
                                     class="nav-link {{ request()->routeIs('other-page.hero-section.*') ? 'active' : '' }}"
-                                    data-key="t-testimonials" style="white-space: nowrap">
+                                    data-key="t-other-page.hero-section" style="white-space: nowrap">
                                     <i class="ri-checkbox-blank-circle-fill"
                                         style="font-size:0.6rem; margin-right:-1rem;"></i>
                                     Other Page
@@ -171,7 +180,7 @@
                             <li class="nav-item">
                                 <a href="{{ route('mail.setting') }}"
                                     class="nav-link {{ request()->routeIs('mail.setting') ? 'active' : '' }}"
-                                    data-key="t-system-settings">
+                                    data-key="t-mail.setting">
                                     SMTP Server
                                 </a>
                             </li>
@@ -203,7 +212,7 @@
                             <li class="nav-item">
                                 <a href="{{ route('privacy-policy.index') }}"
                                     class="nav-link {{ request()->routeIs('privacy-policy.index') ? 'active' : '' }}"
-                                    data-key="t-terms-and-conditions">
+                                    data-key="t-privacy-policy">
                                     Privacy Policy
                                 </a>
                             </li>

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Database\Seeders\AddOnSeeder;
 use Database\Seeders\CMSSeeder;
+use Database\Seeders\ContactUsSeeder;
 use Database\Seeders\ContentSeeder;
 use Database\Seeders\FootageSizeSeeder;
 use Database\Seeders\OtherServiceSeeder;
@@ -33,6 +34,7 @@ class DatabaseSeeder extends Seeder {
             AddOnSeeder::class,
             OtherServiceSeeder::class,
             CMSSeeder::class,
+            ContactUsSeeder::class,
         ]);
     }
 }

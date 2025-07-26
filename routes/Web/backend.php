@@ -4,6 +4,7 @@ use App\Http\Controllers\Web\Backend\AddOnController;
 use App\Http\Controllers\Web\Backend\CMS\ContactPageHeroSectionController;
 use App\Http\Controllers\Web\Backend\CMS\HomePageHeroSectionController;
 use App\Http\Controllers\Web\Backend\CMS\OtherPageHeroSectionController;
+use App\Http\Controllers\Web\Backend\ContactMessageController;
 use App\Http\Controllers\Web\Backend\DashboardController;
 use App\Http\Controllers\Web\Backend\FootageSizeController;
 use App\Http\Controllers\Web\Backend\OtherServiceController;
@@ -83,6 +84,12 @@ Route::controller(OtherServiceController::class)->prefix('other-service')->name(
     Route::put('/update/{id}', 'update')->name('update');
     Route::get('/status/{id}', 'status')->name('status');
     Route::delete('/destroy/{id}', 'destroy')->name('destroy');
+});
+
+// Route for Contact Message
+Route::controller(ContactMessageController::class)->prefix('contact-message')->name('contact-message.')->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/show/{id}', 'show')->name('show');
 });
 
 // CMS
