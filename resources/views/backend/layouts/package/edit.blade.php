@@ -46,7 +46,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div>
                                             <label for="description" class="form-label">Description:</label>
                                             <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
@@ -57,7 +57,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    {{-- <div class="col-md-6">
                                         <label for="image" class="form-label">Image:</label>
                                         <input type="file"
                                             class="form-control dropify @error('image') is-invalid @enderror" id="image"
@@ -66,7 +66,7 @@
                                         @error('image')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
-                                    </div>
+                                    </div> --}}
 
                                     <div class="mt-3">
                                         <button type="submit" class="btn btn-primary">Update</button>

@@ -21,7 +21,7 @@
                                             <th class="column-id">#</th>
                                             <th class="column-content">Title</th>
                                             <th class="column-content">Name</th>
-                                            <th class="column-content">Image</th>
+                                            {{-- <th class="column-content">Image</th> --}}
                                             <th class="column-content">Description</th>
                                             <th class="column-content">Popular</th>
                                             <th class="column-status">Status</th>
@@ -146,14 +146,14 @@
                                     data + '</div>';
                             }
                         },
-                        {
-                            data: 'image',
-                            name: 'image',
-                            orderable: false,
-                            searchable: false,
-                            className: 'text-center',
-                            width: '5%'
-                        },
+                        // {
+                        //     data: 'image',
+                        //     name: 'image',
+                        //     orderable: false,
+                        //     searchable: false,
+                        //     className: 'text-center',
+                        //     width: '5%'
+                        // },
                         {
                             data: 'description',
                             name: 'description',
@@ -234,22 +234,46 @@
         }
 
         // Fetch and display package details in the modal (including image)
+        // async function showPackageDetails(id) {
+        //     let url = '{{ route('package.show', ['id' => ':id']) }}';
+        //     url = url.replace(':id', id);
+
+        //     const defaultImage = "{{ asset('backend/images/users/user-dummy-img.jpg') }}";
+
+        //     try {
+        //         let response = await axios.get(url);
+        //         if (response.data && response.data.data) {
+        //             let data = response.data.data;
+        //             let imgPath = data.image ? `{{ url('/') }}/${data.image}` : defaultImage;
+        //             let modalBody = document.querySelector('#viewPackageModal .modal-body');
+        //             modalBody.innerHTML = `
+        //                 <div class="text-center mb-3">
+        //                     <img src="${imgPath}" alt="Image" width="100" height="100" class="rounded">
+        //                 </div>
+        //                 <p><strong>Name:</strong> ${data.name}</p>
+        //                 <p><strong>Title:</strong> ${data.title}</p>
+        //                 <p><strong>Is Popular:</strong> ${data.is_popular ? 'Yes' : 'No'}</p>
+        //                 <p><strong>Description:</strong> ${data.description}</p>
+        //             `;
+        //         } else {
+        //             toastr.error('No data returned from the server.');
+        //         }
+        //     } catch (error) {
+        //         console.error(error);
+        //         toastr.error('Could not fetch package details.');
+        //     }
+        // }
+
         async function showPackageDetails(id) {
             let url = '{{ route('package.show', ['id' => ':id']) }}';
             url = url.replace(':id', id);
-
-            const defaultImage = "{{ asset('backend/images/users/user-dummy-img.jpg') }}";
 
             try {
                 let response = await axios.get(url);
                 if (response.data && response.data.data) {
                     let data = response.data.data;
-                    let imgPath = data.image ? `{{ url('/') }}/${data.image}` : defaultImage;
                     let modalBody = document.querySelector('#viewPackageModal .modal-body');
                     modalBody.innerHTML = `
-                        <div class="text-center mb-3">
-                            <img src="${imgPath}" alt="Image" width="100" height="100" class="rounded">
-                        </div>
                         <p><strong>Name:</strong> ${data.name}</p>
                         <p><strong>Title:</strong> ${data.title}</p>
                         <p><strong>Is Popular:</strong> ${data.is_popular ? 'Yes' : 'No'}</p>

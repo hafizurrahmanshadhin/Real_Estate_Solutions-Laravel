@@ -32,18 +32,18 @@ class PackageController extends Controller {
                         $shortDescription = strlen($description) > 200 ? substr($description, 0, 200) . '...' : $description;
                         return '<p>' . $shortDescription . '</p>';
                     })
-                    ->addColumn('image', function ($data) {
-                        $defaultImage = asset('backend/images/users/user-dummy-img.jpg');
-                        $url          = $data->image ? asset($data->image) : $defaultImage;
+                    // ->addColumn('image', function ($data) {
+                    //     $defaultImage = asset('backend/images/users/user-dummy-img.jpg');
+                    //     $url          = $data->image ? asset($data->image) : $defaultImage;
 
-                        return '
-                            <div class="d-flex justify-content-center">
-                                <img src="' . $url . '" alt="Image" width="50" height="50" style="cursor:pointer;"
-                                     data-bs-toggle="modal" data-bs-target="#imagePreviewModal"
-                                     onclick="showImagePreview(\'' . $url . '\');" />
-                            </div>
-                        ';
-                    })
+                    //     return '
+                    //         <div class="d-flex justify-content-center">
+                    //             <img src="' . $url . '" alt="Image" width="50" height="50" style="cursor:pointer;"
+                    //                  data-bs-toggle="modal" data-bs-target="#imagePreviewModal"
+                    //                  onclick="showImagePreview(\'' . $url . '\');" />
+                    //         </div>
+                    //     ';
+                    // })
                     ->addColumn('is_popular', function ($data) {
                         $buttonClass = $data->is_popular ? 'btn-success' : 'btn-outline-secondary';
                         $buttonText  = $data->is_popular ? 'Popular' : 'Set Popular';
@@ -92,7 +92,8 @@ class PackageController extends Controller {
                             </div>
                         ';
                     })
-                    ->rawColumns(['description', 'image', 'is_popular', 'status', 'action'])
+                    // ->rawColumns(['description', 'image', 'is_popular', 'status', 'action'])
+                    ->rawColumns(['description', 'is_popular', 'status', 'action'])
                     ->make();
             }
             return view('backend.layouts.package.index');

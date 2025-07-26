@@ -17,23 +17,20 @@ class ContentController extends Controller {
      *
      * @param ContentRequest $request
      * @return JsonResponse
+     * @throws Exception
      */
-    public function index(ContentRequest $request): JsonResponse {
+    public function __invoke(ContentRequest $request): JsonResponse {
         try {
             $validated = $request->validated();
 
-            $content = Content::where('type', $validated['type'])
-                ->where('status', 'active')
-                ->first();
+            $content = Content::where('type', $validated['type'])->where('status', 'active')->first();
 
             if (!$content) {
                 return Helper::jsonResponse(false, "No active content found for type: {$validated['type']}", 404);
             }
 
             // Get the image from CMS table (others_page section)
-            $cmsData = CMS::where('section', 'others_page')
-                ->where('status', 'active')
-                ->first();
+            $cmsData = CMS::where('section', 'others_page')->where('status', 'active')->first();
 
             return Helper::jsonResponse(true, 'Content retrieved successfully.', 200,
                 new ContentResource($content, $cmsData)

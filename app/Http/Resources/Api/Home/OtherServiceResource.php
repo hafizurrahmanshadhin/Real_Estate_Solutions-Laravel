@@ -5,7 +5,7 @@ namespace App\Http\Resources\Api\Home;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PackageResource extends JsonResource {
+class OtherServiceResource extends JsonResource {
     /**
      * Transform the resource into an array.
      *
@@ -15,11 +15,8 @@ class PackageResource extends JsonResource {
         return [
             'id'          => $this->id,
             'title'       => $this->title,
-            // 'image'       => url($this->image),
-            'name'        => $this->name,
+            'image'       => $this->image ? url($this->image) : null,
             'description' => $this->description,
-            'starting_at' => $this->services_min_price !== null ? number_format($this->services_min_price, 2, '.', '') : null,
-            'is_popular'  => (bool) $this->is_popular,
         ];
     }
 }
