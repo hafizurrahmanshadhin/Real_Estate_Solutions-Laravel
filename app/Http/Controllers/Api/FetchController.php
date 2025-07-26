@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\Pricing\AddOnResource;
 use App\Http\Resources\Api\Pricing\FetchPackageResource;
+use App\Models\AddOn;
 use App\Models\FootageSize;
 use App\Models\Package;
 use App\Models\ZipCode;
@@ -49,7 +51,7 @@ class FetchController extends Controller {
     }
 
     /**
-     * Fetch packages with services by footage size.
+     * Fetch packages with services and add-ons by footage size.
      *
      * @param int $footage
      * @return JsonResponse
@@ -57,12 +59,11 @@ class FetchController extends Controller {
      */
     public function FetchPackagesByFootageSize(int $footage) {
         try {
-            // only packages that have at least one active service at this footage size
+            // 1) Only packages that have an active service at this footage size
             $packages = Package::whereHas('services', function ($q) use ($footage) {
                 $q->where('footage_size_id', $footage)
                     ->where('status', 'active');
             })
-            // eager‐load just those services
                 ->with(['services' => function ($q) use ($footage) {
                     $q->where('footage_size_id', $footage)
                         ->where('status', 'active')
@@ -71,13 +72,22 @@ class FetchController extends Controller {
                 ->where('status', 'active')
                 ->get();
 
-            return Helper::jsonResponse(true, 'Packages with services fetched successfully', 200,
-                FetchPackageResource::collection($packages)
+            // 2) All active add‑ons for that footage size
+            $addOns = AddOn::with(['footageSize:id,size', 'serviceItem:id,service_name'])
+                ->where('status', 'active')
+                ->where('footage_size_id', $footage)
+                ->get();
+
+            return Helper::jsonResponse(true, 'Packages and add-ons data fetched successfully', 200,
+                [
+                    'packages' => FetchPackageResource::collection($packages),
+                    'add_ons'  => AddOnResource::collection($addOns),
+                ]
             );
         } catch (Exception $e) {
-            return Helper::jsonResponse(false, 'An error occurred', 500, [
-                'error' => $e->getMessage(),
-            ]);
+            return Helper::jsonResponse(false, 'An error occurred', 500,
+                ['error' => $e->getMessage()]
+            );
         }
     }
 }
