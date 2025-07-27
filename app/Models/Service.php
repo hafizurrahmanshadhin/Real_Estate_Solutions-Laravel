@@ -2,40 +2,65 @@
 
 namespace App\Models;
 
+use App\Models\FootageSize;
+use App\Models\OrderItem;
+use App\Models\Package;
+use App\Models\ServiceItem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Service extends Model {
     use HasFactory, SoftDeletes;
 
+    protected $table = "services";
+
     protected $fillable = [
+        'id',
         'package_id',
         'footage_size_id',
         'price',
         'status',
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     protected $casts = [
-        'price' => 'decimal:2',
+        'id'              => 'integer',
+        'package_id'      => 'integer',
+        'footage_size_id' => 'integer',
+        'price'           => 'decimal:2',
+        'status'          => 'string',
+        'created_at'      => 'datetime',
+        'updated_at'      => 'datetime',
+        'deleted_at'      => 'datetime',
     ];
 
-    // Relationships
-    public function package() {
+    public function package(): BelongsTo {
         return $this->belongsTo(Package::class);
     }
 
-    public function footageSize() {
+    public function footageSize(): BelongsTo {
         return $this->belongsTo(FootageSize::class);
     }
 
-    public function serviceItems() {
+    public function serviceItems(): BelongsToMany {
         return $this->belongsToMany(ServiceItem::class, 'service_items_pivot')
             ->withPivot('quantity')
             ->withTimestamps();
     }
 
-    // Scopes
+    /**
+     * Any order items that point at this Service.
+     */
+    public function orderItems(): MorphMany {
+        return $this->morphMany(OrderItem::class, 'itemable');
+    }
+
     public function scopeActive($query) {
         return $query->where('status', 'active');
     }

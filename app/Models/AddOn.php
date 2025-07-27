@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Models\FootageSize;
+use App\Models\OrderItem;
 use App\Models\ServiceItem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AddOn extends Model {
@@ -59,5 +61,12 @@ class AddOn extends Model {
             return "{$this->quantity} Community Images - {$this->locations} location(s)";
         }
         return "Quantity: {$this->quantity}";
+    }
+
+    /**
+     * Any order items that point at this AddOn.
+     */
+    public function orderItems(): MorphMany {
+        return $this->morphMany(OrderItem::class, 'itemable');
     }
 }
