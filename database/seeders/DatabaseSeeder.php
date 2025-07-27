@@ -7,6 +7,7 @@ use Database\Seeders\CMSSeeder;
 use Database\Seeders\ContactUsSeeder;
 use Database\Seeders\ContentSeeder;
 use Database\Seeders\FootageSizeSeeder;
+use Database\Seeders\OtherServiceOrderSeeder;
 use Database\Seeders\OtherServiceSeeder;
 use Database\Seeders\PackageSeeder;
 use Database\Seeders\ServiceItemSeeder;
@@ -35,6 +36,7 @@ class DatabaseSeeder extends Seeder {
             OtherServiceSeeder::class,
             CMSSeeder::class,
             ContactUsSeeder::class,
+            OtherServiceOrderSeeder::class,
         ]);
     }
 }

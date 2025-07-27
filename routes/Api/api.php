@@ -32,4 +32,4 @@ Route::controller(FetchController::class)->group(function () {
     Route::get('/fetch-other-services', 'FetchOtherServices');
 });
 
-Route::post('/other-service/order', [OtherServiceOrderController::class, 'store'])->middleware(['throttle:5,1']);
+Route::post('/other-service/order', OtherServiceOrderController::class)->middleware(['throttle:5,1']);
