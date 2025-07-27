@@ -224,7 +224,7 @@ class AddOnController extends Controller {
         ];
 
         if ($isCommunityImages) {
-            $rules['locations'] = 'required|integer|min:1|max:5';
+            $rules['locations'] = 'sometimes|required|integer|min:1|max:5';
         }
 
         $validator = Validator::make($request->all(), $rules);

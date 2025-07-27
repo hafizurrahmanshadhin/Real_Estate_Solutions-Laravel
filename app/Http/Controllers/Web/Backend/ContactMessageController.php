@@ -41,7 +41,7 @@ class ContactMessageController extends Controller {
                                 </a>
                             </div>';
                     })
-                    ->rawColumns(['name', 'status', 'action'])
+                    ->rawColumns(['name', 'message', 'action'])
                     ->make();
             }
             return view('backend.layouts.contact-message.index');

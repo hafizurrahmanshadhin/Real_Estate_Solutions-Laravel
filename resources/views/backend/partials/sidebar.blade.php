@@ -88,6 +88,15 @@
                     </a>
                 </li>
 
+                {{-- Order Request --}}
+                <li class="nav-item">
+                    <a href="{{ route('order-request.index') }}"
+                        class="nav-link menu-link {{ request()->routeIs('order-request.*') ? 'active' : '' }}">
+                        <i class="ri-shopping-cart-line"></i>
+                        <span data-key="t-order-request">Other Services<br>Order Request</span>
+                    </a>
+                </li>
+
                 {{-- Contact Message --}}
                 <li class="nav-item">
                     <a href="{{ route('contact-message.index') }}"

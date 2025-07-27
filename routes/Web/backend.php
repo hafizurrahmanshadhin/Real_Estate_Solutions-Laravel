@@ -7,6 +7,7 @@ use App\Http\Controllers\Web\Backend\CMS\OtherPageHeroSectionController;
 use App\Http\Controllers\Web\Backend\ContactMessageController;
 use App\Http\Controllers\Web\Backend\DashboardController;
 use App\Http\Controllers\Web\Backend\FootageSizeController;
+use App\Http\Controllers\Web\Backend\OrderRequestController;
 use App\Http\Controllers\Web\Backend\OtherServiceController;
 use App\Http\Controllers\Web\Backend\PackageController;
 use App\Http\Controllers\Web\Backend\ServiceController;
@@ -84,6 +85,12 @@ Route::controller(OtherServiceController::class)->prefix('other-service')->name(
     Route::put('/update/{id}', 'update')->name('update');
     Route::get('/status/{id}', 'status')->name('status');
     Route::delete('/destroy/{id}', 'destroy')->name('destroy');
+});
+
+// Route for Order Request
+Route::controller(OrderRequestController::class)->prefix('order-request')->name('order-request.')->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/show/{orderRequest}', 'show')->name('show');
 });
 
 // Route for Contact Message
