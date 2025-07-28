@@ -49,4 +49,39 @@ class Property extends Model {
     public function footageSize(): BelongsTo {
         return $this->belongsTo(FootageSize::class, 'footage_size_id');
     }
+
+    /**
+     * Set the address attribute with proper formatting
+     */
+    public function setAddressAttribute(string $value): void {
+        $this->attributes['address'] = trim($value);
+    }
+
+    /**
+     * Set the city attribute with proper formatting
+     */
+    public function setCityAttribute(string $value): void {
+        $this->attributes['city'] = ucwords(strtolower(trim($value)));
+    }
+
+    /**
+     * Set the state attribute with proper formatting
+     */
+    public function setStateAttribute(string $value): void {
+        $this->attributes['state'] = ucwords(strtolower(trim($value)));
+    }
+
+    /**
+     * Get full address attribute
+     */
+    public function getFullAddressAttribute(): string {
+        return $this->address . ', ' . $this->city . ', ' . $this->state . ' ' . $this->zip_code;
+    }
+
+    /**
+     * Scope for orders by footage size
+     */
+    public function scopeByFootageSize($query, int $footageSizeId) {
+        return $query->where('footage_size_id', $footageSizeId);
+    }
 }

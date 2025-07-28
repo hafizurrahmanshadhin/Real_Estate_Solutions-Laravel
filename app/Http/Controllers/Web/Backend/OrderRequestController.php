@@ -7,11 +7,20 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Web\OrderRequestResource;
 use App\Models\OtherServiceOrder;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Yajra\DataTables\DataTables;
 
 class OrderRequestController extends Controller {
-    public function index(Request $request) {
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return JsonResponse|View
+     * @throws Exception
+     */
+    public function index(Request $request): JsonResponse | View {
         try {
             if ($request->ajax()) {
                 $data = OtherServiceOrder::with(['otherService', 'footageSize'])->latest()->get();
@@ -45,7 +54,14 @@ class OrderRequestController extends Controller {
         }
     }
 
-    public function show(OtherServiceOrder $orderRequest) {
+    /**
+     * Display the specified resource.
+     *
+     * @param OtherServiceOrder $orderRequest
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function show(OtherServiceOrder $orderRequest): JsonResponse {
         try {
             $orderRequest->load(['otherService', 'footageSize']);
 

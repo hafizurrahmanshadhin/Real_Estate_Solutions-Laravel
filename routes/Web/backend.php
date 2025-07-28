@@ -7,6 +7,7 @@ use App\Http\Controllers\Web\Backend\CMS\OtherPageHeroSectionController;
 use App\Http\Controllers\Web\Backend\ContactMessageController;
 use App\Http\Controllers\Web\Backend\DashboardController;
 use App\Http\Controllers\Web\Backend\FootageSizeController;
+use App\Http\Controllers\Web\Backend\OrderController;
 use App\Http\Controllers\Web\Backend\OrderRequestController;
 use App\Http\Controllers\Web\Backend\OtherServiceController;
 use App\Http\Controllers\Web\Backend\PackageController;
@@ -93,6 +94,13 @@ Route::controller(OrderRequestController::class)->prefix('order-request')->name(
     Route::get('/show/{orderRequest}', 'show')->name('show');
 });
 
+// Route for Order List
+Route::controller(OrderController::class)->prefix('order')->name('order.')->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/show/{order}', 'show')->name('show');
+    Route::post('/update-status', 'updateStatus')->name('update.status');
+});
+
 // Route for Contact Message
 Route::controller(ContactMessageController::class)->prefix('contact-message')->name('contact-message.')->group(function () {
     Route::get('/', 'index')->name('index');
@@ -101,6 +109,7 @@ Route::controller(ContactMessageController::class)->prefix('contact-message')->n
 
 // CMS
 Route::prefix('cms')->group(function () {
+    // This route is for the Home Page
     Route::prefix('home-page')->name('home-page.')->group(function () {
         Route::controller(HomePageHeroSectionController::class)->prefix('hero-section')->name('hero-section.')->group(function () {
             Route::get('/', 'index')->name('index');
@@ -108,6 +117,7 @@ Route::prefix('cms')->group(function () {
         });
     });
 
+    // This route is for the Contact Page
     Route::prefix('contact-page')->name('contact-page.')->group(function () {
         Route::controller(ContactPageHeroSectionController::class)->prefix('hero-section')->name('hero-section.')->group(function () {
             Route::get('/', 'index')->name('index');
@@ -115,6 +125,7 @@ Route::prefix('cms')->group(function () {
         });
     });
 
+    // This route is for the Other Page
     Route::prefix('other-page')->name('other-page.')->group(function () {
         Route::controller(OtherPageHeroSectionController::class)->prefix('hero-section')->name('hero-section.')->group(function () {
             Route::get('/', 'index')->name('index');

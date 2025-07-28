@@ -30,6 +30,7 @@ class Order extends Model {
         'total_amount',
         'currency',
         'status',
+        'order_status',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -50,6 +51,7 @@ class Order extends Model {
         'total_amount'             => 'decimal:2',
         'currency'                 => 'string',
         'status'                   => 'string',
+        'order_status'             => 'string',
         'created_at'               => 'datetime',
         'updated_at'               => 'datetime',
         'deleted_at'               => 'datetime',
@@ -65,5 +67,33 @@ class Order extends Model {
 
     public function items(): HasMany {
         return $this->hasMany(OrderItem::class);
+    }
+
+    /**
+     * Set the email attribute to lowercase
+     */
+    public function setEmailAttribute(string $value): void {
+        $this->attributes['email'] = strtolower(trim($value));
+    }
+
+    /**
+     * Set the first name attribute with proper formatting
+     */
+    public function setFirstNameAttribute(string $value): void {
+        $this->attributes['first_name'] = ucwords(strtolower(trim($value)));
+    }
+
+    /**
+     * Set the last name attribute with proper formatting
+     */
+    public function setLastNameAttribute(string $value): void {
+        $this->attributes['last_name'] = ucwords(strtolower(trim($value)));
+    }
+
+    /**
+     * Get full name attribute
+     */
+    public function getFullNameAttribute(): string {
+        return $this->first_name . ' ' . $this->last_name;
     }
 }

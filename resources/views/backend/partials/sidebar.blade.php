@@ -97,6 +97,15 @@
                     </a>
                 </li>
 
+                {{-- Order List --}}
+                <li class="nav-item">
+                    <a href="{{ route('order.index') }}"
+                        class="nav-link menu-link {{ request()->routeIs('order.*') ? 'active' : '' }}">
+                        <i class="ri-checkbox-multiple-line"></i>
+                        <span data-key="t-order">Order List</span>
+                    </a>
+                </li>
+
                 {{-- Contact Message --}}
                 <li class="nav-item">
                     <a href="{{ route('contact-message.index') }}"

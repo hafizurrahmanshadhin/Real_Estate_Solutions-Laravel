@@ -28,6 +28,7 @@ return new class extends Migration {
             $table->decimal('total_amount', 10, 2)->nullable(false);
             $table->string('currency', 10)->default('usd');
             $table->enum('status', ['pending', 'paid', 'failed'])->default('pending');
+            $table->enum('order_status', ['pending', 'completed', 'cancelled'])->default('pending');
 
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
