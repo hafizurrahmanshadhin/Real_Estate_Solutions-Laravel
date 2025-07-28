@@ -27,7 +27,7 @@ class Appointment extends Model {
         'id'         => 'integer',
         'order_id'   => 'integer',
         'date'       => 'date',
-        'time'       => 'time',
+        'time'       => 'string',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',

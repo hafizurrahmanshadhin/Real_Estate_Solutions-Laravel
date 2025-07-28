@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\ContactUsController;
 use App\Http\Controllers\Api\ContentController;
 use App\Http\Controllers\Api\FetchController;
 use App\Http\Controllers\Api\HeaderAndFooterController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\OtherServiceOrderController;
+use App\Http\Controllers\Api\StripeWebhookController;
 use Illuminate\Support\Facades\Route;
 
 // This route is for getting header and footer content.
@@ -32,4 +34,11 @@ Route::controller(FetchController::class)->group(function () {
     Route::get('/fetch-other-services', 'FetchOtherServices');
 });
 
+// This route is for submitting an order for other services.
 Route::post('/other-service/order', OtherServiceOrderController::class)->middleware(['throttle:5,1']);
+
+// This two routes are for checkout and Stripe webhook handling.
+Route::middleware(['throttle:5,1'])->group(function () {
+    Route::post('/checkout', CheckoutController::class);
+    Route::post('/stripe/webhook', StripeWebhookController::class);
+});
