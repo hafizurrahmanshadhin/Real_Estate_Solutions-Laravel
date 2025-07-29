@@ -26,12 +26,13 @@ Route::controller(ContactUsController::class)->group(function () {
     Route::post('/contact-us', 'store')->middleware(['throttle:5,1']);
 });
 
-// This route is for fetching home page and pricing page data.
+// This route is for fetching home page, pricing page and others data.
 Route::controller(FetchController::class)->group(function () {
     Route::get('/zip-codes/list', 'FetchZipCodes');
     Route::get('/square-footage-size/list', 'FetchSquareFootageSizes');
     Route::get('/footage-sizes/{footage}/packages', 'FetchPackagesByFootageSize');
     Route::get('/fetch-other-services', 'FetchOtherServices');
+    Route::get('/fetch-unavailable-dates', 'FetchUnavailableDates');
 });
 
 // This route is for submitting an order for other services.

@@ -6,7 +6,9 @@ use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\Pricing\AddOnResource;
 use App\Http\Resources\Api\Pricing\FetchPackageResource;
+use App\Http\Resources\Api\Pricing\UnavailableDateResource;
 use App\Models\AddOn;
+use App\Models\Appointment;
 use App\Models\FootageSize;
 use App\Models\OtherService;
 use App\Models\Package;
@@ -113,6 +115,29 @@ class FetchController extends Controller {
             return Helper::jsonResponse(false, 'An error occurred', 500, [
                 'error' => $e->getMessage(),
             ]);
+        }
+    }
+
+    /**
+     * Fetch unavailable dates for appointments.
+     *
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function FetchUnavailableDates(): JsonResponse {
+        try {
+            $data = Appointment::whereHas('order', function ($query) {
+                $query->where('status', 'paid')
+                    ->where('order_status', 'pending');
+            })
+                ->select('date', 'time')
+                ->orderBy('date')
+                ->orderBy('time')
+                ->get();
+
+            return Helper::jsonResponse(true, 'Unavailable dates fetched successfully', 200, UnavailableDateResource::collection($data));
+        } catch (Exception $e) {
+            return Helper::jsonResponse(false, 'An error occurred', 500, ['error' => $e->getMessage()]);
         }
     }
 }
