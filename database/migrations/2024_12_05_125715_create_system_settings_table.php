@@ -11,6 +11,7 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('system_settings', function (Blueprint $table) {
             $table->id();
+
             $table->string('title')->nullable();
             $table->string('system_name')->nullable();
             $table->string('email')->nullable();

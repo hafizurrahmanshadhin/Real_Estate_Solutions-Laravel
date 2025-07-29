@@ -11,8 +11,10 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('social_media', function (Blueprint $table) {
             $table->id();
+
             $table->string('social_media')->nullable(false);
             $table->string('profile_link')->nullable(false);
+
             $table->timestamps();
             $table->softDeletes();
         });

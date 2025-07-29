@@ -11,13 +11,13 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('contents', function (Blueprint $table) {
             $table->id();
+
             $table->enum('type', ['termsAndConditions', 'privacyPolicy'])->nullable(false);
             $table->string('title');
             $table->string('slug');
             $table->longText('content');
 
             $table->enum('status', ['active', 'inactive'])->default('active')->nullable(false);
-
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
             $table->softDeletes();

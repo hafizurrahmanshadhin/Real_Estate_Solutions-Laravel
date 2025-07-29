@@ -6,7 +6,7 @@
 
 ..................................................................
 
-## [Live Link (Frontend) -- Softvence Server](https://jimmydela.vercel.app/)
+## [Live Link (Frontend) -- Softvence Server](https://jimmydela.vercel.app)
 
 ## [Live Link (Dashboard) -- Softvence Server](https://jimmydela.softvencefsd.xyz)
 

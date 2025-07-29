@@ -11,7 +11,9 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('service_items', function (Blueprint $table) {
             $table->id();
+
             $table->string('service_name', 100)->unique()->nullable(false);
+
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });

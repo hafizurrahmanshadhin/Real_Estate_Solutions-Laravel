@@ -26,7 +26,7 @@ class SystemSettingSeeder extends Seeder {
                 'id'             => 1,
                 'title'          => null,
                 'system_name'    => null,
-                'email'          => null,
+                'email'          => 'shadhin666@gmail.com',
                 'phone_number'   => null,
                 'address'        => null,
                 'copyright_text' => $this->getCopyrightText(),

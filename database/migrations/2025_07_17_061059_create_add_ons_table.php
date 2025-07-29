@@ -25,6 +25,7 @@ return new class extends Migration {
             $table->integer('locations')->nullable()->comment('For Community Images - number of locations');
             $table->integer('quantity')->default(1);
             $table->decimal('price', 10, 2)->nullable(false);
+
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
             $table->softDeletes();

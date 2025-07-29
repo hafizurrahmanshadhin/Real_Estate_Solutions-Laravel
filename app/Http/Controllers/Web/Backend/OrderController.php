@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web\Backend;
 
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Web\OrderDetailsResource;
 use App\Models\Order;
 use Carbon\Carbon;
 use Exception;
@@ -64,14 +65,17 @@ class OrderController extends Controller {
         }
     }
 
+    /**
+     * Show the details of a specific order.
+     *
+     * @param Order $order
+     * @return JsonResponse
+     * @throws Exception
+     */
     public function show(Order $order): JsonResponse {
         try {
-            $order->load([
-                'properties.footageSize',
-                'appointments',
-                'items.itemable',
-            ]);
-            return Helper::jsonResponse(true, 'Order details fetched', 200, $order);
+            $order->load(['properties.footageSize', 'appointments', 'items.itemable']);
+            return Helper::jsonResponse(true, 'Order details fetched', 200, new OrderDetailsResource($order));
         } catch (Exception $e) {
             return Helper::jsonResponse(false, 'An error occurred', 500, ['error' => $e->getMessage()]);
         }

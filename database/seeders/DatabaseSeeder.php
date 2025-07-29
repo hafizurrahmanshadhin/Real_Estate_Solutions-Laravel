@@ -3,13 +3,17 @@
 namespace Database\Seeders;
 
 use Database\Seeders\AddOnSeeder;
+use Database\Seeders\AppointmentSeeder;
 use Database\Seeders\CMSSeeder;
 use Database\Seeders\ContactUsSeeder;
 use Database\Seeders\ContentSeeder;
 use Database\Seeders\FootageSizeSeeder;
+use Database\Seeders\OrderItemSeeder;
+use Database\Seeders\OrderSeeder;
 use Database\Seeders\OtherServiceOrderSeeder;
 use Database\Seeders\OtherServiceSeeder;
 use Database\Seeders\PackageSeeder;
+use Database\Seeders\PropertySeeder;
 use Database\Seeders\ServiceItemSeeder;
 use Database\Seeders\ServiceItemsPivotSeeder;
 use Database\Seeders\ServiceSeeder;
@@ -37,6 +41,10 @@ class DatabaseSeeder extends Seeder {
             CMSSeeder::class,
             ContactUsSeeder::class,
             OtherServiceOrderSeeder::class,
+            OrderSeeder::class,
+            PropertySeeder::class,
+            AppointmentSeeder::class,
+            OrderItemSeeder::class,
         ]);
     }
 }

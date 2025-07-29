@@ -23,9 +23,9 @@
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                    </div>
+                                    </div> --}}
 
-                                    <div class="col-md-6">
+                                    {{-- <div class="col-md-6">
                                         <div>
                                             <label for="system_name" class="form-label">System Name:</label>
                                             <input type="text"
@@ -36,9 +36,9 @@
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                    </div>
+                                    </div> --}}
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div>
                                             <label for="email" class="form-label">Email:</label>
                                             <input type="text" class="form-control @error('email') is-invalid @enderror"
@@ -50,7 +50,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    {{-- <div class="col-md-6">
                                         <div>
                                             <label for="phone_number" class="form-label">Phone Number:</label>
                                             <input type="text"
@@ -62,9 +62,9 @@
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                    </div>
+                                    </div> --}}
 
-                                    <div class="col-12">
+                                    {{-- <div class="col-12">
                                         <div>
                                             <label for="address" class="form-label">Address:</label>
                                             <input type="text"

@@ -11,9 +11,12 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('service_items_pivot', function (Blueprint $table) {
             $table->id();
+
             $table->foreignId('service_id')->constrained()->onDelete('cascade');
             $table->foreignId('service_item_id')->constrained()->onDelete('cascade');
+
             $table->integer('quantity')->default(1);
+
             $table->timestamps();
 
             $table->unique(['service_id', 'service_item_id']);

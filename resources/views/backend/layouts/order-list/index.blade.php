@@ -243,57 +243,58 @@
                 let response = await axios.get(url);
                 if (response.data && response.data.data) {
                     let data = response.data.data;
-                    let property = data.properties[0] || {};
-                    let appointment = data.appointments[0] || {};
                     let items = data.items || [];
 
                     let itemsHtml = items.map(item => {
-                        let name = '';
-                        if (item.itemable_type.endsWith('Service')) {
-                            name = item.itemable?.package?.title || 'Service';
-                        } else if (item.itemable_type.endsWith('AddOn')) {
-                            name = item.itemable?.service_item?.service_name || 'Add-On';
-                        }
                         return `<tr>
-                    <td>${name}</td>
-                    <td>${item.quantity}</td>
-                    <td>${item.unit_price}</td>
-                    <td>${item.line_total}</td>
-                </tr>`;
+                        <td>${item.name}</td>
+                        <td>${item.quantity}</td>
+                        <td>$${item.unit_price}</td>
+                        <td>$${item.line_total}</td>
+                    </tr>`;
                     }).join('');
 
-                    // FIX: Use the correct modal ID
                     let modalBody = document.querySelector('#viewOrderModal .modal-body');
                     modalBody.innerHTML = `
-                <h5>Order #${data.id}</h5>
-                <p><strong>Name:</strong> ${data.full_name}</p>
-                <p><strong>Email:</strong> ${data.email}</p>
-                <p><strong>Phone:</strong> ${data.phone_number}</p>
-                <p><strong>Address:</strong> ${property.full_address || ''}</p>
-                <p><strong>Appointment:</strong> ${appointment.date ?? ''} ${appointment.time ?? ''}</p>
-                <p><strong>Status:</strong> ${data.order_status}</p>
-                <p><strong>Amount Paid:</strong> ${data.total_amount} ${data.currency?.toUpperCase()}</p>
-                <hr>
-                <h6>Order Items</h6>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Qty</th>
-                            <th>Unit Price</th>
-                            <th>Line Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${itemsHtml}
-                    </tbody>
-                </table>
-            `;
+                    <h5>Order #${data.id}</h5>
+                    <p><strong>Transaction ID:</strong> ${data.transaction_id}</p>
+                    <p><strong>Name:</strong> ${data.full_name}</p>
+                    <p><strong>Email:</strong> ${data.email}</p>
+                    <p><strong>Phone:</strong> ${data.phone_number}</p>
+                    <p><strong>Address:</strong> ${data.address}</p>
+                    <p><strong>Property Type:</strong> ${data.property_type}</p>
+                    <p><strong>Footage Size:</strong> ${data.footage_size}</p>
+                    <p><strong>Appointment:</strong> ${data.appointment_date} ${data.appointment_time}</p>
+                    <p><strong>Status:</strong> ${data.order_status}</p>
+                    <p><strong>Amount Paid:</strong> $${data.total_amount} ${data.currency}</p>
+                    <hr>
+                    <h6>Order Items</h6>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Service / Add-On</th>
+                                <th>Qty</th>
+                                <th>Unit Price</th>
+                                <th>Line Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${itemsHtml}
+                            <tr>
+                                <td colspan="3" class="text-end"><strong>Total</strong></td>
+                                <td><strong>$${data.items_total}</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `;
                 } else {
                     toastr.error('No data returned from the server.');
                 }
             } catch (error) {
                 console.error(error);
+                let modalBody = document.querySelector('#viewOrderModal .modal-body');
+                modalBody.innerHTML =
+                    `<div class="alert alert-danger">Error: ${error.response?.data?.error || error.message}</div>`;
                 toastr.error('Could not fetch order request details.');
             }
         }

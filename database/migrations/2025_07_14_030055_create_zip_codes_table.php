@@ -11,7 +11,9 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('zip_codes', function (Blueprint $table) {
             $table->id();
+
             $table->string('zip_code', 15)->unique()->nullable(false);
+
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
             $table->softDeletes();
