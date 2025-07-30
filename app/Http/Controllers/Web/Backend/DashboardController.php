@@ -74,6 +74,7 @@ class DashboardController extends Controller {
      */
     private function getRecentOrders() {
         return Order::with(['properties.footageSize', 'appointments'])
+            ->where('status', 'paid')
             ->latest()
             ->take(5)
             ->get();

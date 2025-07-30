@@ -233,9 +233,7 @@
                                             <th scope="col">Order ID</th>
                                             <th scope="col">Customer</th>
                                             <th scope="col">Amount</th>
-                                            <th scope="col">Status</th>
                                             <th scope="col">Date</th>
-                                            <th scope="col">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -249,17 +247,7 @@
                                                     </div>
                                                 </td>
                                                 <td>${{ number_format($order->total_amount, 2) }}</td>
-                                                <td>
-                                                    <span
-                                                        class="badge badge-pill badge-soft-{{ $order->order_status === 'completed' ? 'success' : ($order->order_status === 'pending' ? 'warning' : 'danger') }} font-size-11">
-                                                        {{ ucfirst($order->order_status) }}
-                                                    </span>
-                                                </td>
                                                 <td>{{ $order->created_at->format('M d, Y') }}</td>
-                                                <td>
-                                                    <a href="{{ route('order.show', $order->id) }}"
-                                                        class="btn btn-primary btn-sm">View</a>
-                                                </td>
                                             </tr>
                                         @empty
                                             <tr>
@@ -302,9 +290,11 @@
 
         </div>
     </div>
+@endsection
 
-    <!-- Chart.js Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+@push('scripts')
+    {{-- Chart.js Scripts --}}
+    <script src="{{ asset('backend/custom_downloaded_file/chart.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Revenue Chart
@@ -363,4 +353,4 @@
             });
         });
     </script>
-@endsection
+@endpush
