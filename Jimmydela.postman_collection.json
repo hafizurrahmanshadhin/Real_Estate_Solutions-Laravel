@@ -911,6 +911,12 @@
 			"value": "https://jimmydela.softvencefsd.xyz/api",
 			"type": "string",
 			"disabled": true
+		},
+		{
+			"key": "base_url",
+			"value": "https://myapp.asap303.com/api",
+			"type": "string",
+			"disabled": true
 		}
 	]
 }

@@ -1,19 +1,19 @@
-# name: Namecheap
-# on:
-#   push:
-#     branches:
-#       - main
-# jobs:
-#   FTP-Deploy-Action:
-#     name: FTP-Deploy-Action
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v2.1.0
-#         with:
-#           fetch-depth: 2
-#       - name: FTP-Deploy-Action
-#         uses: SamKirkland/FTP-Deploy-Action@4.3.0
-#         with:
-#           server:
-#           username:
-#           password:
+name: Namecheap
+on:
+  push:
+    branches:
+      - main
+jobs:
+  FTP-Deploy-Action:
+    name: FTP-Deploy-Action
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.1.0
+        with:
+          fetch-depth: 2
+      - name: FTP-Deploy-Action
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        with:
+          server: 159.198.65.217
+          username: myapp@asap303.com
+          password: "jimmydela_jimmydela"
