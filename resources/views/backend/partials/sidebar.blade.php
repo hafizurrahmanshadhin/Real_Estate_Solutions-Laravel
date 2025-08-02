@@ -18,7 +18,7 @@
             </span>
             <span class="logo-lg">
                 <img src="{{ asset($systemSetting->logo ?? 'backend/images/PNG FILE-01-02.png') }}" alt="Logo"
-                    height="125" style="margin-left: -50px;">
+                    height="60">
             </span>
         </a>
 
