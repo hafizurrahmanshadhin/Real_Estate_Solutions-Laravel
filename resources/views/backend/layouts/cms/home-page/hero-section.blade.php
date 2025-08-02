@@ -27,14 +27,35 @@
                                 <div class="row gy-4">
                                     <div class="col-md-12">
                                         <div>
-                                            <label for="title" class="form-label">Title: <span
-                                                    class="text-danger">*</span></label>
-                                            <input type="text" class="form-control @error('title') is-invalid @enderror"
-                                                name="title" id="title" placeholder="Please Enter Title"
-                                                value="{{ old('title', $heroSection->title ?? '') }}" maxlength="255">
-                                            @error('title')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
+                                            <label class="form-label">Titles: <span class="text-danger">*</span></label>
+                                            <div id="titles-wrapper">
+                                                @php
+                                                    $titles = old('titles', $heroSection->items ?? []);
+                                                    if (!is_array($titles)) {
+                                                        $titles = [];
+                                                    }
+                                                    if (empty($titles)) {
+                                                        $titles = [''];
+                                                    }
+                                                @endphp
+                                                @foreach ($titles as $i => $title)
+                                                    <div class="input-group mb-2 title-item">
+                                                        <input type="text" name="titles[]"
+                                                            class="form-control @error('titles.' . $i) is-invalid @enderror"
+                                                            placeholder="Please Enter Title" value="{{ $title }}"
+                                                            maxlength="255" required>
+                                                        <button type="button" class="btn btn-danger remove-title"
+                                                            @if (count($titles) == 1) style="display:none;" @endif>
+                                                            <i class="ri-delete-bin-2-line"></i>
+                                                        </button>
+                                                    </div>
+                                                    @error('titles.' . $i)
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
+                                                @endforeach
+                                            </div>
+                                            <button type="button" class="btn btn-success btn-sm" id="add-title"><i
+                                                    class="ri-add-line"></i> Add Title</button>
                                         </div>
                                     </div>
 
@@ -112,18 +133,48 @@
                     console.error('CKEditor Error:', error);
                 });
 
+
+            // Add new title input
+            $('#add-title').on('click', function() {
+                let index = $('#titles-wrapper .title-item').length;
+                let html = `
+            <div class="input-group mb-2 title-item">
+                <input type="text" name="titles[]" class="form-control" placeholder="Please Enter Title" maxlength="255" required>
+                <button type="button" class="btn btn-danger remove-title"><i class="ri-delete-bin-2-line"></i></button>
+            </div>
+        `;
+                $('#titles-wrapper').append(html);
+                $('.remove-title').show();
+            });
+
+            // Remove title input
+            $(document).on('click', '.remove-title', function() {
+                $(this).closest('.title-item').remove();
+                if ($('#titles-wrapper .title-item').length === 1) {
+                    $('.remove-title').hide();
+                }
+            });
+
+            // Hide remove button if only one title
+            if ($('#titles-wrapper .title-item').length === 1) {
+                $('.remove-title').hide();
+            }
+
+
             // Form validation
             $('#heroSectionForm').on('submit', function(e) {
-                let title = $('#title').val().trim();
-                let content = $('#content').val().trim();
-
-                if (!title) {
+                let hasTitle = false;
+                $('input[name="titles[]"]').each(function() {
+                    if ($(this).val().trim() !== '') hasTitle = true;
+                });
+                if (!hasTitle) {
                     e.preventDefault();
-                    toastr.error('Title is required.');
-                    $('#title').focus();
+                    toastr.error('At least one title is required.');
+                    $('input[name="titles[]"]').first().focus();
                     return false;
                 }
 
+                let content = $('#content').val().trim();
                 if (!content) {
                     e.preventDefault();
                     toastr.error('Content is required.');

@@ -187,6 +187,7 @@ class OtherServiceController extends Controller {
             $otherService->service_description = null;
             $otherService->title               = $request->input('title');
             $otherService->description         = $request->input('description');
+            $otherService->is_bundle           = $request->input('is_bundle', false);
 
             // If an image was uploaded, store it
             if ($request->hasFile('image')) {
@@ -229,6 +230,7 @@ class OtherServiceController extends Controller {
             $otherService->service_description = null;
             $otherService->title               = $request->input('title');
             $otherService->description         = $request->input('description');
+            $otherService->is_bundle           = $request->input('is_bundle', false);
 
             // If a new image is uploaded, delete the old image and upload the new one.
             if ($request->hasFile('image')) {

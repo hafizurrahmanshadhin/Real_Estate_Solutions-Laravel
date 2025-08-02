@@ -131,6 +131,8 @@ class FetchController extends Controller {
                     ->where('order_status', 'pending');
             })
                 ->select('date', 'time')
+                ->groupBy('date', 'time')
+                ->havingRaw('COUNT(*) >= 5')
                 ->orderBy('date')
                 ->orderBy('time')
                 ->get();

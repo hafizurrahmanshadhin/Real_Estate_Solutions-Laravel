@@ -6,7 +6,6 @@ use App\Helpers\Helper;
 use App\Models\CMS;
 use Exception;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Log;
 
 class HomePageHeroSectionService {
     /**
@@ -25,13 +24,11 @@ class HomePageHeroSectionService {
      * @return void
      */
     public function updateHeroSection(array $data): void {
-        $heroSection = $this->getOrCreateHeroSection();
-
-        // Update basic fields
-        $heroSection->title   = $data['title'];
+        $heroSection          = $this->getOrCreateHeroSection();
+        $heroSection->items   = $data['titles'];
+        $heroSection->title   = $data['titles'][0] ?? '';
         $heroSection->content = $data['content'];
 
-        // Handle image operations
         $this->handleImageUpload($heroSection, $data);
 
         $heroSection->save();
@@ -95,8 +92,6 @@ class HomePageHeroSectionService {
             // Upload the image using Helper
             return Helper::fileUpload($image, 'cms/hero-section', $filename);
         } catch (Exception $e) {
-            // Log the error or handle it as needed
-            Log::error('Hero Section Image Upload Error: ' . $e->getMessage());
             return null;
         }
     }

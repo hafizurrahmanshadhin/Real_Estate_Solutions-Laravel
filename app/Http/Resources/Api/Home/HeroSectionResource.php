@@ -21,7 +21,11 @@ class HeroSectionResource extends JsonResource {
         $logo = SystemSetting::value('logo');
 
         return [
-            'title'    => $this->title,
+            'titles'   => collect($this->items ?? [])->map(function ($title) {
+                return [
+                    'title'   => $title,
+                ];
+            })->values(),
             'image'    => $this->image ? url($this->image) : null,
             'logo'     => $logo ? url($logo) : null,
             'content'  => $this->content,

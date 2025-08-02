@@ -109,6 +109,17 @@
                             <span class="text-danger error-text create_image_error"></span>
                             <small class="text-muted">Accepted formats: JPG, PNG, GIF (Max: 20MB)</small>
                         </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="modal_create_is_bundle"
+                                    name="is_bundle">
+                                <label class="form-check-label" for="modal_create_is_bundle">
+                                    Is Bundle Service?
+                                </label>
+                            </div>
+                            <span class="text-danger error-text create_is_bundle_error"></span>
+                        </div>
                     </div>
 
                     <div class="modal-footer">
@@ -157,6 +168,17 @@
                             <span class="text-danger error-text edit_image_error"></span>
                             <small class="text-muted">Leave empty to keep current image. Accepted formats: JPG, PNG, GIF
                                 (Max: 20MB)</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="modal_edit_is_bundle"
+                                    name="is_bundle">
+                                <label class="form-check-label" for="modal_edit_is_bundle">
+                                    Is Bundle Service?
+                                </label>
+                            </div>
+                            <span class="text-danger error-text edit_is_bundle_error"></span>
                         </div>
                     </div>
 
@@ -443,6 +465,7 @@
                 let description = createEditor ? createEditor.getData().trim() : $(
                     '#modal_create_description').val().trim();
                 let image = $('#modal_create_image')[0].files[0];
+                let is_bundle = $('#modal_create_is_bundle').is(':checked') ? 1 : 0;
 
                 // Validation
                 if (!title || !description || !image) {
@@ -455,6 +478,7 @@
                 formData.append('title', title);
                 formData.append('description', description);
                 formData.append('image', image);
+                formData.append('is_bundle', is_bundle);
 
                 // Submit form
                 $.ajax({
@@ -510,6 +534,9 @@
                             // Set form values
                             $('#edit_other_service_id').val(data.id);
                             $('#modal_edit_title').val(data.title);
+
+                            // Set is_bundle checkbox
+                            $('#modal_edit_is_bundle').prop('checked', data.is_bundle == 1);
 
                             // Set CKEditor content
                             if (editEditor) {
@@ -594,6 +621,7 @@
                 let description = editEditor ? editEditor.getData().trim() : $('#modal_edit_description')
                     .val().trim();
                 let image = $('#modal_edit_image')[0].files[0];
+                let is_bundle = $('#modal_edit_is_bundle').is(':checked') ? 1 : 0;
 
                 // Validation
                 if (!title || !description) {
@@ -606,6 +634,7 @@
                 formData.append('_method', 'PUT');
                 formData.append('title', title);
                 formData.append('description', description);
+                formData.append('is_bundle', is_bundle);
 
                 if (image) {
                     formData.append('image', image);
@@ -751,6 +780,7 @@
                     <p><strong>Title:</strong> ${data.title}</p>
                     <p><strong>Description:</strong> ${data.description}</p>
                     <p><strong>Status:</strong> <span class="badge ${data.status === 'active' ? 'bg-success' : 'bg-danger'}">${data.status}</span></p>
+                    <p><strong>Is Bundle:</strong> <span class="badge ${data.is_bundle ? 'bg-success' : 'bg-danger'}">${data.is_bundle ? 'Yes' : 'No'}</span></p>
                 `);
                     }
                 },

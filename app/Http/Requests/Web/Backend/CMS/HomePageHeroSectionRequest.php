@@ -20,7 +20,8 @@ class HomePageHeroSectionRequest extends FormRequest {
      */
     public function rules(): array {
         return [
-            'title'        => 'required|string|max:255',
+            'titles'       => 'required|array|min:1',
+            'titles.*'     => 'required|string|max:255',
             'content'      => 'required|string',
             'image'        => 'nullable|image|mimes:jpg,jpeg,png,gif,webp|max:20480',
             'remove_image' => 'nullable|boolean',
@@ -34,14 +35,16 @@ class HomePageHeroSectionRequest extends FormRequest {
      */
     public function messages(): array {
         return [
-            'title.required'   => 'The title field is required.',
-            'title.string'     => 'The title must be a valid string.',
-            'title.max'        => 'The title may not be greater than 255 characters.',
-            'content.required' => 'The content field is required.',
-            'content.string'   => 'The content must be a valid string.',
-            'image.image'      => 'The file must be an image.',
-            'image.mimes'      => 'The image must be a file of type: jpg, jpeg, png, gif, webp.',
-            'image.max'        => 'The image may not be greater than 20MB.',
+            'titles.required'   => 'At least one title is required.',
+            'titles.array'      => 'Titles must be an array.',
+            'titles.*.required' => 'Each title is required.',
+            'titles.*.string'   => 'Each title must be a valid string.',
+            'titles.*.max'      => 'Each title may not be greater than 255 characters.',
+            'content.required'  => 'The content field is required.',
+            'content.string'    => 'The content must be a valid string.',
+            'image.image'       => 'The file must be an image.',
+            'image.mimes'       => 'The image must be a file of type: jpg, jpeg, png, gif, webp.',
+            'image.max'         => 'The image may not be greater than 20MB.',
         ];
     }
 }

@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->string('title')->nullable();
             $table->string('image')->nullable();
             $table->text('description')->nullable();
+            $table->boolean('is_bundle')->default(false);
 
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();

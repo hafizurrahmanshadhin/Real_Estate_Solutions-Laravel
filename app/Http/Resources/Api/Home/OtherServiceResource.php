@@ -17,6 +17,7 @@ class OtherServiceResource extends JsonResource {
             'title'       => $this->title,
             'image'       => $this->image ? url($this->image) : null,
             'description' => $this->description,
+            'is_bundle'   => $this->is_bundle,
         ];
     }
 }

@@ -7,7 +7,6 @@ use App\Http\Requests\Web\Backend\CMS\HomePageHeroSectionRequest;
 use App\Services\Web\Backend\CMS\HomePageHeroSectionService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class HomePageHeroSectionController extends Controller {
@@ -28,7 +27,6 @@ class HomePageHeroSectionController extends Controller {
             $heroSection = $this->heroSectionService->getOrCreateHeroSection();
             return view('backend.layouts.cms.home-page.hero-section', compact('heroSection'));
         } catch (Exception $e) {
-            Log::error('Hero Section Index Error: ' . $e->getMessage());
             return redirect()->route('dashboard')->with('t-error', 'Failed to load hero section: ' . $e->getMessage());
         }
     }
@@ -58,7 +56,6 @@ class HomePageHeroSectionController extends Controller {
                 ->with('t-success', 'Hero Section updated successfully.');
 
         } catch (Exception $e) {
-            Log::error('Hero Section Update Error: ' . $e->getMessage());
             return redirect()->back()
                 ->with('t-error', 'Failed to update hero section: ' . $e->getMessage())
                 ->withInput();
