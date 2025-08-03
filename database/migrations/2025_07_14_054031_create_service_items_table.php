@@ -12,7 +12,7 @@ return new class extends Migration {
         Schema::create('service_items', function (Blueprint $table) {
             $table->id();
 
-            $table->string('service_name', 100)->unique()->nullable(false);
+            $table->string('service_name')->unique()->nullable(false);
 
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();

@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use Yajra\DataTables\DataTables;
@@ -198,9 +197,6 @@ class ServiceItemController extends Controller {
         // Replace multiple spaces with single space
         $cleaned = preg_replace('/\s+/', ' ', $cleaned);
 
-        // Capitalize each word properly
-        $cleaned = ucwords(strtolower($cleaned));
-
         return $cleaned;
     }
 
@@ -251,27 +247,19 @@ class ServiceItemController extends Controller {
         try {
             $data = ServiceItem::findOrFail($id);
 
-            // Debug logging
-            Log::info('Attempting to delete ServiceItem ID: ' . $id);
-
             // Check many-to-many relationship with services through pivot table
             $servicesCount = $data->services()->count();
-            Log::info('Services count (via service_items_pivot): ' . $servicesCount);
 
             // Check one-to-many relationship with add-ons
             $addOnsCount = $data->addOns()->count();
-            Log::info('Add-ons count: ' . $addOnsCount);
 
             // If you want to see which specific services are using this item:
             if ($servicesCount > 0) {
                 $serviceIds = $data->services()->pluck('services.id')->toArray();
-                Log::info('Service IDs using this item: ' . implode(', ', $serviceIds));
             }
 
             // Check if this service item is being used
             if ($servicesCount > 0 || $addOnsCount > 0) {
-                Log::info('Cannot delete - item is in use');
-
                 $usageDetails = [];
                 if ($servicesCount > 0) {
                     $usageDetails[] = "$servicesCount service(s)";
@@ -288,7 +276,6 @@ class ServiceItemController extends Controller {
 
             // Delete the service item
             $data->delete();
-            Log::info('ServiceItem deleted successfully');
 
             return response()->json([
                 't-success' => true,
@@ -296,21 +283,18 @@ class ServiceItemController extends Controller {
             ]);
 
         } catch (ModelNotFoundException $e) {
-            Log::error('ServiceItem not found: ' . $e->getMessage());
             return response()->json([
                 't-success' => false,
                 'message'   => 'Service item not found.',
             ], 404);
 
         } catch (QueryException $e) {
-            Log::error('Database error while deleting ServiceItem: ' . $e->getMessage());
             return response()->json([
                 't-success' => false,
                 'message'   => 'Database error occurred while deleting.',
             ], 500);
 
         } catch (Exception $e) {
-            Log::error('Delete ServiceItem Error: ' . $e->getMessage());
             return response()->json([
                 't-success' => false,
                 'message'   => 'An unexpected error occurred: ' . $e->getMessage(),
