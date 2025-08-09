@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "effc7593-8df4-431f-a7b0-adef3d28519d",
-		"name": "Jimmydela",
+		"name": "Real_Estate_Solutions",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "32086283",
 		"_collection_link": "https://www.postman.com/shadhinworkspace/workspace/jimmydela/collection/32086283-effc7593-8df4-431f-a7b0-adef3d28519d?action=share&source=collection_link&creator=32086283"
@@ -904,7 +904,8 @@
 		{
 			"key": "base_url",
 			"value": "http://127.0.0.1:8000/api",
-			"type": "string"
+			"type": "string",
+			"disabled": true
 		},
 		{
 			"key": "base_url",
@@ -915,8 +916,7 @@
 		{
 			"key": "base_url",
 			"value": "https://myapp.asap303.com/api",
-			"type": "string",
-			"disabled": true
+			"type": "string"
 		}
 	]
 }

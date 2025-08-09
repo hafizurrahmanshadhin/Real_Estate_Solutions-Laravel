@@ -166,7 +166,7 @@
                                     <i class="bx bx-buildings"></i>
                                 </span>
                             </div>
-                            <h5 class="font-size-15">{{ $stats['other_service_orders'] }}</h5>
+                            <h5 class="font-size-15">{{ $stats['other_service'] }}</h5>
                             <p class="text-muted mb-0">Other Services</p>
                         </div>
                     </div>

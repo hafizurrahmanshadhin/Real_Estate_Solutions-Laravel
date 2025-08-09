@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AddOn;
 use App\Models\ContactUs;
 use App\Models\Order;
-use App\Models\OtherServiceOrder;
+use App\Models\OtherService;
 use App\Models\Package;
 use App\Models\Service;
 use App\Models\ZipCode;
@@ -52,20 +52,40 @@ class DashboardController extends Controller {
         $thisMonth = Carbon::now()->startOfMonth();
 
         return [
-            'total_orders'         => Order::count(),
-            'pending_orders'       => Order::where('order_status', 'pending')->count(),
-            'completed_orders'     => Order::where('order_status', 'completed')->count(),
-            'total_revenue'        => Order::where('status', 'paid')->sum('total_amount'),
-            'monthly_revenue'      => Order::where('status', 'paid')
+            'total_orders'      => Order::whereNotNull('transaction_id')
+                ->whereRaw('TRIM(transaction_id) <> ""')
+                ->whereNotNull('payment_method')
+                ->whereRaw('TRIM(payment_method) <> ""')
+                ->whereNotNull('stripe_payment_intent')
+                ->whereRaw('TRIM(stripe_payment_intent) <> ""')
+                ->count(),
+            'pending_orders'    => Order::where('order_status', 'pending')
+                ->whereNotNull('transaction_id')
+                ->whereRaw('TRIM(transaction_id) <> ""')
+                ->whereNotNull('payment_method')
+                ->whereRaw('TRIM(payment_method) <> ""')
+                ->whereNotNull('stripe_payment_intent')
+                ->whereRaw('TRIM(stripe_payment_intent) <> ""')
+                ->count(),
+            'completed_orders'  => Order::where('order_status', 'completed')->count(),
+            'total_revenue'     => Order::where('status', 'paid')->sum('total_amount'),
+            'monthly_revenue'   => Order::where('status', 'paid')
                 ->where('created_at', '>=', $thisMonth)
                 ->sum('total_amount'),
-            'today_orders'         => Order::whereDate('created_at', $today)->count(),
-            'contact_inquiries'    => ContactUs::count(),
-            'other_service_orders' => OtherServiceOrder::count(),
-            'active_packages'      => Package::where('status', 'active')->count(),
-            'active_services'      => Service::where('status', 'active')->count(),
-            'active_addons'        => AddOn::where('status', 'active')->count(),
-            'zip_codes'            => ZipCode::where('status', 'active')->count(),
+            'today_orders'      => Order::whereDate('created_at', $today)
+                ->whereNotNull('transaction_id')
+                ->whereRaw('TRIM(transaction_id) <> ""')
+                ->whereNotNull('payment_method')
+                ->whereRaw('TRIM(payment_method) <> ""')
+                ->whereNotNull('stripe_payment_intent')
+                ->whereRaw('TRIM(stripe_payment_intent) <> ""')
+                ->count(),
+            'contact_inquiries' => ContactUs::count(),
+            'other_service'     => OtherService::count(),
+            'active_packages'   => Package::where('status', 'active')->count(),
+            'active_services'   => Service::where('status', 'active')->count(),
+            'active_addons'     => AddOn::where('status', 'active')->count(),
+            'zip_codes'         => ZipCode::where('status', 'active')->count(),
         ];
     }
 
@@ -75,6 +95,12 @@ class DashboardController extends Controller {
     private function getRecentOrders() {
         return Order::with(['properties.footageSize', 'appointments'])
             ->where('status', 'paid')
+            ->whereNotNull('transaction_id')
+            ->whereRaw('TRIM(transaction_id) <> ""')
+            ->whereNotNull('payment_method')
+            ->whereRaw('TRIM(payment_method) <> ""')
+            ->whereNotNull('stripe_payment_intent')
+            ->whereRaw('TRIM(stripe_payment_intent) <> ""')
             ->latest()
             ->take(5)
             ->get();
@@ -92,6 +118,12 @@ class DashboardController extends Controller {
             $months[] = $date->format('M Y');
 
             $monthRevenue = Order::where('status', 'paid')
+                ->whereNotNull('transaction_id')
+                ->whereRaw('TRIM(transaction_id) <> ""')
+                ->whereNotNull('payment_method')
+                ->whereRaw('TRIM(payment_method) <> ""')
+                ->whereNotNull('stripe_payment_intent')
+                ->whereRaw('TRIM(stripe_payment_intent) <> ""')
                 ->whereYear('created_at', $date->year)
                 ->whereMonth('created_at', $date->month)
                 ->sum('total_amount');
@@ -110,9 +142,30 @@ class DashboardController extends Controller {
      */
     private function getOrderStatusData(): array {
         return [
-            'pending'   => Order::where('order_status', 'pending')->count(),
-            'completed' => Order::where('order_status', 'completed')->count(),
-            'cancelled' => Order::where('order_status', 'cancelled')->count(),
+            'pending'   => Order::where('order_status', 'pending')
+                ->whereNotNull('transaction_id')
+                ->whereRaw('TRIM(transaction_id) <> ""')
+                ->whereNotNull('payment_method')
+                ->whereRaw('TRIM(payment_method) <> ""')
+                ->whereNotNull('stripe_payment_intent')
+                ->whereRaw('TRIM(stripe_payment_intent) <> ""')
+                ->count(),
+            'completed' => Order::where('order_status', 'completed')
+                ->whereNotNull('transaction_id')
+                ->whereRaw('TRIM(transaction_id) <> ""')
+                ->whereNotNull('payment_method')
+                ->whereRaw('TRIM(payment_method) <> ""')
+                ->whereNotNull('stripe_payment_intent')
+                ->whereRaw('TRIM(stripe_payment_intent) <> ""')
+                ->count(),
+            'cancelled' => Order::where('order_status', 'cancelled')
+                ->whereNotNull('transaction_id')
+                ->whereRaw('TRIM(transaction_id) <> ""')
+                ->whereNotNull('payment_method')
+                ->whereRaw('TRIM(payment_method) <> ""')
+                ->whereNotNull('stripe_payment_intent')
+                ->whereRaw('TRIM(stripe_payment_intent) <> ""')
+                ->count(),
         ];
     }
 
