@@ -100,7 +100,7 @@
                                         @enderror
                                     </div>
 
-                                    <div class="col-md-6">
+                                    {{-- <div class="col-md-6">
                                         <div>
                                             <label for="logo" class="form-label">Logo:</label>
                                             <input type="hidden" name="remove_logo" value="0">
@@ -124,7 +124,7 @@
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="col-12 mt-3">
                                         <button type="submit" class="btn btn-primary">Submit</button>

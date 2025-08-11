@@ -10,8 +10,8 @@ class SystemSettingSeeder extends Seeder {
     // Company constants
     private const COMPANY_NAME   = 'ASAP Real Estate Solutions';
     private const COPYRIGHT_YEAR = '2025';
-    private const LOGO_PATH      = 'backend/images/PNG FILE-01-02.png';
-    private const FAVICON_PATH   = 'backend/images/PNG FILE-01-02.png';
+    // private const LOGO_PATH      = 'backend/images/PNG FILE-01-02.png';
+    // private const FAVICON_PATH   = 'backend/images/PNG FILE-01-02.png';
 
     /**
      * Run the database seeds.
@@ -31,8 +31,8 @@ class SystemSettingSeeder extends Seeder {
                 'address'        => null,
                 'copyright_text' => $this->getCopyrightText(),
                 'description'    => $this->getCompanyDescription(),
-                'logo'           => self::LOGO_PATH,
-                'favicon'        => self::FAVICON_PATH,
+                // 'logo'           => self::LOGO_PATH,
+                // 'favicon'        => self::FAVICON_PATH,
                 'created_at'     => Carbon::parse('2024-12-07 23:08:00'),
                 'updated_at'     => Carbon::parse('2025-07-23 23:18:50'),
             ],

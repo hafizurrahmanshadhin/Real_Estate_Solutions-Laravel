@@ -40,6 +40,14 @@ class AddOnController extends Controller {
                         }
                         return $data->quantity;
                     })
+                    ->addColumn('maximum_number', function ($data) {
+                        if ($data->is_increment) {
+                            return $data->maximum_number !== null
+                            ? (string) $data->maximum_number
+                            : '<span class="badge bg-warning text-dark">Not set</span>';
+                        }
+                        return '<span class="badge bg-secondary">Disabled</span>';
+                    })
                     ->addColumn('formatted_price', function ($data) {
                         return '$' . number_format($data->price, 2);
                     })
@@ -63,7 +71,7 @@ class AddOnController extends Controller {
                         </a>
                     </div>';
                     })
-                    ->rawColumns(['footage_size', 'service_item_name', 'quantity_display', 'formatted_price', 'status', 'action'])
+                    ->rawColumns(['footage_size', 'service_item_name', 'quantity_display', 'maximum_number', 'formatted_price', 'status', 'action'])
                     ->make();
             }
             return view('backend.layouts.services.index');
@@ -113,6 +121,8 @@ class AddOnController extends Controller {
             'service_item_id' => 'required|integer|exists:service_items,id',
             'quantity'        => 'nullable|integer|min:1',
             'price'           => 'required|numeric|min:0',
+            'is_increment'    => 'sometimes|in:on,1,0',
+            'maximum_number'  => 'nullable|integer|min:1|required_if:is_increment,on|required_if:is_increment,1',
         ];
 
         // Add locations validation for Community Images
@@ -127,11 +137,22 @@ class AddOnController extends Controller {
         }
 
         try {
-            // Enhanced duplicate check including locations
+            $isIncrement = $request->has('is_increment');
+            $maxNumber   = $isIncrement ? $request->input('maximum_number') : null;
+
+            // Enhanced duplicate check including locations and new fields
             $query = AddOn::where('footage_size_id', $request->input('footage_size_id'))
                 ->where('service_item_id', $request->input('service_item_id'))
                 ->where('quantity', $request->input('quantity'))
-                ->where('price', $request->input('price'));
+                ->where('price', $request->input('price'))
+                ->where('is_increment', $isIncrement)
+                ->where(function ($q) use ($maxNumber) {
+                    if (is_null($maxNumber)) {
+                        $q->whereNull('maximum_number');
+                    } else {
+                        $q->where('maximum_number', $maxNumber);
+                    }
+                });
 
             if ($isCommunityImages) {
                 $query->where('locations', $request->input('locations'));
@@ -156,6 +177,8 @@ class AddOnController extends Controller {
                 'service_item_id' => $request->input('service_item_id'),
                 'quantity'        => $request->input('quantity'),
                 'price'           => $request->input('price'),
+                'is_increment'    => $isIncrement,
+                'maximum_number'  => $maxNumber,
             ];
 
             if ($isCommunityImages) {
@@ -194,6 +217,8 @@ class AddOnController extends Controller {
                     'is_community_images' => $addOn->isCommunityImages(),
                     'footage_size_name'   => $addOn->footageSize ? $addOn->footageSize->size : null,
                     'service_item_name'   => $addOn->serviceItem ? $addOn->serviceItem->service_name : null,
+                    'is_increment'        => (bool) $addOn->is_increment,
+                    'maximum_number'      => $addOn->maximum_number,
                 ],
             ]);
         } catch (Exception $e) {
@@ -221,6 +246,8 @@ class AddOnController extends Controller {
             'service_item_id' => 'required|integer|exists:service_items,id',
             'quantity'        => 'nullable|integer|min:1',
             'price'           => 'required|numeric|min:0',
+            'is_increment'    => 'sometimes|in:on,1,0',
+            'maximum_number'  => 'nullable|integer|min:1|required_if:is_increment,on|required_if:is_increment,1',
         ];
 
         if ($isCommunityImages) {
@@ -236,11 +263,22 @@ class AddOnController extends Controller {
         try {
             $addOn = AddOn::findOrFail($id);
 
-            // Enhanced duplicate check
+            $isIncrement = $request->has('is_increment');
+            $maxNumber   = $isIncrement ? $request->input('maximum_number') : null;
+
+            // Enhanced duplicate check including locations and new fields
             $query = AddOn::where('footage_size_id', $request->input('footage_size_id'))
                 ->where('service_item_id', $request->input('service_item_id'))
                 ->where('quantity', $request->input('quantity'))
                 ->where('price', $request->input('price'))
+                ->where('is_increment', $isIncrement)
+                ->where(function ($q) use ($maxNumber) {
+                    if (is_null($maxNumber)) {
+                        $q->whereNull('maximum_number');
+                    } else {
+                        $q->where('maximum_number', $maxNumber);
+                    }
+                })
                 ->where('id', '!=', $id);
 
             if ($isCommunityImages) {
@@ -261,6 +299,8 @@ class AddOnController extends Controller {
                 'service_item_id' => $request->input('service_item_id'),
                 'quantity'        => $request->input('quantity'),
                 'price'           => $request->input('price'),
+                'is_increment'    => $isIncrement,
+                'maximum_number'  => $maxNumber,
             ];
 
             if ($isCommunityImages) {

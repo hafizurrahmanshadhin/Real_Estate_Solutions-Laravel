@@ -9,10 +9,10 @@
                 <div class="text-center mt-4">
                     <div class="mb-4 pb-2">
                         <a href="#" class="auth-logo">
-                            <img src="{{ $systemSetting->logo ? asset($systemSetting->logo) : asset('backend/images/PNG FILE-01-02.png') }}"
-                                alt="logo" height="150" class="auth-logo-dark mx-auto">
-                            <img src="{{ $systemSetting->logo ? asset($systemSetting->logo) : asset('backend/images/PNG FILE-01-02.png') }}"
-                                alt="logo" height="150" class="auth-logo-light mx-auto">
+                            <img src="{{ $systemSetting->logo ? asset($systemSetting->logo) : asset('assets/logo-white.png') }}"
+                                alt="logo" height="100" class="auth-logo-dark mx-auto">
+                            <img src="{{ $systemSetting->logo ? asset($systemSetting->logo) : asset('assets/logo-white.png') }}"
+                                alt="logo" height="100" class="auth-logo-light mx-auto">
                         </a>
                     </div>
                     <h5 class="fs-3xl">Forgot Your Password?</h5>

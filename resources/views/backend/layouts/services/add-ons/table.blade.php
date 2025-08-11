@@ -15,6 +15,7 @@
                             <th class="column-content">Footage Size</th>
                             <th class="column-content">Service Item</th>
                             <th class="column-content">Quantity/Locations</th>
+                            <th class="column-content">Maximum Quantity</th>
                             <th class="column-content">Price</th>
                             <th class="column-status">Status</th>
                             <th class="column-action">Action</th>

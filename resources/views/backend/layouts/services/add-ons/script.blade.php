@@ -60,9 +60,17 @@
                     data: 'quantity_display',
                     name: 'quantity_display',
                     orderable: true,
-                    searchable: false,
+                    searchable: true,
                     className: 'text-center',
-                    width: '25%'
+                    width: '20%'
+                },
+                {
+                    data: 'maximum_number',
+                    name: 'maximum_number',
+                    orderable: true,
+                    searchable: true,
+                    className: 'text-center',
+                    width: '5%'
                 },
                 {
                     data: 'formatted_price',
@@ -91,6 +99,28 @@
             ],
         });
 
+        // helper: toggle create maximum_number UI
+        function toggleCreateIncrementUI(checked) {
+            if (checked) {
+                $('#maximum_number_field').show();
+                $('#maximum_number').prop('disabled', false).prop('required', true);
+            } else {
+                $('#maximum_number_field').hide();
+                $('#maximum_number').prop('disabled', true).prop('required', false).val('');
+            }
+        }
+
+        // helper: toggle edit maximum_number UI
+        function toggleEditIncrementUI(checked) {
+            if (checked) {
+                $('#edit_maximum_number_field').show();
+                $('#edit_maximum_number').prop('disabled', false).prop('required', true);
+            } else {
+                $('#edit_maximum_number_field').hide();
+                $('#edit_maximum_number').prop('disabled', true).prop('required', false).val('');
+            }
+        }
+
         // Show Create Modal
         $('#addNewAddOn').click(function() {
             $('#createAddOnModal').modal('show');
@@ -101,15 +131,21 @@
             // Hide Community Images fields initially
             $('#locations_field, #community_pricing_guide').hide();
 
+            $('#is_increment').prop('checked', false);
+            toggleCreateIncrementUI(false);
+
             loadFormData();
+        });
+
+        // Create checkbox change
+        $(document).on('change', '#is_increment', function() {
+            toggleCreateIncrementUI(this.checked);
         });
 
         // Handle Service Item Change for Create Modal
         $(document).on('change', '#service_item_id', function() {
             const selectedText = $(this).find('option:selected').text().toLowerCase();
             const isCommunityImages = selectedText === 'community image';
-
-            console.log('Service changed to:', selectedText, 'Is Community Images:', isCommunityImages);
 
             if (isCommunityImages) {
                 $('#locations_field, #community_pricing_guide').show();
@@ -125,9 +161,6 @@
             const selectedText = $(this).find('option:selected').text().toLowerCase();
             const isCommunityImages = selectedText === 'community image';
 
-            console.log('Edit service changed to:', selectedText, 'Is Community Images:',
-                isCommunityImages);
-
             if (isCommunityImages) {
                 $('#edit_locations_field, #edit_community_pricing_guide').show();
                 $('#edit_locations').prop('required', true);
@@ -141,12 +174,9 @@
         function loadFormData() {
             axios.get("{{ route('service.add-on.form-data') }}")
                 .then(function(response) {
-                    console.log('Form data response:', response.data);
-
                     if (response.data.success) {
                         const data = response.data.data;
 
-                        // Populate Footage Size Dropdown
                         let footageOptions = '<option value="">Choose a footage size...</option>';
                         if (data.footage_sizes && data.footage_sizes.length > 0) {
                             data.footage_sizes.forEach(function(footage) {
@@ -156,7 +186,6 @@
                         }
                         $('#footage_size_id_for_add_ons').html(footageOptions);
 
-                        // Populate Service Item Dropdown
                         let serviceItemOptions = '<option value="">Choose a service item...</option>';
                         if (data.service_items && data.service_items.length > 0) {
                             data.service_items.forEach(function(item) {
@@ -165,14 +194,11 @@
                             });
                         }
                         $('#service_item_id').html(serviceItemOptions);
-
-                        console.log('Form data loaded successfully');
                     } else {
                         toastr.error('Failed to load form data');
                     }
                 })
-                .catch(function(error) {
-                    console.error('Form data error:', error);
+                .catch(function() {
                     toastr.error('An error occurred while loading form data');
                 });
         }
@@ -180,13 +206,11 @@
         // Create Form Submission
         $('#createAddOnForm').submit(function(e) {
             e.preventDefault();
-            console.log('Creating add-on...');
 
             $('.error-text').text('');
             $('.form-control, .form-select').removeClass('is-invalid');
 
             let formData = $(this).serialize();
-            console.log('Create form data:', formData);
 
             let submitBtn = $(this).find('button[type="submit"]');
             let originalText = submitBtn.html();
@@ -195,8 +219,6 @@
 
             axios.post("{{ route('service.add-on.store') }}", formData)
                 .then(function(response) {
-                    console.log('Create response:', response.data);
-
                     if (response.data.success) {
                         $('#createAddOnModal').modal('hide');
                         $('#createAddOnForm')[0].reset();
@@ -212,7 +234,6 @@
                     }
                 })
                 .catch(function(error) {
-                    console.error('Create error:', error);
                     if (error.response && error.response.data && error.response.data.errors) {
                         handleValidationErrors(error.response.data.errors, 'create');
                         toastr.error('Please fix the validation errors.');
@@ -227,11 +248,8 @@
 
         // Show Edit Modal
         $(document).on('click', '.edit-add-on', function() {
-            console.log('Edit button clicked');
-
             let tr = $(this).closest('tr');
             let rowData = addOnsTable.row(tr).data();
-            console.log('Row data:', rowData);
 
             $('.error-text').text('');
             $('.form-control, .form-select').removeClass('is-invalid');
@@ -241,14 +259,16 @@
             // Hide Community Images fields initially
             $('#edit_locations_field, #edit_community_pricing_guide').hide();
 
+            // Reset increment UI
+            $('#edit_is_increment').prop('checked', false);
+            toggleEditIncrementUI(false);
+
             loadEditFormData(rowData.id);
             $('#editAddOnModal').modal('show');
         });
 
         // Load Edit Form Data
         function loadEditFormData(addOnId) {
-            console.log('Loading edit form data for ID:', addOnId);
-
             // Show loading state
             $('#edit_footage_size_id_for_add_ons, #edit_service_item_id').html(
                 '<option value="">Loading...</option>').prop('disabled', true);
@@ -262,19 +282,11 @@
                     const formDataResponse = responses[0];
                     const addOnResponse = responses[1];
 
-                    console.log('Edit form data response:', formDataResponse.data);
-                    console.log('Edit add-on response:', addOnResponse.data);
-
                     if (formDataResponse.data.success && addOnResponse.data.success) {
                         const formData = formDataResponse.data.data;
                         const addOnData = addOnResponse.data.data;
 
-                        console.log('Processing edit data:', {
-                            formData,
-                            addOnData
-                        });
-
-                        // Populate Footage Size Dropdown
+                        // Populate Footage Size
                         let footageOptions = '<option value="">Choose a footage size...</option>';
                         if (formData.footage_sizes && formData.footage_sizes.length > 0) {
                             formData.footage_sizes.forEach(function(footage) {
@@ -286,7 +298,7 @@
                         }
                         $('#edit_footage_size_id_for_add_ons').html(footageOptions).prop('disabled', false);
 
-                        // Populate Service Item Dropdown
+                        // Populate Service Item
                         let serviceItemOptions = '<option value="">Choose a service item...</option>';
                         if (formData.service_items && formData.service_items.length > 0) {
                             formData.service_items.forEach(function(item) {
@@ -304,20 +316,23 @@
 
                         // Handle Community Images fields
                         if (addOnData.is_community_images) {
-                            console.log('Showing Community Images fields, locations:', addOnData.locations);
                             $('#edit_locations_field, #edit_community_pricing_guide').show();
                             $('#edit_locations').val(addOnData.locations || '').prop('required', true);
                         } else {
-                            console.log('Hiding Community Images fields');
                             $('#edit_locations_field, #edit_community_pricing_guide').hide();
                             $('#edit_locations').prop('required', false).val('');
                         }
 
-                        console.log('Edit form data loaded successfully');
-                        toastr.success('Edit form loaded successfully!');
+                        // New: set increment UI
+                        const isInc = !!addOnData.is_increment;
+                        $('#edit_is_increment').prop('checked', isInc);
+                        toggleEditIncrementUI(isInc);
+                        if (isInc) {
+                            $('#edit_maximum_number').val(addOnData.maximum_number || '');
+                        }
 
+                        toastr.success('Edit form loaded successfully!');
                     } else {
-                        console.error('API responses failed');
                         toastr.error('Failed to load add-on data for editing');
                         $('#edit_footage_size_id_for_add_ons, #edit_service_item_id').prop('disabled',
                             false);
@@ -325,27 +340,27 @@
                             false);
                     }
                 })
-                .catch(function(error) {
-                    console.error('Edit form data error:', error);
+                .catch(function() {
                     toastr.error('An error occurred while loading add-on data');
                     $('#edit_footage_size_id_for_add_ons, #edit_service_item_id').prop('disabled', false);
                     $('#edit_quantity, #edit_price_for_add_ons, #edit_locations').prop('disabled', false);
                 });
         }
 
+        // Edit checkbox change
+        $(document).on('change', '#edit_is_increment', function() {
+            toggleEditIncrementUI(this.checked);
+        });
+
         // Edit Form Submission
         $('#editAddOnForm').submit(function(e) {
             e.preventDefault();
-            console.log('Updating add-on...');
 
             $('.error-text').text('');
             $('.form-control, .form-select').removeClass('is-invalid');
 
             let formData = $(this).serialize();
             let addOnId = $('#edit_service_id').val();
-
-            console.log('Update form data:', formData);
-            console.log('Update add-on ID:', addOnId);
 
             if (!addOnId) {
                 toastr.error('Add-on ID is missing. Please try again.');
@@ -359,8 +374,6 @@
 
             axios.put("{{ route('service.add-on.update', 0) }}".replace('/0', '/' + addOnId), formData)
                 .then(function(response) {
-                    console.log('Update response:', response.data);
-
                     if (response.data.success) {
                         $('#editAddOnModal').modal('hide');
                         $('#editAddOnForm')[0].reset();
@@ -376,7 +389,6 @@
                     }
                 })
                 .catch(function(error) {
-                    console.error('Update error:', error);
                     if (error.response && error.response.data) {
                         if (error.response.data.errors) {
                             handleValidationErrors(error.response.data.errors, 'edit');
@@ -396,8 +408,6 @@
 
         // Validation Error Handler
         function handleValidationErrors(errors, prefix) {
-            console.log('Handling validation errors:', errors, 'Prefix:', prefix);
-
             $.each(errors, function(key, value) {
                 let errorMessage = Array.isArray(value) ? value[0] : value;
                 let errorElement = $(`.${prefix}_${key}_error`);
@@ -407,7 +417,6 @@
                     inputElement = $(`#editAddOnForm [name="${key}"]`);
                 }
 
-                console.log(`Setting error for ${key}:`, errorMessage);
                 errorElement.text(errorMessage);
                 inputElement.addClass('is-invalid');
             });
@@ -418,12 +427,18 @@
             $(this).find('.error-text').text('');
             $(this).find('.form-control, .form-select').removeClass('is-invalid');
             $('#locations_field, #community_pricing_guide').hide();
+            // reset increment ui
+            $('#is_increment').prop('checked', false);
+            toggleCreateIncrementUI(false);
         });
 
         $('#editAddOnModal').on('hidden.bs.modal', function() {
             $(this).find('.error-text').text('');
             $(this).find('.form-control, .form-select').removeClass('is-invalid');
             $('#edit_locations_field, #edit_community_pricing_guide').hide();
+            // reset increment ui
+            $('#edit_is_increment').prop('checked', false);
+            toggleEditIncrementUI(false);
         });
     });
 

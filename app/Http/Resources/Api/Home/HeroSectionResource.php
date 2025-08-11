@@ -18,7 +18,7 @@ class HeroSectionResource extends JsonResource {
         // Fetch hero services (ID > 1)
         $heroServices = OtherService::where('id', '>', 1)->where('status', 'active')->get();
         // Fetch logo from system settings
-        $logo = SystemSetting::value('logo');
+        // $logo = SystemSetting::value('logo');
 
         return [
             'titles'   => collect($this->items ?? [])->map(function ($title) {
@@ -27,7 +27,7 @@ class HeroSectionResource extends JsonResource {
                 ];
             })->values(),
             'image'    => $this->image ? url($this->image) : null,
-            'logo'     => $logo ? url($logo) : null,
+            // 'logo'     => $logo ? url($logo) : null,
             'content'  => $this->content,
             'services' => HeroServiceResource::collection($heroServices),
         ];

@@ -13,12 +13,14 @@ class AddOnResource extends JsonResource {
      */
     public function toArray(Request $request): array {
         return [
-            'id'           => $this->id,
-            'service_item' => $this->serviceItem?->service_name,
-            'price'        => number_format($this->price, 2, '.', ''),
-            'quantity'     => $this->quantity,
-            'locations'    => $this->isCommunityImages() ? $this->locations : null,
-            'display_text' => $this->getDisplayText(),
+            'id'             => $this->id,
+            'service_item'   => $this->serviceItem?->service_name,
+            'price'          => number_format($this->price, 2, '.', ''),
+            'quantity'       => $this->quantity,
+            'locations'      => $this->isCommunityImages() ? $this->locations : null,
+            'display_text'   => $this->getDisplayText(),
+            'is_increment'   => $this->is_increment,
+            'maximum_number' => $this->maximum_number,
         ];
     }
 }

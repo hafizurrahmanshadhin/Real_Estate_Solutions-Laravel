@@ -26,6 +26,9 @@ return new class extends Migration {
             $table->integer('quantity')->default(1);
             $table->decimal('price', 10, 2)->nullable(false);
 
+            $table->boolean('is_increment')->default(false);
+            $table->integer('maximum_number')->nullable();
+
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
             $table->softDeletes();

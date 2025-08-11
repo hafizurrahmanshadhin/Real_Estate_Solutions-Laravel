@@ -17,8 +17,8 @@ class HeaderAndFooterResource extends JsonResource {
         $socialMedias  = $this->social_medias;
 
         return [
-            'logo'           => $systemSetting->logo ? url($systemSetting->logo) : asset('backend/images/PNG FILE-01-02.png'),
-            'favicon'        => $systemSetting->favicon ? url($systemSetting->favicon) : asset('backend/images/PNG FILE-01-02.png'),
+            // 'logo'           => $systemSetting->logo ? url($systemSetting->logo) : asset('backend/images/PNG FILE-01-02.png'),
+            // 'favicon'        => $systemSetting->favicon ? url($systemSetting->favicon) : asset('backend/images/PNG FILE-01-02.png'),
             'description'    => $systemSetting->description,
             'copyright_text' => $systemSetting->copyright_text,
 

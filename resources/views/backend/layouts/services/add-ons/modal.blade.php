@@ -58,6 +58,26 @@
                             <span class="text-danger error-text create_price_error"></span>
                         </div>
 
+                        {{-- Increment option --}}
+                        <div class="col-md-6 mb-3 d-flex align-items-center">
+                            <div class="form-check mt-4">
+                                <input class="form-check-input" type="checkbox" id="is_increment" name="is_increment">
+                                <label class="form-check-label" for="is_increment">
+                                    Enable maximum quantity limit
+                                </label>
+                            </div>
+                            <span class="text-danger error-text create_is_increment_error ms-2"></span>
+                        </div>
+
+                        {{-- Maximum number (shown only if is_increment is checked) --}}
+                        <div class="col-md-6 mb-3" id="maximum_number_field" style="display: none;">
+                            <label for="maximum_number" class="form-label">Maximum Number <span
+                                    class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="maximum_number" name="maximum_number"
+                                placeholder="Enter maximum number" min="1" step="1" disabled>
+                            <span class="text-danger error-text create_maximum_number_error"></span>
+                        </div>
+
                         {{-- Community Images Pricing Guide --}}
                         <div class="col-12" id="community_pricing_guide" style="display: none;">
                             <div class="alert alert-info">
@@ -82,7 +102,8 @@
 {{-- Create Modal For Add-ons End --}}
 
 {{-- Edit Modal For Add-ons Start --}}
-<div class="modal fade" id="editAddOnModal" tabindex="-1" aria-labelledby="editAddOnModalLabel" aria-hidden="true">
+<div class="modal fade" id="editAddOnModal" tabindex="-1" aria-labelledby="editAddOnModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -141,6 +162,28 @@
                             <input type="number" class="form-control" id="edit_price_for_add_ons" name="price"
                                 placeholder="Enter price" min="0" step="0.01">
                             <span class="text-danger error-text edit_price_error"></span>
+                        </div>
+
+                        {{-- Increment option --}}
+                        <div class="col-md-6 mb-3 d-flex align-items-center">
+                            <div class="form-check mt-4">
+                                <input class="form-check-input" type="checkbox" id="edit_is_increment"
+                                    name="is_increment">
+                                <label class="form-check-label" for="edit_is_increment">
+                                    Enable maximum quantity limit
+                                </label>
+                            </div>
+                            <span class="text-danger error-text edit_is_increment_error ms-2"></span>
+                        </div>
+
+                        {{-- Maximum number (shown only if edit_is_increment is checked) --}}
+                        <div class="col-md-6 mb-3" id="edit_maximum_number_field" style="display: none;">
+                            <label for="edit_maximum_number" class="form-label">Maximum Number <span
+                                    class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="edit_maximum_number"
+                                name="maximum_number" placeholder="Enter maximum number" min="1"
+                                step="1" disabled>
+                            <span class="text-danger error-text edit_maximum_number_error"></span>
                         </div>
 
                         {{-- Edit Community Images Pricing Guide --}}
